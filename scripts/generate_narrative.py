@@ -196,14 +196,14 @@ def call_gemini(prompt: str, api_key: str) -> dict:
 
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel(
-        model_name="gemini-3.5-flash",
+        model_name="gemini-2.5-flash",
         system_instruction=SYSTEM_INSTRUCTION,
         generation_config=genai.types.GenerationConfig(
             temperature=0.3,    # Lower temperature for factual, consistent output
             response_mime_type="application/json",
         ),
     )
-    print("Calling Gemini API (gemini-2.0-flash) ...")
+    print("Calling Gemini API (gemini-2.5-flash) ...")
     response = model.generate_content(prompt)
     raw = response.text.strip()
 
