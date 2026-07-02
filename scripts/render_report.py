@@ -74,7 +74,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nigerian Real Estate Market Reports — reports.akinmokun.com</title>
-  <meta name="description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isla Akinmokun." />
+  <meta name="description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isaac Akinmokun." />
   <style>
     :root {
       --bg: #0d1117; --bg-card: #161b22; --border: #21262d;
@@ -129,7 +129,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   </div>
 
   <footer>
-    <span>© Isla Akinmokun — reports.akinmokun.com</span>
+    <span>© Isaac Akinmokun — reports.akinmokun.com</span>
     <div>
       <a href="https://akinmokun.com/">akinmokun.com</a> ·
       <a href="https://github.com/islajr">GitHub</a>
