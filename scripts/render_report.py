@@ -17,6 +17,7 @@ Output:
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import sys
 from datetime import date
@@ -26,7 +27,52 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+FONTS_DIR = Path(__file__).parent.parent / "templates" / "fonts"
 REPORTS_DIR = Path(__file__).parent.parent / "reports"
+
+# Ordered list of (CSS font-family name, CSS weight, filename)
+EMBEDDED_FONTS = [
+    ("Inter",          "400", "Inter_400.woff2"),
+    ("Inter",          "500", "Inter_500.woff2"),
+    ("Inter",          "600", "Inter_600.woff2"),
+    ("Inter",          "700", "Inter_700.woff2"),
+    ("JetBrains Mono", "400", "JetBrains_Mono_400.woff2"),
+    ("JetBrains Mono", "500", "JetBrains_Mono_500.woff2"),
+]
+
+
+def build_embedded_fonts_css() -> str:
+    """
+    Read each woff2 file from templates/fonts/, base64-encode it,
+    and return a CSS string of @font-face declarations.
+    If font files are missing, returns an empty string and warns.
+    """
+    blocks = ["/* === EMBEDDED FONTS (Inter + JetBrains Mono, latin subset) === */"]
+    missing = []
+    for family, weight, filename in EMBEDDED_FONTS:
+        path = FONTS_DIR / filename
+        if not path.exists():
+            missing.append(filename)
+            continue
+        with open(path, "rb") as f:
+            b64 = base64.b64encode(f.read()).decode()
+        blocks.append(
+            f"@font-face {{\n"
+            f"  font-family: '{family}';\n"
+            f"  font-style: normal;\n"
+            f"  font-weight: {weight};\n"
+            f"  font-display: swap;\n"
+            f"  src: url('data:font/woff2;base64,{b64}') format('woff2');\n"
+            f"}}"
+        )
+    if missing:
+        print(
+            f"  ⚠  Font files not found in templates/fonts/: {missing}\n"
+            f"     Run: python scripts/download_fonts.py to fetch them.\n"
+            f"     Report will fall back to system fonts.",
+            file=sys.stderr,
+        )
+    return "\n".join(blocks)
 
 
 # ---------------------------------------------------------------------------
@@ -216,6 +262,9 @@ def main() -> None:
 
     published_date = date.today().strftime("%B %d, %Y").replace(" 0", " ")
 
+    print("Embedding fonts ...")
+    embedded_fonts_css = build_embedded_fonts_css()
+
     template_vars = {
         "overall": metrics["overall"],
         "weekly_aggregates": metrics["weekly_aggregates"],
@@ -226,6 +275,7 @@ def main() -> None:
         "narrative": narrative,
         "issue_number": issue_number,
         "published_date": published_date,
+        "embedded_fonts_css": embedded_fonts_css,
     }
 
     # Render HTML
