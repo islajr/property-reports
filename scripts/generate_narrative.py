@@ -265,20 +265,25 @@ def main() -> None:
         metrics = json.load(f)
 
     api_key = os.getenv("GEMINI_API_KEY")
+    use_placeholder = args.placeholder or not api_key
 
-    if args.placeholder or not api_key:
-        if not api_key:
-            print("GEMINI_API_KEY not set — writing placeholder narrative.")
-        narrative = PLACEHOLDER_NARRATIVE
+    if use_placeholder and out_path.exists():
+        print(f"✓ Narrative JSON already exists at {out_path}. Skipping writing placeholder to preserve existing content.")
+        with open(out_path) as f:
+            narrative = json.load(f)
     else:
-        prompt = build_prompt(metrics)
-        narrative = call_gemini(prompt, api_key)
+        if use_placeholder:
+            if not api_key:
+                print("GEMINI_API_KEY not set — writing placeholder narrative.")
+            narrative = PLACEHOLDER_NARRATIVE
+        else:
+            prompt = build_prompt(metrics)
+            narrative = call_gemini(prompt, api_key)
 
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, "w") as f:
-        json.dump(narrative, f, indent=2)
-
-    print(f"✓ Narrative written to {out_path}")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w") as f:
+            json.dump(narrative, f, indent=2)
+        print(f"✓ Narrative written to {out_path}")
 
     # Sanity check: warn if any placeholder strings remain
     raw = json.dumps(narrative)
