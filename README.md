@@ -42,7 +42,7 @@ Cloudflare Pages (reports.akinmokun.com)
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-pipeline.txt
 ```
 
 Copy `.env.example` to `.env` and fill in your Supabase credentials and Gemini API key.
