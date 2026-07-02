@@ -21,15 +21,19 @@ Reports are generated on the first of each month covering the prior calendar mon
 ## Pipeline
 
 ```
-Supabase (PostgreSQL) → scripts/export_data.py
-        ↓
-scripts/compute_metrics.py  → data/metrics_{month}.json
-        ↓
-scripts/generate_narrative.py (Gemini API) → data/narrative_{month}.json
-        ↓
-templates/report.html.j2  → reports/{YYYY-MM}/index.html
-templates/report.tex.j2   → reports/{YYYY-MM}/report.pdf
-        ↓
+Supabase (PostgreSQL) -> scripts/export_data.py
+        |
+        v
+scripts/compute_metrics.py  -> data/metrics_{month}[_{period}].json
+        |
+        v
+scripts/generate_narrative.py (Gemini API) -> data/narrative_{month}[_{period}].json
+        |
+        v
+templates/report.html.j2  -> reports/{month}[_{period}]/index.html
+                             reports/{month}[_{period}]/report.pdf (WeasyPrint)
+        |
+        v
 Cloudflare Pages (reports.akinmokun.com)
 ```
 
@@ -43,21 +47,28 @@ pip install -r requirements.txt
 
 Copy `.env.example` to `.env` and fill in your Supabase credentials and Gemini API key.
 
-## Generating a Report Manually
+## Generating a Report
+
+Use the unified orchestrator script `run.py` at the root of the project to generate reports. It automates all steps (exporting, computing metrics, narrative generation, HTML rendering, and PDF generation) with flags:
 
 ```bash
-# 1. Export data from Supabase (or place CSV in data/ manually)
-python scripts/export_data.py --month 2026-07
+# Render a single month with placeholder narrative (skips Gemini API key requirement):
+python run.py --month 2026-06 --placeholder
 
-# 2. Compute metrics
-python scripts/compute_metrics.py --month 2026-07
+# Render a 3-month report ending in June 2026, pulling fresh data from Supabase first:
+python run.py --month 2026-06 --period 3mo --export
 
-# 3. Generate narrative (requires GEMINI_API_KEY in .env)
-python scripts/generate_narrative.py --month 2026-07
-
-# 4. Render HTML + PDF
-python scripts/render_report.py --month 2026-07
+# Render a 6-month report with real Gemini narratives:
+python run.py --month 2026-06 --period 6mo
 ```
+
+Options:
+- `--month YYYY-MM`: Target reporting month (required)
+- `--period [1mo|3mo|6mo|12mo]`: Window length (default: 1mo)
+- `--export`: Pull fresh snapshots from Supabase database
+- `--placeholder`: Bypasses Gemini API key using draft narratives
+- `--no-pdf`: Skips PDF rendering via WeasyPrint
+- `--issue N`: Sets a custom issue number override
 
 ## Commit Convention
 
