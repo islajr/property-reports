@@ -196,7 +196,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     .global-header .logo-link { display: inline-flex; align-items: center; transition: opacity 0.15s ease; }
     .global-header .logo-link:hover { opacity: 0.55; }
     .global-header .logo-img { border-radius: 3px; }
-    .global-header .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .global-header .nav-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; align-items: center; }
     .global-header .nav-links a { font-size: 0.85rem; color: var(--text2); text-decoration: none; transition: color 0.15s ease; }
     .global-header .nav-links a:hover, .global-header .nav-links a.active { color: var(--text); }
     .reports-header { margin-top: 3rem; margin-bottom: 3rem; }
