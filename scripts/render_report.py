@@ -323,6 +323,70 @@ def regenerate_index(reports_dir: Path) -> None:
     print(f"✓ Index regenerated: {index_path} ({len(report_entries)} reports listed)")
 
 
+def generate_sitemap_and_robots(reports_dir: Path) -> None:
+    """
+    Generate sitemap.xml and robots.txt inside the reports directory.
+    Ensures all published market reports are discoverable and indexed
+    by search engine crawlers under the reports.akinmokun.com subdomain.
+    """
+    # 1. Write robots.txt
+    robots_path = reports_dir / "robots.txt"
+    robots_content = (
+        "# robots.txt for reports.akinmokun.com\n"
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Sitemap: https://reports.akinmokun.com/sitemap.xml\n"
+    )
+    with open(robots_path, "w", encoding="utf-8") as f:
+        f.write(robots_content)
+    print(f"✓ Robots.txt generated: {robots_path}")
+
+    # 2. Write sitemap.xml
+    entries = []
+    
+    # Homepage entry
+    entries.append(
+        "  <url>\n"
+        "    <loc>https://reports.akinmokun.com/</loc>\n"
+        "    <changefreq>monthly</changefreq>\n"
+        "    <priority>1.0</priority>\n"
+        "  </url>"
+    )
+
+    # Scan for compiled report directories
+    for sub in sorted(reports_dir.iterdir()):
+        if not sub.is_dir():
+            continue
+        if sub.name in (".gitkeep", ".git", ".github", ".antigravitycli", ".venv"):
+            continue
+        
+        # Verify index.html exists in the subfolder
+        html_file = sub / "index.html"
+        if not html_file.exists():
+            continue
+
+        # Extract month/period from the subfolder name
+        entries.append(
+            f"  <url>\n"
+            f"    <loc>https://reports.akinmokun.com/{sub.name}/</loc>\n"
+            f"    <changefreq>never</changefreq>\n"
+            f"    <priority>0.8</priority>\n"
+            f"  </url>"
+        )
+
+    # Compile the full XML payload
+    sitemap_content = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(entries) + "\n"
+        '</urlset>\n'
+    )
+    sitemap_path = reports_dir / "sitemap.xml"
+    with open(sitemap_path, "w", encoding="utf-8") as f:
+        f.write(sitemap_content)
+    print(f"✓ Sitemap.xml generated: {sitemap_path} ({len(entries)} URLs listed)")
+
+
 # ---------------------------------------------------------------------------
 # Entrypoint
 # ---------------------------------------------------------------------------
@@ -406,6 +470,9 @@ def main() -> None:
 
     # Regenerate reports index
     regenerate_index(REPORTS_DIR)
+
+    # Regenerate sitemap.xml and robots.txt
+    generate_sitemap_and_robots(REPORTS_DIR)
 
     print(f"\n✓ Report complete: reports/{args.month}/")
     print(f"  Open: file://{html_path.resolve()}")

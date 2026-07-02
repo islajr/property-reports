@@ -1,0 +1,4 @@
+# robots.txt for reports.akinmokun.com
+User-agent: *
+Allow: /
+Sitemap: https://reports.akinmokun.com/sitemap.xml
