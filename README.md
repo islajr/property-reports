@@ -1,8 +1,7 @@
 # Nigerian Real Estate Market Reports
 
 Monthly market intelligence reports for the Nigerian residential real estate market, powered by
-**PS-0 PropertyScraper** — an autonomous data pipeline tracking active listings across Lagos,
-Abuja, and six other cities.
+**PS-0 PropertyScraper** — an autonomous data pipeline tracking active listings from major portals across Lagos, Abuja, and six other cities.
 
 Published at [reports.akinmokun.com](https://reports.akinmokun.com).
 
@@ -73,4 +72,4 @@ This repo follows [Conventional Commits](https://www.conventionalcommits.org/):
 
 ## License
 
-Report content © Isla Akinmokun. Code is MIT licensed.
+Report content © Isaac Akinmokun. Code is MIT licensed.
