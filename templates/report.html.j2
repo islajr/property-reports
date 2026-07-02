@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report | akinmokun.com</title>
+  <meta name="description" content="Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods." />
+  <meta name="author" content="Isla Akinmokun" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
+  <meta property="og:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+
+  <style>
+    /* ===================================================================
+       DESIGN TOKENS
+    =================================================================== */
+    :root {
+      --bg-deep:      #0d1117;
+      --bg-card:      #161b22;
+      --bg-card-alt:  #1a2030;
+      --border:       #21262d;
+      --border-light: #30363d;
+
+      --gold:         #c9a84c;
+      --gold-light:   #e0c070;
+      --gold-dim:     #8a6f30;
+
+      --text-primary: #e6edf3;
+      --text-secondary: #8b949e;
+      --text-muted:   #6e7681;
+
+      --accent-teal:  #39d0d0;
+      --accent-red:   #e05c5c;
+      --accent-green: #3fb950;
+
+      --radius:       6px;
+      --radius-lg:    10px;
+
+      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+      --max-width: 920px;
+    }
+
+    /* ===================================================================
+       RESET & BASE
+    =================================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===================================================================
+       TYPOGRAPHY
+    =================================================================== */
+    h1, h2, h3, h4 { line-height: 1.3; font-weight: 600; }
+
+    h1 { font-size: 2rem; letter-spacing: -0.5px; }
+    h2 { font-size: 1.35rem; color: var(--gold-light); margin-bottom: 0.75rem; }
+    h3 { font-size: 1.1rem; color: var(--text-primary); margin-bottom: 0.5rem; }
+
+    p { margin-bottom: 1rem; color: var(--text-secondary); }
+    p:last-child { margin-bottom: 0; }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { color: var(--gold-light); text-decoration: underline; }
+
+    strong { color: var(--text-primary); font-weight: 600; }
+
+    /* ===================================================================
+       LAYOUT
+    =================================================================== */
+    .page-wrapper {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* ===================================================================
+       HEADER
+    =================================================================== */
+    .report-header {
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 0 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    .header-meta .dot { color: var(--gold-dim); }
+
+    .report-header h1 {
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--text-primary) 60%, var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-sub {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .header-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border: 1px solid var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    .tag.gold {
+      border-color: var(--gold-dim);
+      color: var(--gold-light);
+      background: rgba(201,168,76,0.08);
+    }
+
+    /* ===================================================================
+       KPI STRIP
+    =================================================================== */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      padding: 1.25rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .kpi-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+    }
+
+    .kpi-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .kpi-value.gold { color: var(--gold-light); }
+    .kpi-value.green { color: var(--accent-green); }
+    .kpi-value.red { color: var(--accent-red); }
+
+    /* ===================================================================
+       SECTION
+    =================================================================== */
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-number {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: var(--gold-dim);
+      letter-spacing: 1px;
+      padding: 0.15rem 0.4rem;
+      border: 1px solid var(--gold-dim);
+      border-radius: 3px;
+    }
+
+    /* ===================================================================
+       CARDS
+    =================================================================== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ===================================================================
+       TABLES
+    =================================================================== */
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.25rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead {
+      background: var(--bg-card-alt);
+    }
+
+    thead th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    thead th.right { text-align: right; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+    tbody td {
+      padding: 0.65rem 1rem;
+      color: var(--text-secondary);
+    }
+
+    tbody td.right { text-align: right; font-family: var(--font-mono); font-size: 0.82rem; }
+    tbody td.city { color: var(--text-muted); font-size: 0.8rem; }
+    tbody td.rank { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.8rem; }
+    tbody td.hood { color: var(--text-primary); font-weight: 500; }
+    tbody td.price { color: var(--gold-light); font-family: var(--font-mono); font-size: 0.82rem; }
+    tbody td.growth-pos { color: var(--accent-green); font-family: var(--font-mono); }
+    tbody td.growth-neg { color: var(--accent-red); font-family: var(--font-mono); }
+
+    /* ===================================================================
+       CHART PLACEHOLDER (static bar chart via CSS)
+    =================================================================== */
+    .bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 130px 1fr 90px;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.78rem;
+    }
+
+    .bar-label {
+      color: var(--text-secondary);
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bar-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold-light));
+      border-radius: 999px;
+    }
+
+    .bar-value {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    /* ===================================================================
+       WEEKLY CHART (ASCII-style sparkline)
+    =================================================================== */
+    .sparkline-section {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.6;
+    }
+
+    /* ===================================================================
+       TAKEAWAYS LIST
+    =================================================================== */
+    .takeaways {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .takeaways li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold-dim);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .takeaways li::before {
+      content: "→";
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ===================================================================
+       DIVIDER
+    =================================================================== */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ===================================================================
+       FOOTER
+    =================================================================== */
+    .report-footer {
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-brand { font-size: 0.85rem; color: var(--text-muted); }
+    .footer-brand strong { color: var(--text-secondary); }
+
+    .footer-links { display: flex; gap: 1rem; font-size: 0.82rem; }
+
+    /* ===================================================================
+       METHODOLOGY NOTE
+    =================================================================== */
+    .methodology-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border-light);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+    }
+
+    /* ===================================================================
+       PRINT / PDF OVERRIDES
+       WeasyPrint and browser print both use these.
+    =================================================================== */
+    @media print {
+      :root {
+        --bg-deep:     #ffffff;
+        --bg-card:     #f8f9fa;
+        --bg-card-alt: #f0f2f4;
+        --border:      #d0d7de;
+        --border-light:#d8dee4;
+        --gold:        #8a6f30;
+        --gold-light:  #7a5f20;
+        --gold-dim:    #a07820;
+        --text-primary:#1a1f2e;
+        --text-secondary:#4a5568;
+        --text-muted:  #718096;
+        --accent-green:#2d6a4f;
+        --accent-red:  #c0392b;
+        --accent-teal: #2b7a8a;
+      }
+
+      body { font-size: 11pt; }
+      .page-wrapper { max-width: 100%; padding: 0; }
+      .report-header h1 {
+        background: none;
+        -webkit-text-fill-color: var(--text-primary);
+        color: var(--text-primary);
+      }
+      .kpi-strip { page-break-inside: avoid; }
+      .section { page-break-inside: avoid; }
+      .table-wrap { page-break-inside: avoid; }
+      a { color: var(--text-primary); text-decoration: none; }
+    }
+
+    /* ===================================================================
+       RESPONSIVE
+    =================================================================== */
+    @media (max-width: 680px) {
+      h1 { font-size: 1.5rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 100px 1fr 70px; }
+      .kpi-strip { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+
+  <!-- Google Fonts loaded async for performance; has print fallback via system fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+<div class="page-wrapper">
+
+  <!-- ================================================================
+       HEADER
+  ================================================================ -->
+  <header class="report-header">
+    <div class="header-meta">
+      <span>akinmokun.com</span>
+      <span class="dot">·</span>
+      <span>Market Intelligence</span>
+      <span class="dot">·</span>
+      <span>Issue {{ issue_number }}</span>
+    </div>
+    <h1>Nigerian Residential Real Estate<br>Market Report</h1>
+    <p class="header-sub">
+      {{ overall.report_period_label }} — 
+      {{ overall.date_range.start }} to {{ overall.date_range.end }}
+    </p>
+    <div class="header-tags">
+      <span class="tag gold">PS-0 PropertyScraper</span>
+      <span class="tag">{{ overall.num_cities }} Cities</span>
+      <span class="tag">{{ overall.unique_neighbourhoods }} Neighbourhoods</span>
+      <span class="tag">{{ overall.num_weeks }} Weeks of Data</span>
+      <span class="tag">Published {{ published_date }}</span>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       KPI STRIP
+  ================================================================ -->
+  <div class="kpi-strip" id="kpi-strip">
+    <div class="kpi-card">
+      <span class="kpi-label">Peak Active Listings</span>
+      <span class="kpi-value">{{ "{:,}".format(overall.peak_active_listings) }}</span>
+      <span class="kpi-sub">Latest week total</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">New Listings</span>
+      <span class="kpi-value green">{{ "{:,}".format(overall.total_new_listings) }}</span>
+      <span class="kpi-sub">Discovered this period</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Price Reductions</span>
+      <span class="kpi-value red">{{ "{:,}".format(overall.total_price_reductions) }}</span>
+      <span class="kpi-sub">Seller adjustments tracked</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Inventory Growth</span>
+      <span class="kpi-value gold">{{ overall.active_listings_growth_pct }}%</span>
+      <span class="kpi-sub">First → last week</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Neighbourhoods Tracked</span>
+      <span class="kpi-value">{{ overall.unique_neighbourhoods }}</span>
+      <span class="kpi-sub">Across {{ overall.num_cities }} cities</span>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SECTION 1: EXECUTIVE SUMMARY
+  ================================================================ -->
+  <section class="section" id="executive-summary">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2>Executive Summary</h2>
+    </div>
+    <div class="card">
+      {{ narrative.executive_summary | replace('\n\n', '</p><p>') | replace('\n', ' ') }}
+    </div>
+
+    <!-- Key Takeaways -->
+    <h3>Key Takeaways</h3>
+    <ul class="takeaways" id="key-takeaways">
+      {% for point in narrative.key_takeaways %}
+      <li>{{ point }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <!-- ================================================================
+       SECTION 2: INVENTORY DISTRIBUTION
+  ================================================================ -->
+  <section class="section" id="inventory-distribution">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2>Inventory Distribution — Most Active Markets</h2>
+    </div>
+
+    <div class="card">
+      <p>{{ narrative.inventory_narrative }}</p>
+    </div>
+
+    <!-- Bar chart: top neighbourhoods -->
+    {% set max_active = inventory_ranking[0].avg_weekly_active_listings %}
+    <div class="bar-chart" id="inventory-chart">
+      {% for item in inventory_ranking %}
+      <div class="bar-row">
+        <span class="bar-label" title="{{ item.neighbourhood }}, {{ item.city }}">
+          {{ item.neighbourhood }}
+        </span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: {{ (item.avg_weekly_active_listings / max_active * 100) | round(1) }}%"></div>
+        </div>
+        <span class="bar-value">{{ item.avg_weekly_active_listings }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="table-wrap" id="inventory-table">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Neighbourhood</th>
+            <th>City / State</th>
+            <th class="right">Avg. Weekly Active Listings</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in inventory_ranking %}
+          <tr>
+            <td class="rank">{{ item.rank }}</td>
+            <td class="hood">{{ item.neighbourhood }}</td>
+            <td class="city">{{ item.city }}</td>
+            <td class="right">{{ "{:,.1f}".format(item.avg_weekly_active_listings) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="methodology-note">
+      Average computed across all snapshot weeks in the reporting period.
+      Neighbourhoods with fewer than {{ pricing_tiers.filter_note.expensive_min_listings }} average weekly listings are excluded from pricing tables.
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 3: PRICING TIERS
+  ================================================================ -->
+  <section class="section" id="pricing-tiers">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
+    </div>
+
+    <div class="card">
+      <p>{{ narrative.pricing_narrative }}</p>
+    </div>
+
+    <div class="card-grid">
+      <!-- Most Expensive -->
+      <div>
+        <h3>Most Expensive Areas</h3>
+        <div class="table-wrap" id="expensive-table">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Neighbourhood</th>
+                <th class="right">Avg. Median Price</th>
+                <th class="right">Avg. DOM</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in pricing_tiers.most_expensive %}
+              <tr>
+                <td class="rank">{{ item.rank }}</td>
+                <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
+                <td class="price">
+                  {% if item.avg_median_price_ngn %}
+                    {% if item.avg_median_price_ngn >= 1_000_000_000 %}
+                      ₦{{ "{:.2f}".format(item.avg_median_price_ngn / 1_000_000_000) }}B
+                    {% elif item.avg_median_price_ngn >= 1_000_000 %}
+                      ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M
+                    {% else %}
+                      ₦{{ "{:,.0f}".format(item.avg_median_price_ngn) }}
+                    {% endif %}
+                  {% else %}N/A{% endif %}
+                </td>
+                <td class="right">{{ item.avg_days_on_market }}d</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Most Affordable -->
+      <div>
+        <h3>Most Affordable Areas</h3>
+        <div class="table-wrap" id="affordable-table">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Neighbourhood</th>
+                <th class="right">Avg. Median Price</th>
+                <th class="right">Avg. DOM</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in pricing_tiers.most_affordable %}
+              <tr>
+                <td class="rank">{{ item.rank }}</td>
+                <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
+                <td class="price">
+                  {% if item.avg_median_price_ngn %}
+                    {% if item.avg_median_price_ngn >= 1_000_000 %}
+                      ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M
+                    {% elif item.avg_median_price_ngn >= 1_000 %}
+                      ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k
+                    {% else %}
+                      ₦{{ "{:,.0f}".format(item.avg_median_price_ngn) }}
+                    {% endif %}
+                  {% else %}N/A{% endif %}
+                </td>
+                <td class="right">{{ item.avg_days_on_market }}d</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 4: REGIONAL DEEP DIVE
+  ================================================================ -->
+  <section class="section" id="regional-deep-dive">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2>Regional Deep Dive</h2>
+    </div>
+
+    <div class="card-grid">
+      {% if narrative.lagos_narrative %}
+      <div class="card" id="lagos-section">
+        <h3>Lagos</h3>
+        <p>{{ narrative.lagos_narrative }}</p>
+        {% if city_breakdown.LAGOS %}
+        <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
+            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.LAGOS.num_neighbourhoods }}</div>
+          </div>
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
+            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.LAGOS.top_neighbourhood_by_activity }}</div>
+          </div>
+          {% if city_breakdown.LAGOS.median_price_ngn %}
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
+            <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(city_breakdown.LAGOS.median_price_ngn / 1_000_000) }}M</div>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if narrative.abuja_narrative and city_breakdown.ABUJA %}
+      <div class="card" id="abuja-section">
+        <h3>Abuja (FCT)</h3>
+        <p>{{ narrative.abuja_narrative }}</p>
+        <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
+            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.ABUJA.num_neighbourhoods }}</div>
+          </div>
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
+            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.ABUJA.top_neighbourhood_by_activity }}</div>
+          </div>
+          {% if city_breakdown.ABUJA.median_price_ngn %}
+          <div>
+            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
+            <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(city_breakdown.ABUJA.median_price_ngn / 1_000_000) }}M</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if narrative.other_cities_narrative %}
+    <div class="card" id="other-cities-section">
+      <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
+      <p>{{ narrative.other_cities_narrative }}</p>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- ================================================================
+       SECTION 5: WEEKLY TRENDS
+  ================================================================ -->
+  <section class="section" id="weekly-trends">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2>Weekly Inflow &amp; Price Reduction Trends</h2>
+    </div>
+
+    <div class="table-wrap" id="weekly-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Week Start</th>
+            <th class="right">Active Listings</th>
+            <th class="right">New Listings</th>
+            <th class="right">Price Reductions</th>
+            <th class="right">Median Price (NGN)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in weekly_aggregates %}
+          <tr>
+            <td style="font-family:var(--font-mono);font-size:0.82rem">{{ row.week }}</td>
+            <td class="right">{{ "{:,}".format(row.active_listing_count) }}</td>
+            <td class="right">{{ "{:,}".format(row.new_listings_count) }}</td>
+            <td class="right">{{ row.price_reduced_count }}</td>
+            <td class="price">
+              {% if row.median_price_ngn %}
+                {% if row.median_price_ngn >= 1_000_000 %}
+                  ₦{{ "{:.1f}".format(row.median_price_ngn / 1_000_000) }}M
+                {% else %}
+                  ₦{{ "{:,.0f}".format(row.median_price_ngn) }}
+                {% endif %}
+              {% else %}—{% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 6: PRICE REDUCTION ANALYSIS
+  ================================================================ -->
+  <section class="section" id="price-reduction-analysis">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <h2>Price Reduction Analysis — Seller Behaviour</h2>
+    </div>
+
+    <div class="card">
+      <p>{{ narrative.price_reduction_narrative }}</p>
+      <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)">
+        <strong style="color:var(--text-secondary)">Peak reduction week:</strong>
+        {{ price_reduction_analysis.peak_week }} with
+        {{ price_reduction_analysis.peak_week_count }} events.
+      </p>
+    </div>
+
+    <!-- Price reductions by city bar chart -->
+    {% set max_reductions = price_reduction_analysis.by_city[0].total_reductions if price_reduction_analysis.by_city else 1 %}
+    <div class="bar-chart" id="reductions-chart">
+      {% for item in price_reduction_analysis.by_city %}
+      {% if item.total_reductions > 0 %}
+      <div class="bar-row">
+        <span class="bar-label">{{ item.city }}</span>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: {{ (item.total_reductions / max_reductions * 100) | round(1) }}%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+        </div>
+        <span class="bar-value">{{ item.total_reductions }}</span>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ================================================================
+       SECTION 7: OUTLOOK
+  ================================================================ -->
+  <section class="section" id="outlook">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <h2>Market Outlook</h2>
+    </div>
+    <div class="card">
+      <p>{{ narrative.outlook }}</p>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       METHODOLOGY
+  ================================================================ -->
+  <section class="section" id="methodology">
+    <div class="section-header">
+      <span class="section-number">08</span>
+      <h2>Methodology &amp; Data Notes</h2>
+    </div>
+    <div class="card" style="font-size:0.875rem">
+      <p><strong>Data source:</strong> PS-0 PropertyScraper autonomously collects listings from
+      PropertyPro.ng, PrivateProperty.com.ng, and NigeriaPropertyCentre.com on a weekly discovery
+      cadence with mid-week health checks.</p>
+
+      <p><strong>Neighbourhood normalisation:</strong> Raw neighbourhood strings from all portals
+      are normalised to a canonical name via a manually-curated mapping table. Only neighbourhoods
+      with ≥90% normalisation coverage are included in analysis.</p>
+
+      <p><strong>Price storage:</strong> All prices are stored internally as 64-bit integer kobo
+      values to eliminate floating-point arithmetic errors. NGN figures displayed in this report
+      are exact integer divisions by 100.</p>
+
+      <p><strong>Median vs. mean pricing:</strong> Median is used throughout to reduce skew from
+      outlier ultra-luxury listings. P25, P75, and P90 data are available in the source dataset
+      but excluded from this summary report for brevity.</p>
+
+      <p><strong>Price reductions:</strong> An event is recorded when a listing's price decreases
+      between two consecutive observations. Multiple reductions on the same listing count as
+      separate events.</p>
+
+      <p><strong>Days on market (DOM):</strong> Computed as the number of days between a listing's
+      first observed date and the snapshot date. Listings present since before the pipeline's
+      inception show DOM from the first observation date, not the actual listing date.</p>
+
+      <p><strong>Outage handling:</strong> On weeks where portal access was blocked or failed,
+      active inventory is carried forward from the prior week. New listing counts are recorded as
+      zero for that week. These weeks are noted in the weekly table.</p>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ================================================================
+       FOOTER
+  ================================================================ -->
+  <footer class="report-footer" id="report-footer">
+    <div class="footer-brand">
+      <strong>Isla Akinmokun</strong><br>
+      <span>Nigerian Residential Real Estate Market Intelligence</span><br>
+      <span>Published {{ published_date }} · reports.akinmokun.com</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://reports.akinmokun.com/">All Reports</a>
+      <a href="https://akinmokun.com/">akinmokun.com</a>
+      <a href="https://github.com/islajr/property-scraper">GitHub</a>
+    </div>
+  </footer>
+
+</div><!-- /page-wrapper -->
+</body>
+</html>
