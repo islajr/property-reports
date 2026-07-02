@@ -128,10 +128,47 @@
       margin-bottom: 1.5rem;
     }
 
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
     .header-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
+    }
+
+    .download-pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--bg-deep);
+      background-color: var(--gold-light);
+      border: 1px solid var(--gold);
+      border-radius: var(--radius);
+      transition: background-color 0.2s, border-color 0.2s, transform 0.1s, box-shadow 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .download-pdf-btn:hover {
+      background-color: var(--gold);
+      border-color: var(--gold-light);
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.15);
+    }
+
+    .download-pdf-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
     .tag {
@@ -448,8 +485,14 @@
         --accent-teal: #2b7a8a;
       }
 
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
       body { font-size: 11pt; }
       .page-wrapper { max-width: 100%; padding: 0; }
+      .download-pdf-btn { display: none !important; }
       .report-header h1 {
         background: none;
         -webkit-text-fill-color: var(--text-primary);
@@ -492,12 +535,18 @@
       {{ overall.report_period_label }} — 
       {{ overall.date_range.start }} to {{ overall.date_range.end }}
     </p>
-    <div class="header-tags">
-      <span class="tag gold">PS-0 PropertyScraper</span>
-      <span class="tag">{{ overall.num_cities }} Cities</span>
-      <span class="tag">{{ overall.unique_neighbourhoods }} Neighbourhoods</span>
-      <span class="tag">{{ overall.num_weeks }} Weeks of Data</span>
-      <span class="tag">Published {{ published_date }}</span>
+    <div class="header-actions">
+      <div class="header-tags">
+        <span class="tag gold">PS-0 PropertyScraper</span>
+        <span class="tag">{{ overall.num_cities }} Cities</span>
+        <span class="tag">{{ overall.unique_neighbourhoods }} Neighbourhoods</span>
+        <span class="tag">{{ overall.num_weeks }} Weeks of Data</span>
+        <span class="tag">Published {{ published_date }}</span>
+      </div>
+      <a href="report.pdf" class="download-pdf-btn" download>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download PDF
+      </a>
     </div>
   </header>
 
