@@ -76,6 +76,41 @@ def month_date_range(month_str: str) -> tuple[date, date]:
     return first, last
 
 
+def get_period_dates(month_str: str, period_str: str) -> tuple[date, date, str]:
+    """
+    Given an end month YYYY-MM and a period (1mo, 3mo, 6mo, 12mo),
+    returns (start_date, end_date, label).
+    """
+    year, month = int(month_str[:4]), int(month_str[5:7])
+    
+    months_to_subtract = {
+        "1mo": 0,
+        "3mo": 2,
+        "6mo": 5,
+        "12mo": 11,
+    }.get(period_str, 0)
+    
+    start_month = month - months_to_subtract
+    start_year = year
+    while start_month <= 0:
+        start_month += 12
+        start_year -= 1
+        
+    first_date = date(start_year, start_month, 1)
+    
+    if month == 12:
+        last_date = date(year + 1, 1, 1) - timedelta(days=1)
+    else:
+        last_date = date(year, month + 1, 1) - timedelta(days=1)
+        
+    if period_str == "1mo":
+        label = first_date.strftime("%B %Y")
+    else:
+        label = f"{first_date.strftime('%B %Y')} – {date(year, month, 1).strftime('%B %Y')}"
+        
+    return first_date, last_date, label
+
+
 # ---------------------------------------------------------------------------
 # Core analysis
 # ---------------------------------------------------------------------------
@@ -109,19 +144,18 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
     return df
 
 
-def filter_to_period(df: pd.DataFrame, month_str: str) -> pd.DataFrame:
-    first, last = month_date_range(month_str)
+def filter_to_period(df: pd.DataFrame, first: date, last: date, label_str: str) -> pd.DataFrame:
     mask = (df["snapshot_week"] >= first) & (df["snapshot_week"] <= last)
     filtered = df[mask].copy()
     if filtered.empty:
         raise ValueError(
-            f"No snapshot rows found for period {month_str} "
+            f"No snapshot rows found for period {label_str} "
             f"({first} to {last}). Check the CSV date range."
         )
     return filtered
 
 
-def compute_overall(df: pd.DataFrame, month_str: str) -> dict[str, Any]:
+def compute_overall(df: pd.DataFrame, month_str: str, period_label_str: str, period_str: str) -> dict[str, Any]:
     """High-level summary metrics for the reporting period."""
     weeks = sorted(df["snapshot_week"].unique())
     num_weeks = len(weeks)
@@ -160,9 +194,11 @@ def compute_overall(df: pd.DataFrame, month_str: str) -> dict[str, Any]:
     first_weekly_median_kobo = float(weekly_medians.iloc[0]) if len(weekly_medians) > 0 else None
     last_weekly_median_kobo = float(weekly_medians.iloc[-1]) if len(weekly_medians) > 0 else None
 
+    report_month_val = month_str if period_str == "1mo" else f"{month_str}_{period_str}"
+
     return {
-        "report_month": month_str,
-        "report_period_label": period_label(month_str),
+        "report_month": report_month_val,
+        "report_period_label": period_label_str,
         "weeks": [str(w) for w in weeks],
         "num_weeks": num_weeks,
         "date_range": {
@@ -353,6 +389,12 @@ def main() -> None:
         help="Reporting month in YYYY-MM format, e.g. 2026-06",
     )
     parser.add_argument(
+        "--period",
+        default="1mo",
+        choices=["1mo", "3mo", "6mo", "12mo"],
+        help="Reporting period window length (default: 1mo)",
+    )
+    parser.add_argument(
         "--csv",
         default=None,
         help=f"Path to the snapshots CSV. Defaults to {DEFAULT_CSV}",
@@ -360,7 +402,7 @@ def main() -> None:
     parser.add_argument(
         "--out",
         default=None,
-        help="Output JSON path. Defaults to data/metrics_YYYY-MM.json",
+        help="Output JSON path. Defaults to data/metrics_YYYY-MM[_period].json",
     )
     args = parser.parse_args()
 
@@ -377,21 +419,25 @@ def main() -> None:
         print("Run scripts/export_data.py first, or pass --csv path/to/file.csv", file=sys.stderr)
         sys.exit(1)
 
-    out_path = Path(args.out) if args.out else DATA_DIR / f"metrics_{args.month}.json"
+    # Determine start date, end date, and text label based on period
+    first_date, last_date, period_label_str = get_period_dates(args.month, args.period)
+
+    suffix = "" if args.period == "1mo" else f"_{args.period}"
+    out_path = Path(args.out) if args.out else DATA_DIR / f"metrics_{args.month}{suffix}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"Loading snapshots from {csv_path} ...")
     df = load_snapshots(csv_path)
     print(f"  Total rows loaded: {len(df):,}")
 
-    print(f"Filtering to period {args.month} ...")
-    period_df = filter_to_period(df, args.month)
+    print(f"Filtering to period {period_label_str} ({first_date} to {last_date}) ...")
+    period_df = filter_to_period(df, first_date, last_date, period_label_str)
     weeks = sorted(period_df["snapshot_week"].unique())
     print(f"  Rows in period: {len(period_df):,}  |  Weeks: {[str(w) for w in weeks]}")
 
     print("Computing metrics ...")
     metrics = {
-        "overall": compute_overall(period_df, args.month),
+        "overall": compute_overall(period_df, args.month, period_label_str, args.period),
         "weekly_aggregates": compute_weekly_aggregates(period_df),
         "inventory_ranking": compute_inventory_ranking(period_df),
         "pricing_tiers": compute_pricing_tiers(period_df),

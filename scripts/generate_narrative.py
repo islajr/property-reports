@@ -230,14 +230,20 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate LLM narrative for a monthly report.")
     parser.add_argument("--month", required=True, help="Reporting month in YYYY-MM format.")
     parser.add_argument(
+        "--period",
+        default="1mo",
+        choices=["1mo", "3mo", "6mo", "12mo"],
+        help="Reporting period window length (default: 1mo)",
+    )
+    parser.add_argument(
         "--metrics",
         default=None,
-        help="Path to metrics JSON. Defaults to data/metrics_YYYY-MM.json.",
+        help="Path to metrics JSON. Defaults to data/metrics_YYYY-MM[_period].json.",
     )
     parser.add_argument(
         "--out",
         default=None,
-        help="Output narrative JSON path. Defaults to data/narrative_YYYY-MM.json.",
+        help="Output narrative JSON path. Defaults to data/narrative_YYYY-MM[_period].json.",
     )
     parser.add_argument(
         "--placeholder",
@@ -246,8 +252,9 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}.json"
-    out_path = Path(args.out) if args.out else DATA_DIR / f"narrative_{args.month}.json"
+    suffix = "" if args.period == "1mo" else f"_{args.period}"
+    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}{suffix}.json"
+    out_path = Path(args.out) if args.out else DATA_DIR / f"narrative_{args.month}{suffix}.json"
 
     if not metrics_path.exists():
         print(f"ERROR: Metrics file not found: {metrics_path}", file=sys.stderr)

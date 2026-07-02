@@ -207,9 +207,19 @@ def regenerate_index(reports_dir: Path) -> None:
                 meta = json.load(f)
 
         month_str = sub.name
+        parts = month_str.split("_")
+        base_month = parts[0]
+        period_suffix = parts[1] if len(parts) > 1 else "1mo"
+
         try:
-            dt = date.fromisoformat(f"{month_str}-01")
+            dt = date.fromisoformat(f"{base_month}-01")
             label = dt.strftime("%B %Y")
+            if period_suffix == "3mo":
+                label += " (3-Month)"
+            elif period_suffix == "6mo":
+                label += " (6-Month)"
+            elif period_suffix == "12mo":
+                label += " (Yearly)"
         except ValueError:
             label = month_str
 
@@ -235,23 +245,30 @@ def regenerate_index(reports_dir: Path) -> None:
 # ---------------------------------------------------------------------------
 # Entrypoint
 # ---------------------------------------------------------------------------
-
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render monthly report HTML (and PDF).")
     parser.add_argument("--month", required=True, help="Reporting month in YYYY-MM format.")
+    parser.add_argument(
+        "--period",
+        default="1mo",
+        choices=["1mo", "3mo", "6mo", "12mo"],
+        help="Reporting period window length (default: 1mo)",
+    )
     parser.add_argument("--metrics", default=None, help="Override metrics JSON path.")
     parser.add_argument("--narrative", default=None, help="Override narrative JSON path.")
     parser.add_argument("--issue", type=int, default=None, help="Issue number (e.g. 1 for first report).")
     parser.add_argument("--no-pdf", action="store_true", help="Skip PDF generation.")
     args = parser.parse_args()
 
-    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}.json"
-    narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{args.month}.json"
+    suffix = "" if args.period == "1mo" else f"_{args.period}"
+    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}{suffix}.json"
+    narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{args.month}{suffix}.json"
 
     metrics = load_json(metrics_path, "metrics")
     narrative = load_json(narrative_path, "narrative")
 
-    out_dir = REPORTS_DIR / args.month
+    folder_name = args.month if args.period == "1mo" else f"{args.month}_{args.period}"
+    out_dir = REPORTS_DIR / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
     # Determine issue number
