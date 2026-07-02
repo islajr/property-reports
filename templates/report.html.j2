@@ -468,6 +468,10 @@
        WeasyPrint and browser print both use these.
     =================================================================== */
     @media print {
+      @page {
+        size: A4;
+        margin: 15mm;
+      }
       :root {
         --bg-deep:     #ffffff;
         --bg-card:     #f8f9fa;
@@ -498,9 +502,35 @@
         -webkit-text-fill-color: var(--text-primary);
         color: var(--text-primary);
       }
-      .kpi-strip { page-break-inside: avoid; }
-      .section { page-break-inside: avoid; }
-      .table-wrap { page-break-inside: avoid; }
+      .kpi-strip {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        background: none !important;
+        border: none !important;
+        gap: 8px !important;
+        margin-bottom: 2rem !important;
+        page-break-inside: avoid !important;
+      }
+      .kpi-card {
+        flex: 1 1 140px !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius) !important;
+        background: var(--bg-card) !important;
+        padding: 0.85rem !important;
+      }
+      .card-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+      }
+      .card-grid > * {
+        page-break-inside: avoid !important;
+        width: 100% !important;
+      }
+      .section { page-break-inside: auto !important; }
+      .card { page-break-inside: avoid !important; }
+      .table-wrap { page-break-inside: avoid !important; }
       a { color: var(--text-primary); text-decoration: none; }
     }
 
