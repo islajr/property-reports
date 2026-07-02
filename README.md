@@ -49,17 +49,17 @@ Copy `.env.example` to `.env` and fill in your Supabase credentials and Gemini A
 
 ## Generating a Report
 
-Use the unified orchestrator script `run.py` at the root of the project to generate reports. It automates all steps (exporting, computing metrics, narrative generation, HTML rendering, and PDF generation) with flags:
+Use the unified orchestrator shell script `run.sh` at the root of the project to generate reports. It automates all steps (exporting, computing metrics, narrative generation, HTML rendering, and PDF generation) with flags:
 
 ```bash
 # Render a single month with placeholder narrative (skips Gemini API key requirement):
-python run.py --month 2026-06 --placeholder
+./run.sh --month 2026-06 --placeholder
 
 # Render a 3-month report ending in June 2026, pulling fresh data from Supabase first:
-python run.py --month 2026-06 --period 3mo --export
+./run.sh --month 2026-06 --period 3mo --export
 
 # Render a 6-month report with real Gemini narratives:
-python run.py --month 2026-06 --period 6mo
+./run.sh --month 2026-06 --period 6mo
 ```
 
 Options:
