@@ -1,0 +1,100 @@
+name: Monthly Market Report
+
+on:
+  schedule:
+    # First day of each month at 06:00 WAT (05:00 UTC)
+    - cron: '0 5 1 * *'
+  workflow_dispatch:
+    inputs:
+      month:
+        description: 'Reporting month (YYYY-MM). Defaults to prior calendar month.'
+        required: false
+        type: string
+      issue_number:
+        description: 'Issue number override (optional).'
+        required: false
+        type: string
+      skip_pdf:
+        description: 'Skip PDF generation'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+jobs:
+  generate-report:
+    name: Generate & Publish Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed to push the rendered output
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Install WeasyPrint system deps (required on Ubuntu)
+      - name: Install WeasyPrint system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 \
+            libcairo2 libffi-dev libxml2 libxslt1.1
+
+      - name: Determine reporting month
+        id: month
+        run: |
+          if [ -n "${{ github.event.inputs.month }}" ]; then
+            echo "month=${{ github.event.inputs.month }}" >> $GITHUB_OUTPUT
+          else
+            # Prior calendar month
+            echo "month=$(date -d '1 month ago' +'%Y-%m')" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Export data from Supabase
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          mkdir -p data
+          python scripts/export_data.py --out data/neighbourhood_snapshots.csv
+
+      - name: Compute metrics
+        run: |
+          python scripts/compute_metrics.py \
+            --month ${{ steps.month.outputs.month }} \
+            --csv data/neighbourhood_snapshots.csv
+
+      - name: Generate narrative (Gemini)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/generate_narrative.py --month ${{ steps.month.outputs.month }}
+
+      - name: Render HTML report
+        run: |
+          SKIP_PDF="${{ github.event.inputs.skip_pdf || 'false' }}"
+          PDF_FLAG=""
+          if [ "$SKIP_PDF" = "true" ]; then PDF_FLAG="--no-pdf"; fi
+          python scripts/render_report.py \
+            --month ${{ steps.month.outputs.month }} \
+            ${{ github.event.inputs.issue_number && format('--issue {0}', github.event.inputs.issue_number) || '' }} \
+            $PDF_FLAG
+
+      - name: Commit and push rendered report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          MONTH="${{ steps.month.outputs.month }}"
+          git diff --cached --quiet || \
+            git commit -m "report: add $(date -d "${MONTH}-01" +'%B %Y') market report"
+          git push
