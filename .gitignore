@@ -26,3 +26,9 @@ Thumbs.db
 .idea/
 .vscode/
 .antigravity*
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
