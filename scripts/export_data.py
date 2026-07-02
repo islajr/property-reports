@@ -41,7 +41,7 @@ SELECT
     p25,
     p75,
     p90
-FROM analytics.neighbourhood_snapshots
+FROM market.neighbourhood_snapshots
 ORDER BY snapshot_week ASC, city ASC, neighbourhood ASC;
 """
 
