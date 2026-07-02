@@ -39,8 +39,33 @@
       --radius:       6px;
       --radius-lg:    10px;
 
-      --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+      /*
+       * System font stack — works offline, zero external requests.
+       * Rendering order: Inter (if self-hosted later) → SF Pro (macOS/iOS)
+       * → Segoe UI Variable (Windows 11) → Ubuntu/Cantarell (Linux)
+       * → Roboto (Android/Chrome) → generic system-ui fallback.
+       */
+      --font-sans:
+        'Inter',
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI Variable',
+        'Segoe UI',
+        Ubuntu,
+        Cantarell,
+        Roboto,
+        'Helvetica Neue',
+        Arial,
+        sans-serif;
+      --font-mono:
+        'JetBrains Mono',
+        'Cascadia Code',
+        'Cascadia Mono',
+        'Fira Code',
+        'Consolas',
+        'Courier New',
+        monospace;
 
       --max-width: 920px;
     }
@@ -465,11 +490,6 @@
       .kpi-strip { grid-template-columns: 1fr 1fr; }
     }
   </style>
-
-  <!-- Google Fonts loaded async for performance; has print fallback via system fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 
 <body>
@@ -918,3 +938,8 @@
 </div><!-- /page-wrapper -->
 </body>
 </html>
+<!--
+  FONT NOTE: This report uses a system font stack (no external CDN requests).
+  The document renders correctly offline and is self-contained.
+  If Inter is ever self-hosted, add it as a @font-face before the :root block.
+-->

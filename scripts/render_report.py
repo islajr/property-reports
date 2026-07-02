@@ -75,8 +75,6 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nigerian Real Estate Market Reports — reports.akinmokun.com</title>
   <meta name="description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isla Akinmokun." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg: #0d1117; --bg-card: #161b22; --border: #21262d;
@@ -85,7 +83,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
       --radius: 8px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    body { font-family: 'Inter', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable', 'Segoe UI', Ubuntu, Cantarell, Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
     .wrap { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
     header { margin-bottom: 3rem; }
     .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 0.75rem; }
