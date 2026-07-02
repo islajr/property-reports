@@ -4,7 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nigerian Real Estate Market Reports — reports.akinmokun.com</title>
-  <meta name="description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isaac Akinmokun." />
+  <meta name="description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isaac Akinmokun, powered by PS-0 PropertyScraper." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://reports.akinmokun.com/" />
+
+  <!-- Favicons / Icons -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16" />
+  <link rel="icon" href="/isaac-akinmokun-favicon-16x16.png" sizes="16x16" type="image/png" />
+  <link rel="icon" href="/isaac-akinmokun-favicon-32x32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/isaac-akinmokun-apple-touch-icon.png" sizes="180x180" type="image/png" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Nigerian Real Estate Market Reports — reports.akinmokun.com" />
+  <meta property="og:description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isaac Akinmokun, powered by PS-0 PropertyScraper." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://reports.akinmokun.com/" />
+  <meta property="og:site_name" content="Isaac Akinmokun" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nigerian Real Estate Market Reports — reports.akinmokun.com" />
+  <meta name="twitter:description" content="Monthly market intelligence reports on the Nigerian residential real estate market by Isaac Akinmokun, powered by PS-0 PropertyScraper." />
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://akinmokun.com/#person",
+        "name": "Isaac Akinmokun",
+        "givenName": "Isaac",
+        "familyName": "Akinmokun",
+        "gender": "http://schema.org/Male",
+        "jobTitle": "Backend Engineer & Quantitative PropTech Builder",
+        "url": "https://akinmokun.com",
+        "sameAs": [
+          "https://github.com/islajr",
+          "https://linkedin.com/in/akinmokun",
+          "https://x.com/islajrn",
+          "https://instagram.com/islajrn",
+          "https://instagram.com/ioakin"
+        ]
+      },
+      {
+        "@type": "CollectionPage",
+        "@id": "https://reports.akinmokun.com/#webpage",
+        "url": "https://reports.akinmokun.com/",
+        "name": "Nigerian Real Estate Market Reports",
+        "description": "Monthly market intelligence reports on the Nigerian residential real estate market by Isaac Akinmokun, powered by PS-0 PropertyScraper.",
+        "publisher": {
+          "@id": "https://akinmokun.com/#person"
+        }
+      }
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -17,8 +75,15 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; -webkit-font-smoothing: antialiased; }
-    .wrap { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
-    header { margin-bottom: 3rem; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+    .global-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; }
+    .global-header .logo-link { display: inline-flex; align-items: center; transition: opacity 0.15s ease; }
+    .global-header .logo-link:hover { opacity: 0.55; }
+    .global-header .logo-img { border-radius: 3px; }
+    .global-header .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .global-header .nav-links a { font-size: 0.85rem; color: var(--text2); text-decoration: none; transition: color 0.15s ease; }
+    .global-header .nav-links a:hover, .global-header .nav-links a.active { color: var(--text); }
+    .reports-header { margin-top: 3rem; margin-bottom: 3rem; }
     .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 0.75rem; }
     h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, var(--text) 60%, var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
     .sub { color: var(--text2); font-size: 1rem; }
@@ -40,7 +105,20 @@
 </head>
 <body>
 <div class="wrap">
-  <header>
+  <header class="global-header">
+    <a class="logo-link" href="https://akinmokun.com/">
+      <img alt="Isaac Akinmokun Logo" src="/isaac-akinmokun-apple-touch-icon.png" width="32" height="32" class="logo-img" />
+    </a>
+    <nav class="nav-links">
+      <a href="https://akinmokun.com/">Home</a>
+      <a href="https://akinmokun.com/about/">About</a>
+      <a href="https://akinmokun.com/now/">Now</a>
+      <a href="https://akinmokun.com/blog/">Blog ↗</a>
+      <a href="/" class="active">Reports</a>
+    </nav>
+  </header>
+
+  <header class="reports-header">
     <div class="label">akinmokun.com · Market Intelligence</div>
     <h1>Nigerian Residential Real Estate<br>Market Reports</h1>
     <p class="sub">Monthly data intelligence on Nigeria's property market, powered by PS-0 PropertyScraper.</p>

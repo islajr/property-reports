@@ -6,12 +6,87 @@
   <title>{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report | akinmokun.com</title>
   <meta name="description" content="Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods." />
   <meta name="author" content="Isaac Akinmokun" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+
+  <!-- Favicons / Icons -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16" />
+  <link rel="icon" href="/isaac-akinmokun-favicon-16x16.png" sizes="16x16" type="image/png" />
+  <link rel="icon" href="/isaac-akinmokun-favicon-32x32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/isaac-akinmokun-apple-touch-icon.png" sizes="180x180" type="image/png" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
   <meta property="og:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
   <meta property="og:type" content="article" />
   <meta property="og:url" content="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+  <meta property="og:site_name" content="Isaac Akinmokun" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
+  <meta name="twitter:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://akinmokun.com/#person",
+        "name": "Isaac Akinmokun",
+        "givenName": "Isaac",
+        "familyName": "Akinmokun",
+        "gender": "http://schema.org/Male",
+        "jobTitle": "Backend Engineer & Quantitative PropTech Builder",
+        "url": "https://akinmokun.com",
+        "sameAs": [
+          "https://github.com/islajr",
+          "https://linkedin.com/in/akinmokun",
+          "https://x.com/islajrn",
+          "https://instagram.com/islajrn",
+          "https://instagram.com/ioakin"
+        ]
+      },
+      {
+        "@type": "TechArticle",
+        "@id": "https://reports.akinmokun.com/{{ overall.report_month }}/#article",
+        "isPartOf": {
+          "@type": "WebPage",
+          "@id": "https://reports.akinmokun.com/{{ overall.report_month }}/"
+        },
+        "headline": "{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report",
+        "description": "Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods.",
+        "inLanguage": "en-US",
+        "mainEntityOfPage": "https://reports.akinmokun.com/{{ overall.report_month }}/",
+        "datePublished": "{{ published_date_iso }}",
+        "dateModified": "{{ published_date_iso }}",
+        "author": {
+          "@id": "https://akinmokun.com/#person"
+        },
+        "publisher": {
+          "@id": "https://akinmokun.com/#person"
+        },
+        "about": [
+          {
+            "@type": "Thing",
+            "name": "Real Estate Market"
+          },
+          {
+            "@type": "Thing",
+            "name": "Property Valuation"
+          },
+          {
+            "@type": "Thing",
+            "name": "Nigeria"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 
   <style>
     {{ embedded_fonts_css }}
@@ -462,11 +537,45 @@
       padding: 0.75rem 1rem;
       margin-top: 0.75rem;
     }
+    .global-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    .global-header .logo-link {
+      display: inline-flex;
+      align-items: center;
+      transition: opacity 0.15s ease;
+    }
+    .global-header .logo-link:hover {
+      opacity: 0.55;
+    }
+    .global-header .logo-img {
+      border-radius: 3px;
+    }
+    .global-header .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .global-header .nav-links a {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .global-header .nav-links a:hover,
+    .global-header .nav-links a.active {
+      color: var(--text-primary);
+    }
 
     /* ===================================================================
        PRINT / PDF OVERRIDES
        WeasyPrint and browser print both use these.
-    =================================================================== */
+       =================================================================== */
     @media print {
       @page {
         size: A4;
@@ -496,6 +605,7 @@
       }
       body { font-size: 11pt; }
       .page-wrapper { max-width: 100%; padding: 0; }
+      .global-header { display: none !important; }
       .download-pdf-btn { display: none !important; }
       .report-header h1 {
         background: none;
@@ -548,6 +658,19 @@
 
 <body>
 <div class="page-wrapper">
+
+  <header class="global-header">
+    <a class="logo-link" href="https://akinmokun.com/">
+      <img alt="Isaac Akinmokun Logo" src="/isaac-akinmokun-apple-touch-icon.png" width="32" height="32" class="logo-img" />
+    </a>
+    <nav class="nav-links">
+      <a href="https://akinmokun.com/">Home</a>
+      <a href="https://akinmokun.com/about/">About</a>
+      <a href="https://akinmokun.com/now/">Now</a>
+      <a href="https://akinmokun.com/blog/">Blog ↗</a>
+      <a href="/" class="active">Reports</a>
+    </nav>
+  </header>
 
   <!-- ================================================================
        HEADER
