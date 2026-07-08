@@ -110,6 +110,15 @@ def render_pdf(html_path: Path, pdf_path: Path) -> None:
     print(f"  ✓ PDF: {pdf_path}  ({size_kb:.0f} KB)")
 
 
+def get_descriptive_pdf_filename(month: str, period: str, type_str: str) -> str:
+    parts = ["nigerian-residential-real-estate-market-report", month]
+    if period and period != "1mo":
+        parts.append(period)
+    if type_str and type_str != "all":
+        parts.append(type_str)
+    return "-".join(parts) + ".pdf"
+
+
 # ---------------------------------------------------------------------------
 # Index page generation
 # ---------------------------------------------------------------------------
@@ -526,7 +535,8 @@ def regenerate_index(reports_dir: Path) -> None:
         if not sub.is_dir() or sub.name == ".gitkeep":
             continue
         html_file = sub / "index.html"
-        pdf_file = sub / "report.pdf"
+        pdf_files = list(sub.glob("*.pdf"))
+        pdf_file = pdf_files[0] if pdf_files else None
         meta_file = sub / "meta.json"
         if not html_file.exists():
             continue
@@ -577,7 +587,8 @@ def regenerate_index(reports_dir: Path) -> None:
             "published": meta.get("published_date", "—"),
             "cities": meta.get("num_cities", "—"),
             "neighbourhoods": meta.get("unique_neighbourhoods", "—"),
-            "has_pdf": pdf_file.exists(),
+            "has_pdf": pdf_file is not None,
+            "pdf_name": pdf_file.name if pdf_file else None,
         })
 
     env = Environment(autoescape=select_autoescape(["html"]))
@@ -706,6 +717,10 @@ def main() -> None:
         print("ERROR: No metrics data found (neither sales nor rentals)", file=sys.stderr)
         sys.exit(1)
 
+    # Determine descriptive PDF filename
+    pdf_filename = get_descriptive_pdf_filename(args.month, args.period, metrics.get("type", "all"))
+
+    # Prepare Jinja template context
     template_vars = {
         "overall": primary["overall"],
         "metrics": metrics,
@@ -716,6 +731,7 @@ def main() -> None:
         "published_date": published_date,
         "published_date_iso": published_date_iso,
         "embedded_fonts_css": embedded_fonts_css,
+        "pdf_filename": pdf_filename,
     }
 
     # Render HTML
@@ -743,7 +759,7 @@ def main() -> None:
 
     # Render PDF
     if not args.no_pdf:
-        pdf_path = out_dir / "report.pdf"
+        pdf_path = out_dir / pdf_filename
         render_pdf(html_path, pdf_path)
 
     # Regenerate reports index
