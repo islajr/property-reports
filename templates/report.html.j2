@@ -127,6 +127,49 @@
     }
 
     /* ===================================================================
+       THEME OVERRIDES (Period & Type scoping)
+    =================================================================== */
+
+    /* Type overrides (Sales/Rentals) */
+    .type-sale {
+      --gold:         #3182ce;
+      --gold-light:   #63b3ed;
+      --gold-dim:     #2b6cb0;
+    }
+
+    .type-rent {
+      --gold:         #38a169;
+      --gold-light:   #68d391;
+      --gold-dim:     #2f855a;
+    }
+
+    /* Period overrides (Quarterly, Bi-Annual, Yearly - takes precedence) */
+    .period-3mo {
+      --gold:         #829ab1;
+      --gold-light:   #9fb3c8;
+      --gold-dim:     #627d98;
+    }
+
+    .period-6mo {
+      --gold:         #c87a53;
+      --gold-light:   #e2947a;
+      --gold-dim:     #a65f3c;
+    }
+
+    .period-12mo {
+      --gold:         #d4af37;
+      --gold-light:   #f3e5ab;
+      --gold-dim:     #aa8c2c;
+    }
+
+    .period-12mo h1,
+    .period-12mo h2,
+    .period-12mo h3 {
+      font-family: 'Playfair Display', Georgia, serif !important;
+      letter-spacing: -0.2px;
+    }
+
+    /* ===================================================================
        RESET & BASE
     =================================================================== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -658,7 +701,7 @@
 </head>
 
 <body>
-<div class="page-wrapper">
+<div class="page-wrapper period-{{ period }} type-{{ type }}">
 
   <header class="global-header">
     <a class="logo-link" href="https://akinmokun.com/">
