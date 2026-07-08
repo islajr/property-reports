@@ -290,7 +290,14 @@ def regenerate_index(reports_dir: Path) -> None:
         month_str = sub.name
         parts = month_str.split("_")
         base_month = parts[0]
-        period_suffix = parts[1] if len(parts) > 1 else "1mo"
+
+        period_suffix = "1mo"
+        mtype_suffix = "all"
+        for p in parts[1:]:
+            if p in ("3mo", "6mo", "12mo"):
+                period_suffix = p
+            elif p in ("sale", "rent"):
+                mtype_suffix = p
 
         try:
             dt = date.fromisoformat(f"{base_month}-01")
@@ -301,6 +308,11 @@ def regenerate_index(reports_dir: Path) -> None:
                 label += " (6-Month)"
             elif period_suffix == "12mo":
                 label += " (Yearly)"
+
+            if mtype_suffix == "sale":
+                label += " - Sales"
+            elif mtype_suffix == "rent":
+                label += " - Rentals"
         except ValueError:
             label = month_str
 
@@ -413,6 +425,9 @@ def main() -> None:
     narrative = load_json(narrative_path, "narrative")
 
     folder_name = args.month if args.period == "1mo" else f"{args.month}_{args.period}"
+    mtype = metrics.get("type", "all")
+    if mtype != "all":
+        folder_name = f"{folder_name}_{mtype}"
     out_dir = REPORTS_DIR / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -428,13 +443,14 @@ def main() -> None:
     print("Embedding fonts ...")
     embedded_fonts_css = build_embedded_fonts_css()
 
+    primary = metrics["sales"] if metrics.get("sales") else metrics["rentals"]
+    if not primary:
+        print("ERROR: No metrics data found (neither sales nor rentals)", file=sys.stderr)
+        sys.exit(1)
+
     template_vars = {
-        "overall": metrics["overall"],
-        "weekly_aggregates": metrics["weekly_aggregates"],
-        "inventory_ranking": metrics["inventory_ranking"],
-        "pricing_tiers": metrics["pricing_tiers"],
-        "city_breakdown": metrics["city_breakdown"],
-        "price_reduction_analysis": metrics["price_reduction_analysis"],
+        "overall": primary["overall"],
+        "metrics": metrics,
         "narrative": narrative,
         "issue_number": issue_number,
         "published_date": published_date,
@@ -456,9 +472,10 @@ def main() -> None:
         "month": args.month,
         "issue_number": issue_number,
         "published_date": published_date,
-        "num_cities": metrics["overall"]["num_cities"],
-        "unique_neighbourhoods": metrics["overall"]["unique_neighbourhoods"],
-        "peak_active_listings": metrics["overall"]["peak_active_listings"],
+        "num_cities": primary["overall"]["num_cities"],
+        "unique_neighbourhoods": primary["overall"]["unique_neighbourhoods"],
+        "peak_active_listings": primary["overall"]["peak_active_listings"],
+        "type": metrics.get("type", "all"),
     }
     with open(out_dir / "meta.json", "w") as f:
         json.dump(meta, f, indent=2)

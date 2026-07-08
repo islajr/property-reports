@@ -36,8 +36,8 @@ KOBO_PER_NGN = 100
 DEFAULT_CSV = Path(__file__).parent.parent / "data" / "neighbourhood_snapshots.csv"
 DATA_DIR = Path(__file__).parent.parent / "data"
 
-MIN_LISTINGS_EXPENSIVE = 10   # minimum average weekly active listings to appear in expensive table
-MIN_LISTINGS_AFFORDABLE = 5   # minimum for affordable table
+MIN_LISTINGS_EXPENSIVE = 5   # lowered slightly due to price_type split
+MIN_LISTINGS_AFFORDABLE = 3   # lowered slightly due to price_type split
 
 
 # ---------------------------------------------------------------------------
@@ -140,6 +140,10 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
                 "p25", "p75", "p90", "avg_days_on_market"]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # Filter out short lets
+    if "price_type" in df.columns:
+        df = df[df["price_type"] != "FOR_SHORT_LET"].copy()
 
     return df
 
@@ -379,6 +383,18 @@ def compute_price_reduction_analysis(df: pd.DataFrame) -> dict[str, Any]:
 # Entrypoint
 # ---------------------------------------------------------------------------
 
+def compute_all_metrics(df: pd.DataFrame, month_str: str, period_label_str: str, period_str: str) -> dict[str, Any]:
+    """Helper to calculate the full set of metrics for a filtered dataset."""
+    return {
+        "overall": compute_overall(df, month_str, period_label_str, period_str),
+        "weekly_aggregates": compute_weekly_aggregates(df),
+        "inventory_ranking": compute_inventory_ranking(df),
+        "pricing_tiers": compute_pricing_tiers(df),
+        "city_breakdown": compute_city_breakdown(df),
+        "price_reduction_analysis": compute_price_reduction_analysis(df),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Compute monthly market metrics from neighbourhood snapshots CSV."
@@ -393,6 +409,12 @@ def main() -> None:
         default="1mo",
         choices=["1mo", "3mo", "6mo", "12mo"],
         help="Reporting period window length (default: 1mo)",
+    )
+    parser.add_argument(
+        "--type",
+        default="all",
+        choices=["all", "sale", "rent"],
+        help="Report type: all (combined), sale (sales only), or rent (rentals only)",
     )
     parser.add_argument(
         "--csv",
@@ -435,36 +457,43 @@ def main() -> None:
     weeks = sorted(period_df["snapshot_week"].unique())
     print(f"  Rows in period: {len(period_df):,}  |  Weeks: {[str(w) for w in weeks]}")
 
-    print("Computing metrics ...")
+    print(f"Computing metrics (type: {args.type}) ...")
     metrics = {
-        "overall": compute_overall(period_df, args.month, period_label_str, args.period),
-        "weekly_aggregates": compute_weekly_aggregates(period_df),
-        "inventory_ranking": compute_inventory_ranking(period_df),
-        "pricing_tiers": compute_pricing_tiers(period_df),
-        "city_breakdown": compute_city_breakdown(period_df),
-        "price_reduction_analysis": compute_price_reduction_analysis(period_df),
+        "type": args.type,
+        "sales": None,
+        "rentals": None
     }
+
+    if args.type in ("all", "sale"):
+        sales_df = period_df[period_df["price_type"] == "FOR_SALE"]
+        if not sales_df.empty:
+            metrics["sales"] = compute_all_metrics(sales_df, args.month, period_label_str, args.period)
+        else:
+            print("  WARNING: No Sales records found in period.")
+
+    if args.type in ("all", "rent"):
+        rent_df = period_df[period_df["price_type"] == "FOR_RENT"]
+        if not rent_df.empty:
+            metrics["rentals"] = compute_all_metrics(rent_df, args.month, period_label_str, args.period)
+        else:
+            print("  WARNING: No Rentals records found in period.")
 
     with open(out_path, "w") as f:
         json.dump(metrics, f, indent=2, default=str)
 
     print(f"\n✓ Metrics written to {out_path}")
 
-    # Print a quick sanity-check summary
-    ov = metrics["overall"]
+    # Print sanity check
     print("\n--- Sanity check ---")
-    print(f"  Period:               {ov['report_period_label']}")
-    print(f"  Weeks covered:        {ov['num_weeks']}")
-    print(f"  Cities:               {', '.join(ov['cities'])}")
-    print(f"  Unique neighbourhoods:{ov['unique_neighbourhoods']}")
-    print(f"  Cumulative active:    {ov['cumulative_active_listings']:,}")
-    print(f"  Total new listings:   {ov['total_new_listings']:,}")
-    print(f"  Total price drops:    {ov['total_price_reductions']:,}")
-    print(f"  Peak active (latest): {ov['peak_active_listings']:,}")
-    print(f"  Growth (first→last):  {ov['active_listings_growth_pct']}%")
-    print(f"  Overall median price: {fmt_ngn(ov['overall_median_price_kobo'])}")
+    print(f"  Period:               {period_label_str}")
+    print(f"  Weeks covered:        {len(weeks)}")
+    if metrics["sales"]:
+        ov = metrics["sales"]["overall"]
+        print(f"  [SALES] Cumulative Active: {ov['cumulative_active_listings']:,} | Peak Active: {ov['peak_active_listings']:,} | Median Price: {fmt_ngn(ov['overall_median_price_kobo'])}")
+    if metrics["rentals"]:
+        ov = metrics["rentals"]["overall"]
+        print(f"  [RENTALS] Cumulative Active: {ov['cumulative_active_listings']:,} | Peak Active: {ov['peak_active_listings']:,} | Median Price: {fmt_ngn(ov['overall_median_price_kobo'])}/yr")
     print("--------------------")
-    print("Review the above against known numbers before generating the report.")
 
 
 if __name__ == "__main__":

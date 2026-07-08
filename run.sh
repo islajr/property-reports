@@ -17,6 +17,7 @@ set -e
 
 # Default values
 PERIOD="1mo"
+TYPE="all"
 EXPORT=false
 PLACEHOLDER=false
 NO_PDF=false
@@ -29,6 +30,7 @@ show_help() {
   echo "Options:"
   echo "  -m, --month YYYY-MM    Target reporting month (end month) (required)"
   echo "  -p, --period PERIOD    Period window (1mo, 3mo, 6mo, 12mo; default: 1mo)"
+  echo "  -t, --type TYPE        Report type (all, sale, rent; default: all)"
   echo "  -e, --export           Pull fresh snapshots from Supabase first"
   echo "  --placeholder          Use placeholder narratives (bypasses Gemini API)"
   echo "  --no-pdf               Skip PDF generation via WeasyPrint"
@@ -46,6 +48,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -p|--period)
       PERIOD="$2"
+      shift 2
+      ;;
+    -t|--type)
+      TYPE="$2"
       shift 2
       ;;
     -e|--export)
@@ -96,8 +102,8 @@ if [ "$EXPORT" = true ]; then
 fi
 
 # Step 2: Compute metrics
-echo "=== Step 2: Computing metrics for $MONTH ($PERIOD period) ==="
-"$PYTHON" "$DIR/scripts/compute_metrics.py" --month "$MONTH" --period "$PERIOD"
+echo "=== Step 2: Computing metrics for $MONTH ($PERIOD period, type: $TYPE) ==="
+"$PYTHON" "$DIR/scripts/compute_metrics.py" --month "$MONTH" --period "$PERIOD" --type "$TYPE"
 
 # Step 3: Generate narrative
 echo "=== Step 3: Generating report narrative ==="
@@ -123,7 +129,11 @@ SUFFIX=""
 if [ "$PERIOD" != "1mo" ]; then
   SUFFIX="_$PERIOD"
 fi
-OUT_FOLDER="reports/${MONTH}${SUFFIX}"
+OUT_TYPE=""
+if [ "$TYPE" != "all" ]; then
+  OUT_TYPE="_$TYPE"
+fi
+OUT_FOLDER="reports/${MONTH}${SUFFIX}${OUT_TYPE}"
 
 echo ""
 echo "✓ Build completed successfully!"
