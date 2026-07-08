@@ -734,23 +734,17 @@
        RESPONSIVE
     =================================================================== */
     @media (max-width: 680px) {
-      .page-wrapper { padding: 0 1rem 3rem; }
+      .page-wrapper { padding: 0 1.5rem 3rem; }
       h1 { font-size: 1.6rem; line-height: 1.25; }
-      .global-header { flex-direction: column; gap: 1rem; align-items: flex-start; padding: 1rem 0; }
-      .global-header .nav-links { gap: 0.5rem 1rem; width: 100%; flex-wrap: wrap; }
+      .global-header { flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
       .report-header { padding: 1.5rem 0; margin-bottom: 1.5rem; }
-      .header-meta { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
-      .card-grid { grid-template-columns: 1fr; gap: 1rem; }
-      .bar-row { grid-template-columns: 80px 1fr 60px; font-size: 0.8rem; gap: 0.5rem; }
-      .kpi-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-      .kpi-card { padding: 0.75rem 1rem; }
-      .kpi-value { font-size: 1.25rem; }
-      .kpi-label { font-size: 0.65rem; }
-      .card { padding: 1rem 1.25rem; }
+      .header-meta { flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .card-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .bar-row { grid-template-columns: 110px 1fr 70px; gap: 0.6rem; }
+      .kpi-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+      .kpi-card { padding: 0.85rem 1.1rem; }
+      .card { padding: 1.25rem 1.5rem; }
       .section-header h2 { font-size: 1.15rem; }
-      table th, table td { padding: 0.5rem 0.4rem; font-size: 0.78rem; }
-      .price { font-size: 0.78rem; }
-      .takeaways li { font-size: 0.82rem; }
     }
   </style>
 </head>
@@ -854,20 +848,20 @@
             <h2>Executive Summary</h2>
           </div>
           <div class="card">
-            The Nigerian residential sales market demonstrated resilient expansion between April and June 2026, characterised by a 9.7% growth in active listings from the first to the final week of the quarter, peaking at 589 active listings. Across 225 unique neighbourhoods, cumulative active listings reached 6,785, supported by 5,695 new listings. This supply injection reflects sustained developer confidence and a steady pipeline of new completions entering the market.</p><p>Pricing dynamics remained highly volatile, with weekly median prices fluctuating between a low of ₦177.5M in late May and a peak of ₦260.0M in mid-April, before closing the quarter at ₦243.8M. The market continues to be dominated by high-value transactions, particularly in Lagos and Abuja, where institutional capital and high-net-worth individuals drive premium pricing.
+            The Nigerian residential sales market demonstrated structured expansion and resilient capital commitment between April and June 2026. Across 225 unique neighbourhoods analysed, cumulative active listings reached 6,785, supported by 5,695 new listings entering the market. The sector recorded a 9.7% growth in active listings from the first to the final week of the quarter, culminating in a peak active inventory of 589 listings in the latest week. This steady supply injection highlights sustained developer confidence in long-term market absorption despite prevailing macroeconomic headwinds.
           </div>
 
           <!-- Key Takeaways -->
           <h3>Key Takeaways</h3>
           <ul class="takeaways">
             
-            <li>Lagos dominated sales inventory, accounting for 5,263 of the 6,785 cumulative active listings.</li>
+            <li>Lagos and Abuja dominate residential sales, accounting for over 90% of active listing volumes.</li>
             
             <li>Banana Island remains the most expensive sales market, averaging a median price of ₦2956.7M.</li>
             
-            <li>Active listings grew by 9.7% over the quarter, indicating robust supply-side pipeline expansion.</li>
+            <li>Sales listings grew by 9.7% over the quarter, peaking at 589 active listings.</li>
             
-            <li>Abuja sales prices closely rivalled Lagos, posting a high median price of ₦238.8M.</li>
+            <li>Tactical price reductions peaked at 30 events in late April, primarily concentrated in Lagos.</li>
             
           </ul>
         </section>
@@ -882,7 +876,7 @@
 
           
           <div class="card">
-            <p>The distribution of active listings is heavily concentrated in prime Lagos corridors, with Lekki Phase 1 leading the market with an average of 52.3 active listings per week, followed by Lekki at 40.6 and Ikota at 29.0. This concentration highlights the dominance of the Lekki-Epe axis as the primary hub for residential development and transaction volume. In contrast, secondary markets like Ibadan and Asaba maintained modest inventory levels, averaging 15.8 and 15.0 active listings per week, respectively.</p>
+            <p>Inventory distribution remains heavily concentrated in prime metropolitan areas, with Lagos and Abuja dominating the market share. Lagos alone accounted for 5,263 active listings and 4,522 new listings across 125 neighbourhoods, reflecting its status as the primary liquidity hub. Abuja followed with 883 active listings across 63 neighbourhoods. This concentration signals that institutional development remains focused on low-risk, high-velocity urban centres. In contrast, secondary markets like Ibadan and Ogun showed emerging activity, recording 240 and 187 active listings respectively. The dominance of Lekki Phase 1 (averaging 52.3 active listings per week) and Lekki (40.6 active listings per week) highlights a strong developer preference for the Lekki-Epe corridor, where land availability and infrastructure projects continue to drive residential construction.</p>
           </div>
           
 
@@ -1089,7 +1083,7 @@
 
           
           <div class="card">
-            <p>The luxury residential tier is anchored by Banana Island, where the average weekly median price reached ₦2956.7M with a remarkably low days on market (DOM) of 4.9 days, followed by Victoria Island at ₦1354.4M (DOM: 1.6 days) and Ikoyi at ₦1166.7M (DOM: 6.4 days). At the affordable end of the spectrum, entry-level opportunities are concentrated in peripheral regions such as Ijebu Ode in Ogun State at ₦6.7M and Pyakassa in Abuja at ₦7.5M, both recording 0.0 days on market, indicating rapid absorption of low-priced inventory.</p>
+            <p>The pricing landscape reveals a stark divergence between ultra-luxury enclaves and emerging affordable nodes. Banana Island in Lagos leads the luxury tier with an average weekly median price of ₦2956.7M and a remarkably low average days on market (DOM) of 4.9 days, indicating robust liquidity at the absolute top of the market. Other premium locations such as Victoria Island (₦1354.4M, DOM: 1.6 days) and Ikoyi (₦1166.7M, DOM: 6.4 days) continue to command significant premiums, driven by dollar-denominated valuations and institutional demand. Conversely, the affordable end of the market is characterised by outer-fringe locations and regional hubs. Ijebu Ode in Ogun registered as the most affordable neighbourhood with a median price of ₦6.7M, followed by Pyakassa in Abuja at ₦7.5M. Within Lagos, Epe (₦15.3M) and Ikorodu (₦38.5M) represent the entry-level residential frontier, offering viable alternatives for middle-income buyers priced out of the core metropolitan markets.</p>
           </div>
           
 
@@ -1407,7 +1401,7 @@
             
             <div class="card">
               <h3>Lagos</h3>
-              <p>Lagos remains the undisputed engine of the national sales market, accounting for 125 of the 225 analysed neighbourhoods, 5,263 active listings, and 4,522 new listings. The state recorded a median sales price of ₦240.0M, driven by intense activity in Lekki Phase 1, and accounted for the vast majority of market activity, reinforcing its position as the primary destination for domestic and diaspora real estate investment.</p>
+              <p>Lagos remains the undisputed anchor of the Nigerian residential sales market, accounting for 125 neighbourhoods, 5,263 active listings, and a median price of ₦240.0M. The market is highly active, led by Lekki Phase 1, which serves as the primary liquidity driver. Despite experiencing 118 price reductions over the quarter, the high volume of new listings (4,522) and strong pricing power in prime districts like Victoria Island and Ikoyi demonstrate the structural resilience of Lagos real estate as a hedge against inflation.</p>
               
               <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
                 <div>
@@ -1432,7 +1426,7 @@
             
             <div class="card">
               <h3>Abuja (FCT)</h3>
-              <p>Abuja's sales market represents a highly capitalised segment, spanning 63 neighbourhoods with 883 active listings and 657 new listings. The federal capital territory recorded a median sales price of ₦238.8M, closely rivalled by Lagos, with Katampe emerging as the top-performing neighbourhood and Guzape commanding premium pricing at an average median of ₦622.7M.</p>
+              <p>Abuja's residential sales market, spanning 63 neighbourhoods, recorded 883 active listings and 657 new listings, with Katampe emerging as the top-performing neighbourhood. The city's median sales price stood at ₦238.8M, closely trailing Lagos. Premium demand remains concentrated in Guzape (₦622.7M, DOM: 7.9 days) and Katampe (₦424.5M, DOM: 3.7 days), reflecting sustained appetite from public sector expatriates, high-net-worth individuals, and institutional investors seeking secure, high-yield capital assets in the federal capital.</p>
               <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
                 <div>
                   <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
@@ -1456,7 +1450,7 @@
           
           <div class="card" style="margin-top: 1.5rem;">
             <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
-            <p>Beyond the two primary hubs, regional markets exhibited diverse performance. Ibadan led secondary markets with 240 active listings and a median price of ₦92.5M, while Port Harcourt maintained a premium median price of ₦175.0M across 87 active listings. Ogun State offered the most affordable regional entry point with 187 active listings and a median price of ₦9.5M, heavily influenced by low-cost land and residential developments in Ijebu Ode.</p>
+            <p>Outside the dual hubs of Lagos and Abuja, regional markets showed varied performance. Ibadan led secondary markets with 240 active listings and a median price of ₦92.5M, driven by its proximity to Lagos and lower entry barriers. Ogun recorded 187 active listings with a highly affordable median price of ₦9.5M, anchored by Ijebu Ode. Port Harcourt registered a median price of ₦175.0M across 87 active listings, while Enugu showed a median price of ₦170.0M, indicating pockets of high-value demand in regional administrative capitals.</p>
           </div>
           
         </section>
@@ -1663,7 +1657,7 @@
 
           
           <div class="card">
-            <p>A total of 177 price reduction events occurred during the quarter, peaking at 30 reductions during the week of 27 April 2026. Lagos accounted for the lion's share with 118 reductions, followed by Abuja with 34, signalling selective price corrections as sellers adjusted expectations to meet liquidity constraints and shifting buyer leverage in highly competitive luxury segments.</p>
+            <p>A total of 177 price reduction events were recorded during the quarter, peaking in the week of 2026-04-27 with 30 reductions. Lagos accounted for the vast majority of these adjustments (118), followed by Abuja (34) and Ibadan (9). This trend suggests that while initial asking prices in premium developments are often aggressive, developers are willing to make tactical downward adjustments to secure liquidity and accelerate transaction velocity in a highly competitive market.</p>
             <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)">
               <strong style="color:var(--text-secondary)">Peak reduction week:</strong>
               2026-04-27 with
@@ -1764,7 +1758,7 @@
             <h2>Market Outlook</h2>
           </div>
           <div class="card">
-            <p>The 9.7% expansion in active listings alongside sustained high median prices suggests that the sales market will enter the next quarter with strong supply-side momentum. However, the presence of price reductions in premium nodes indicates that developers must adopt realistic pricing strategies to maintain velocity, particularly as secondary markets like Ibadan and Port Harcourt begin to capture spillover demand from capital-constrained buyers.</p>
+            <p>The sales market is expected to maintain its upward pricing trajectory, particularly in prime Lagos and Abuja neighbourhoods, as developers pass on rising construction costs to buyers. The 9.7% growth in active listings over the quarter indicates a steady pipeline of completions. Investors should expect continued premium pricing in the Lekki-Epe axis and Guzape, while secondary markets like Ibadan will increasingly attract middle-income residential developers seeking yield.</p>
           </div>
         </section>
         
@@ -1819,20 +1813,20 @@
             <h2>Executive Summary</h2>
           </div>
           <div class="card">
-            The residential rental market experienced substantial expansion during the second quarter of 2026, with active listings growing by 24.3% from the first to the final week, peaking at 614 active listings. Across 176 unique neighbourhoods, cumulative active listings reached 6,819, supported by 5,770 new rental listings. This rapid supply growth reflects a highly active leasing environment as tenants navigate changing economic conditions.</p><p>Rental pricing trends showed upward pressure towards the end of the quarter, with the weekly median rental price rising from ₦6.4M/yr in early April to ₦6.0M/yr by late June, after dipping to ₦4.0M/yr in mid-April. This volatility highlights a highly segmented market where premium luxury rentals in Lagos and Abuja skew overall averages, while mid-market demand remains highly price-sensitive.
+            The residential rental market across Nigeria experienced substantial expansion between April and June 2026, characterised by a 24.3% growth in active listings from the first to the final week. Across 176 unique neighbourhoods, cumulative active listings reached 6,819, supported by 5,770 new rental listings. The market peaked at 614 active listings in the final week of June, indicating a significant influx of rental supply as newly completed developments were handed over to the market. Rental pricing demonstrated strong upward momentum over the quarter. The weekly median rental price started at ₦6.4M/yr in early April, dipped to ₦4.0M/yr mid-quarter, and steadily climbed to close at ₦6.0M/yr by late June. This upward trend reflects a growing preference for renting over purchasing amidst high borrowing costs, driving strong demand for premium rental units in core urban centres.
           </div>
 
           <!-- Key Takeaways -->
           <h3>Key Takeaways</h3>
           <ul class="takeaways">
             
-            <li>Active rental listings grew by 24.3% over the quarter, indicating a rapidly expanding rental supply.</li>
+            <li>Rental listings grew by 24.3% over the quarter, peaking at 614 active listings.</li>
             
-            <li>Banana Island commanded the highest rental prices, averaging ₦48.1M/yr with a low 2.9 days on market.</li>
+            <li>Banana Island commands the highest residential rent in Nigeria at ₦48.1M/yr.</li>
             
-            <li>Lagos dominated rental activity, accounting for 5,983 of the 6,819 cumulative active listings.</li>
+            <li>Lagos represents the largest rental market, accounting for 5,983 active listings.</li>
             
-            <li>Abuja posted a premium median rental price of ₦8.2M/yr, driven by Gwarinpa.</li>
+            <li>Landlords executed 237 price reductions to maintain occupancy and limit vacancy periods.</li>
             
           </ul>
         </section>
@@ -1847,7 +1841,7 @@
 
           
           <div class="card">
-            <p>Rental inventory is heavily concentrated in premium Lagos neighbourhoods, led by Lekki Phase 1 with an average of 69.0 active listings per week, followed by Lekki at 41.7 and Ikoyi at 36.6. This concentration indicates that developers are focusing rental supply on high-yield coastal corridors. Conversely, secondary rental markets like Ibadan and Port Harcourt showed much lower inventory levels, reflecting more localised demand patterns.</p>
+            <p>Rental inventory is highly concentrated in Lagos, which accounted for 5,983 active listings and 5,037 new listings across 118 neighbourhoods. This concentration highlights Lagos as the primary rental market for corporate tenants and young professionals. Lekki Phase 1 led all neighbourhoods with an average of 69.0 active listings per week, followed by Lekki at 41.7 and Ikoyi at 36.6. Abuja represented the second-largest rental market with 605 active listings across 46 neighbourhoods. The high volume of active listings in Lekki Phase 1 and Ikoyi indicates that developers are actively targeting the high-yield corporate rental segment, which remains resilient despite broader economic pressures.</p>
           </div>
           
 
@@ -2054,7 +2048,7 @@
 
           
           <div class="card">
-            <p>The luxury rental ceiling is defined by Banana Island in Lagos, commanding an average weekly median rent of ₦48.1M/yr with a days on market (DOM) of 2.9 days, followed by Lekki at ₦39.1M/yr (DOM: 6.1 days) and Ikoyi at ₦38.7M/yr (DOM: 6.9 days). On the affordable end, Ikorodu in Lagos offers the lowest entry point at ₦789k/yr (DOM: 2.1 days), followed by Mushin at ₦1.0M/yr, highlighting the stark disparity between premium coastal enclaves and mainland commuter hubs.</p>
+            <p>The rental pricing structure is highly bifurcated, with ultra-luxury enclaves commanding exceptional premiums. Banana Island in Lagos recorded the highest average weekly median rent at ₦48.1M/yr, with a low average days on market (DOM) of 2.9 days, indicating rapid absorption of premium units. Other high-end locations such as Lekki (₦39.1M/yr, DOM: 6.1 days) and Ikoyi (₦38.7M/yr, DOM: 6.9 days) also commanded premium rates. At the affordable end, Ikorodu in Lagos registered as the most affordable rental market with an average median rent of ₦789k/yr, followed by Mushin at ₦1.0M/yr and Ikotun at ₦1.1M/yr. This stark contrast highlights the deep divide between the corporate-dominated luxury rental market in coastal Lagos and the domestic middle-to-low-income rental markets in mainland suburbs.</p>
           </div>
           
 
@@ -2372,7 +2366,7 @@
             
             <div class="card">
               <h3>Lagos</h3>
-              <p>Lagos remains the dominant rental market, encompassing 118 neighbourhoods, 5,983 active listings, and 5,037 new listings. The state recorded a median rental price of ₦4.1M/yr, driven by high-volume leasing activity in Lekki Phase 1, which continues to serve as the primary destination for corporate tenants and young professionals.</p>
+              <p>Lagos remains the dominant force in the rental sector, accounting for 5,983 active listings and a median rental price of ₦4.1M/yr. Lekki Phase 1 is the top-performing rental neighbourhood, averaging 69.0 active listings per week with an average median rent of ₦17.2M/yr. Despite 208 price reductions during the quarter, strong demand from corporate tenants and expatriates in Victoria Island (₦28.8M/yr) and Ikoyi (₦38.7M/yr) continues to support high rental yields.</p>
               
               <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
                 <div>
@@ -2397,7 +2391,7 @@
             
             <div class="card">
               <h3>Abuja (FCT)</h3>
-              <p>Abuja's rental market presents a premium profile, spanning 46 neighbourhoods with 605 active listings and 526 new listings. The federal capital territory posted a high median rental price of ₦8.2M/yr, with Gwarinpa emerging as the top rental neighbourhood, driven by strong demand from diplomatic, public sector, and corporate tenants seeking secure, high-quality accommodation.</p>
+              <p>Abuja's rental market recorded 605 active listings and 526 new listings across 46 neighbourhoods, with Gwarinpa emerging as the top rental destination. The city's median rental price stood at ₦8.2M/yr, significantly higher than Lagos's overall median, reflecting a higher concentration of premium diplomatic and civil service rentals. The market remains highly stable, with only 24 price reductions recorded over the three-month period.</p>
               <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
                 <div>
                   <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
@@ -2421,7 +2415,7 @@
           
           <div class="card" style="margin-top: 1.5rem;">
             <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
-            <p>Regional rental markets showed varied performance, with Port Harcourt commanding a premium median rent of ₦13.5M/yr across 13 active listings, reflecting localised oil and gas sector demand. Ibadan recorded 186 active listings with a median rent of ₦2.6M/yr, while Ogun State offered highly affordable options with a median rent of ₦1.2M/yr across 25 active listings.</p>
+            <p>Outside Lagos and Abuja, rental activity was led by Port Harcourt, which recorded a high median rent of ₦13.5M/yr across 13 active listings, driven by the oil and gas sector's demand for secure corporate housing. Ibadan recorded 186 active listings with a median rent of ₦2.6M/yr, representing a growing hub for remote workers and students. Ogun registered 25 active listings with a highly affordable median rent of ₦1.2M/yr, led by Iyana Iyesi.</p>
           </div>
           
         </section>
@@ -2628,7 +2622,7 @@
 
           
           <div class="card">
-            <p>The rental market recorded 237 price reduction events, peaking at 39 reductions during the week of 8 June 2026. Lagos accounted for 208 of these reductions, indicating that landlords in premium areas are increasingly willing to adjust asking rents to avoid prolonged vacancies and secure reliable, liquid tenants in a competitive market.</p>
+            <p>The rental market saw 237 price reduction events, peaking at 39 reductions in the week of 2026-06-08. Lagos accounted for 208 of these reductions, while Abuja recorded 24. This high volume of adjustments, particularly in Lagos, indicates that landlords are actively adjusting their expectations to avoid prolonged vacancies as tenants push back against aggressive annual rent increases.</p>
             <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)">
               <strong style="color:var(--text-secondary)">Peak reduction week:</strong>
               2026-06-08 with
@@ -2689,7 +2683,7 @@
             <h2>Market Outlook</h2>
           </div>
           <div class="card">
-            <p>The 24.3% growth in active rental listings suggests that supply is expanding faster than immediate absorption, which may lead to further price corrections in premium segments. Landlords will likely need to offer more flexible payment terms or modest rent reductions to maintain occupancy rates, while mid-market demand in mainland Lagos and regional hubs like Ibadan will remain resilient.</p>
+            <p>The rental market is poised for continued growth, with the 24.3% increase in active listings indicating a healthy supply pipeline. High financing costs will likely keep potential homebuyers in the rental market longer, sustaining demand for mid-to-high-end apartments in Lekki Phase 1, Ikoyi, and Gwarinpa. Landlords who price realistically will benefit from low days on market, while over-optimistic pricing will face quick correction.</p>
           </div>
         </section>
         
