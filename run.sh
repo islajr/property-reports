@@ -139,5 +139,8 @@ echo ""
 echo "✓ Build completed successfully!"
 echo "  Generated HTML: file://$DIR/$OUT_FOLDER/index.html"
 if [ "$NO_PDF" = false ]; then
-  echo "  Generated PDF:  file://$DIR/$OUT_FOLDER/report.pdf"
+  PDF_FILE=$(find "$DIR/$OUT_FOLDER" -name "*.pdf" -print -quit)
+  if [ -n "$PDF_FILE" ]; then
+    echo "  Generated PDF:  file://$PDF_FILE"
+  fi
 fi

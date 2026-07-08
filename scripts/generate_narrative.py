@@ -312,8 +312,8 @@ def main() -> None:
     api_key = os.getenv("GEMINI_API_KEY")
     use_placeholder = args.placeholder or not api_key
 
-    if use_placeholder and out_path.exists():
-        print(f"✓ Narrative JSON already exists at {out_path}. Skipping writing placeholder to preserve existing content.")
+    if out_path.exists():
+        print(f"✓ Narrative JSON already exists at {out_path}. Loading existing content. (Delete this file if you wish to regenerate).")
         with open(out_path) as f:
             narrative = json.load(f)
     else:
