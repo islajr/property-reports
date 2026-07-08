@@ -178,6 +178,21 @@ Options:
 
 ---
 
+## Local Testing & Hosting
+
+To review the generated dashboard and reports locally under matching static web server path conditions, run Python's built-in HTTP server directed at the `reports/` folder:
+
+```bash
+# Start local HTTP server on port 8000
+python3 -m http.server --directory reports/ 8000
+```
+
+Now open your browser and navigate to:
+* Dashboard Index: **`http://localhost:8000/`**
+* June 3-Month Report: **`http://localhost:8000/2026-06_3mo/`**
+
+---
+
 ## Troubleshooting Common Build Errors
 
 ### 1. WeasyPrint PDF Rendering Fails
