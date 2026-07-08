@@ -707,360 +707,369 @@
   <!-- ================================================================
        KPI STRIP
   ================================================================ -->
-  <div class="kpi-strip" id="kpi-strip">
-    <div class="kpi-card">
-      <span class="kpi-label">Peak Active Listings</span>
-      <span class="kpi-value">{{ "{:,}".format(overall.peak_active_listings) }}</span>
-      <span class="kpi-sub">Latest week total</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">New Listings</span>
-      <span class="kpi-value green">{{ "{:,}".format(overall.total_new_listings) }}</span>
-      <span class="kpi-sub">Discovered this period</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Price Reductions</span>
-      <span class="kpi-value red">{{ "{:,}".format(overall.total_price_reductions) }}</span>
-      <span class="kpi-sub">Seller adjustments tracked</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Inventory Growth</span>
-      <span class="kpi-value gold">{{ overall.active_listings_growth_pct }}%</span>
-      <span class="kpi-sub">First → last week</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Neighbourhoods Tracked</span>
-      <span class="kpi-value">{{ overall.unique_neighbourhoods }}</span>
-      <span class="kpi-sub">Across {{ overall.num_cities }} cities</span>
-    </div>
-  </div>
+  {% for mtype in ['sales', 'rentals'] %}
+    {% set mdata = metrics[mtype] %}
+    {% set mnarr = narrative[mtype] if narrative else none %}
+    {% if mdata %}
+      {% set suffix = "/yr" if mtype == "rentals" else "" %}
+      
+      <div class="market-section" style="margin-top: 4rem; page-break-before: always;">
+        <hr class="divider" style="margin-bottom: 3rem; opacity: 0.25;" />
+        <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.7px; color: var(--gold-light); margin-bottom: 2.5rem; text-transform: uppercase;">
+          {{ "Sales Market Analysis" if mtype == 'sales' else "Rentals Market Analysis" }}
+        </h1>
 
-  <!-- ================================================================
-       SECTION 1: EXECUTIVE SUMMARY
-  ================================================================ -->
-  <section class="section" id="executive-summary">
-    <div class="section-header">
-      <span class="section-number">01</span>
-      <h2>Executive Summary</h2>
-    </div>
-    <div class="card">
-      {{ narrative.executive_summary | replace('\n\n', '</p><p>') | replace('\n', ' ') }}
-    </div>
-
-    <!-- Key Takeaways -->
-    <h3>Key Takeaways</h3>
-    <ul class="takeaways" id="key-takeaways">
-      {% for point in narrative.key_takeaways %}
-      <li>{{ point }}</li>
-      {% endfor %}
-    </ul>
-  </section>
-
-  <!-- ================================================================
-       SECTION 2: INVENTORY DISTRIBUTION
-  ================================================================ -->
-  <section class="section" id="inventory-distribution">
-    <div class="section-header">
-      <span class="section-number">02</span>
-      <h2>Inventory Distribution — Most Active Markets</h2>
-    </div>
-
-    <div class="card">
-      <p>{{ narrative.inventory_narrative }}</p>
-    </div>
-
-    <!-- Bar chart: top neighbourhoods -->
-    {% set max_active = inventory_ranking[0].avg_weekly_active_listings %}
-    <div class="bar-chart" id="inventory-chart">
-      {% for item in inventory_ranking %}
-      <div class="bar-row">
-        <span class="bar-label" title="{{ item.neighbourhood }}, {{ item.city }}">
-          {{ item.neighbourhood }}
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: {{ (item.avg_weekly_active_listings / max_active * 100) | round(1) }}%"></div>
-        </div>
-        <span class="bar-value">{{ item.avg_weekly_active_listings }}</span>
-      </div>
-      {% endfor %}
-    </div>
-
-    <div class="table-wrap" id="inventory-table">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Neighbourhood</th>
-            <th>City / State</th>
-            <th class="right">Avg. Weekly Active Listings</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in inventory_ranking %}
-          <tr>
-            <td class="rank">{{ item.rank }}</td>
-            <td class="hood">{{ item.neighbourhood }}</td>
-            <td class="city">{{ item.city }}</td>
-            <td class="right">{{ "{:,.1f}".format(item.avg_weekly_active_listings) }}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-
-    <div class="methodology-note">
-      Average computed across all snapshot weeks in the reporting period.
-      Neighbourhoods with fewer than {{ pricing_tiers.filter_note.expensive_min_listings }} average weekly listings are excluded from pricing tables.
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 3: PRICING TIERS
-  ================================================================ -->
-  <section class="section" id="pricing-tiers">
-    <div class="section-header">
-      <span class="section-number">03</span>
-      <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
-    </div>
-
-    <div class="card">
-      <p>{{ narrative.pricing_narrative }}</p>
-    </div>
-
-    <div class="card-grid">
-      <!-- Most Expensive -->
-      <div>
-        <h3>Most Expensive Areas</h3>
-        <div class="table-wrap" id="expensive-table">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Neighbourhood</th>
-                <th class="right">Avg. Median Price</th>
-                <th class="right">Avg. DOM</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in pricing_tiers.most_expensive %}
-              <tr>
-                <td class="rank">{{ item.rank }}</td>
-                <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
-                <td class="price">
-                  {% if item.avg_median_price_ngn %}
-                    {% if item.avg_median_price_ngn >= 1_000_000_000 %}
-                      ₦{{ "{:.2f}".format(item.avg_median_price_ngn / 1_000_000_000) }}B
-                    {% elif item.avg_median_price_ngn >= 1_000_000 %}
-                      ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M
-                    {% else %}
-                      ₦{{ "{:,.0f}".format(item.avg_median_price_ngn) }}
-                    {% endif %}
-                  {% else %}N/A{% endif %}
-                </td>
-                <td class="right">{{ item.avg_days_on_market }}d</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Most Affordable -->
-      <div>
-        <h3>Most Affordable Areas</h3>
-        <div class="table-wrap" id="affordable-table">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Neighbourhood</th>
-                <th class="right">Avg. Median Price</th>
-                <th class="right">Avg. DOM</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in pricing_tiers.most_affordable %}
-              <tr>
-                <td class="rank">{{ item.rank }}</td>
-                <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
-                <td class="price">
-                  {% if item.avg_median_price_ngn %}
-                    {% if item.avg_median_price_ngn >= 1_000_000 %}
-                      ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M
-                    {% elif item.avg_median_price_ngn >= 1_000 %}
-                      ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k
-                    {% else %}
-                      ₦{{ "{:,.0f}".format(item.avg_median_price_ngn) }}
-                    {% endif %}
-                  {% else %}N/A{% endif %}
-                </td>
-                <td class="right">{{ item.avg_days_on_market }}d</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 4: REGIONAL DEEP DIVE
-  ================================================================ -->
-  <section class="section" id="regional-deep-dive">
-    <div class="section-header">
-      <span class="section-number">04</span>
-      <h2>Regional Deep Dive</h2>
-    </div>
-
-    <div class="card-grid">
-      {% if narrative.lagos_narrative %}
-      <div class="card" id="lagos-section">
-        <h3>Lagos</h3>
-        <p>{{ narrative.lagos_narrative }}</p>
-        {% if city_breakdown.LAGOS %}
-        <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
-            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.LAGOS.num_neighbourhoods }}</div>
+        <!-- KPI Strip -->
+        <div class="kpi-strip">
+          <div class="kpi-card">
+            <span class="kpi-label">Peak Active Listings</span>
+            <span class="kpi-value">{{ "{:,}".format(mdata.overall.peak_active_listings) }}</span>
+            <span class="kpi-sub">Latest week total</span>
           </div>
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
-            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.LAGOS.top_neighbourhood_by_activity }}</div>
+          <div class="kpi-card">
+            <span class="kpi-label">New Listings</span>
+            <span class="kpi-value green">{{ "{:,}".format(mdata.overall.total_new_listings) }}</span>
+            <span class="kpi-sub">Discovered this period</span>
           </div>
-          {% if city_breakdown.LAGOS.median_price_ngn %}
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
-            <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(city_breakdown.LAGOS.median_price_ngn / 1_000_000) }}M</div>
+          <div class="kpi-card">
+            <span class="kpi-label">Price Reductions</span>
+            <span class="kpi-value red">{{ "{:,}".format(mdata.overall.total_price_reductions) }}</span>
+            <span class="kpi-sub">Seller adjustments tracked</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Inventory Growth</span>
+            <span class="kpi-value gold">{{ mdata.overall.active_listings_growth_pct }}%</span>
+            <span class="kpi-sub">First → last week</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Neighbourhoods Tracked</span>
+            <span class="kpi-value">{{ mdata.overall.unique_neighbourhoods }}</span>
+            <span class="kpi-sub">Across {{ mdata.overall.num_cities }} cities</span>
+          </div>
+        </div>
+
+        {% if mnarr %}
+        <!-- SECTION 1: EXECUTIVE SUMMARY -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">01</span>
+            <h2>Executive Summary</h2>
+          </div>
+          <div class="card">
+            {{ mnarr.executive_summary | replace('\n\n', '</p><p>') | replace('\n', ' ') }}
+          </div>
+
+          <!-- Key Takeaways -->
+          <h3>Key Takeaways</h3>
+          <ul class="takeaways">
+            {% for point in mnarr.key_takeaways %}
+            <li>{{ point }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+
+        <!-- SECTION 2: INVENTORY DISTRIBUTION -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">02</span>
+            <h2>Inventory Distribution — Most Active Areas</h2>
+          </div>
+
+          {% if mnarr %}
+          <div class="card">
+            <p>{{ mnarr.inventory_narrative }}</p>
           </div>
           {% endif %}
-        </div>
+
+          {% if mdata.inventory_ranking %}
+          {% set max_active = mdata.inventory_ranking[0].avg_weekly_active_listings %}
+          <div class="bar-chart">
+            {% for item in mdata.inventory_ranking %}
+            <div class="bar-row">
+              <span class="bar-label" title="{{ item.neighbourhood }}, {{ item.city }}">
+                {{ item.neighbourhood }}
+              </span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: {{ (item.avg_weekly_active_listings / max_active * 100) | round(1) }}%"></div>
+              </div>
+              <span class="bar-value">{{ item.avg_weekly_active_listings }}</span>
+            </div>
+            {% endfor %}
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Neighbourhood</th>
+                  <th>City / State</th>
+                  <th class="right">Avg. Weekly Active Listings</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for item in mdata.inventory_ranking %}
+                <tr>
+                  <td class="rank">{{ item.rank }}</td>
+                  <td class="hood">{{ item.neighbourhood }}</td>
+                  <td class="city">{{ item.city }}</td>
+                  <td class="right">{{ "{:,.1f}".format(item.avg_weekly_active_listings) }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endif %}
+        </section>
+
+        <!-- SECTION 3: PRICING TIERS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">03</span>
+            <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
+          </div>
+
+          {% if mnarr %}
+          <div class="card">
+            <p>{{ mnarr.pricing_narrative }}</p>
+          </div>
+          {% endif %}
+
+          <div class="card-grid">
+            <!-- Most Expensive -->
+            <div>
+              <h3>Most Expensive Areas</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Neighbourhood</th>
+                      <th class="right">Avg. Median Price</th>
+                      <th class="right">Avg. DOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in mdata.pricing_tiers.most_expensive %}
+                    <tr>
+                      <td class="rank">{{ item.rank }}</td>
+                      <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
+                      <td class="price">
+                        {% if item.avg_median_price_ngn %}
+                          {% if item.avg_median_price_ngn >= 1_000_000_000 %}
+                            ₦{{ "{:.2f}".format(item.avg_median_price_ngn / 1_000_000_000) }}B{{ suffix }}
+                          {% elif item.avg_median_price_ngn >= 1_000_000 %}
+                            ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M{{ suffix }}
+                          {% else %}
+                            ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k{{ suffix }}
+                          {% endif %}
+                        {% else %}N/A{% endif %}
+                      </td>
+                      <td class="right">{{ item.avg_days_on_market }}d</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Most Affordable -->
+            <div>
+              <h3>Most Affordable Areas</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Neighbourhood</th>
+                      <th class="right">Avg. Median Price</th>
+                      <th class="right">Avg. DOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in mdata.pricing_tiers.most_affordable %}
+                    <tr>
+                      <td class="rank">{{ item.rank }}</td>
+                      <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
+                      <td class="price">
+                        {% if item.avg_median_price_ngn %}
+                          {% if item.avg_median_price_ngn >= 1_000_000 %}
+                            ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M{{ suffix }}
+                          {% elif item.avg_median_price_ngn >= 1_000 %}
+                            ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k{{ suffix }}
+                          {% else %}
+                            ₦{{ "{:,.0f}".format(item.avg_median_price_ngn) }}{{ suffix }}
+                          {% endif %}
+                        {% else %}N/A{% endif %}
+                      </td>
+                      <td class="right">{{ item.avg_days_on_market }}d</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: REGIONAL DEEP DIVE -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">04</span>
+            <h2>Regional Deep Dive</h2>
+          </div>
+
+          <div class="card-grid">
+            {% if mnarr and mnarr.lagos_narrative %}
+            <div class="card">
+              <h3>Lagos</h3>
+              <p>{{ mnarr.lagos_narrative }}</p>
+              {% if mdata.city_breakdown.LAGOS %}
+              <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
+                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.LAGOS.num_neighbourhoods }}</div>
+                </div>
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
+                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.LAGOS.top_neighbourhood_by_activity }}</div>
+                </div>
+                {% if mdata.city_breakdown.LAGOS.median_price_ngn %}
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
+                  <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(mdata.city_breakdown.LAGOS.median_price_ngn / 1_000_000) }}M{{ suffix }}</div>
+                </div>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
+
+            {% if mnarr and mnarr.abuja_narrative and mdata.city_breakdown.ABUJA %}
+            <div class="card">
+              <h3>Abuja (FCT)</h3>
+              <p>{{ mnarr.abuja_narrative }}</p>
+              <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
+                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.ABUJA.num_neighbourhoods }}</div>
+                </div>
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
+                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.ABUJA.top_neighbourhood_by_activity }}</div>
+                </div>
+                {% if mdata.city_breakdown.ABUJA.median_price_ngn %}
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
+                  <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(mdata.city_breakdown.ABUJA.median_price_ngn / 1_000_000) }}M{{ suffix }}</div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if mnarr and mnarr.other_cities_narrative %}
+          <div class="card" style="margin-top: 1.5rem;">
+            <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
+            <p>{{ mnarr.other_cities_narrative }}</p>
+          </div>
+          {% endif %}
+        </section>
+
+        <!-- SECTION 5: WEEKLY TRENDS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">05</span>
+            <h2>Weekly Market Trajectory</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Week Start</th>
+                  <th class="right">Active Listings</th>
+                  <th class="right">New Listings</th>
+                  <th class="right">Price Reductions</th>
+                  <th class="right">Median Price (NGN)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in mdata.weekly_aggregates %}
+                <tr>
+                  <td style="font-family:var(--font-mono);font-size:0.82rem">{{ row.week }}</td>
+                  <td class="right">{{ "{:,}".format(row.active_listing_count) }}</td>
+                  <td class="right">{{ "{:,}".format(row.new_listings_count) }}</td>
+                  <td class="right">{{ row.price_reduced_count }}</td>
+                  <td class="price">
+                    {% if row.median_price_ngn %}
+                      {% if row.median_price_ngn >= 1_000_000 %}
+                        ₦{{ "{:.1f}".format(row.median_price_ngn / 1_000_000) }}M{{ suffix }}
+                      {% else %}
+                        ₦{{ "{:,.0f}".format(row.median_price_ngn / 1_000) }}k{{ suffix }}
+                      {% endif %}
+                    {% else %}—{% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 6: PRICE REDUCTION ANALYSIS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">06</span>
+            <h2>Price Reduction Analysis</h2>
+          </div>
+
+          {% if mnarr %}
+          <div class="card">
+            <p>{{ mnarr.price_reduction_narrative }}</p>
+            <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)">
+              <strong style="color:var(--text-secondary)">Peak reduction week:</strong>
+              {{ mdata.price_reduction_analysis.peak_week }} with
+              {{ mdata.price_reduction_analysis.peak_week_count }} events.
+            </p>
+          </div>
+          {% endif %}
+
+          {% if mdata.price_reduction_analysis.by_city %}
+          {% set max_reductions = mdata.price_reduction_analysis.by_city[0].total_reductions if mdata.price_reduction_analysis.by_city else 1 %}
+          <div class="bar-chart">
+            {% for item in mdata.price_reduction_analysis.by_city %}
+            {% if item.total_reductions > 0 %}
+            <div class="bar-row">
+              <span class="bar-label">{{ item.city }}</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: {{ (item.total_reductions / max_reductions * 100) | round(1) }}%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">{{ item.total_reductions }}</span>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </section>
+
+        <!-- SECTION 7: OUTLOOK -->
+        {% if mnarr %}
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">07</span>
+            <h2>Market Outlook</h2>
+          </div>
+          <div class="card">
+            <p>{{ mnarr.outlook }}</p>
+          </div>
+        </section>
         {% endif %}
       </div>
-      {% endif %}
-
-      {% if narrative.abuja_narrative and city_breakdown.ABUJA %}
-      <div class="card" id="abuja-section">
-        <h3>Abuja (FCT)</h3>
-        <p>{{ narrative.abuja_narrative }}</p>
-        <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
-            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.ABUJA.num_neighbourhoods }}</div>
-          </div>
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
-            <div style="font-size:1.1rem;font-weight:600">{{ city_breakdown.ABUJA.top_neighbourhood_by_activity }}</div>
-          </div>
-          {% if city_breakdown.ABUJA.median_price_ngn %}
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
-            <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(city_breakdown.ABUJA.median_price_ngn / 1_000_000) }}M</div>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-      {% endif %}
-    </div>
-
-    {% if narrative.other_cities_narrative %}
-    <div class="card" id="other-cities-section">
-      <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
-      <p>{{ narrative.other_cities_narrative }}</p>
-    </div>
     {% endif %}
-  </section>
-
-  <!-- ================================================================
-       SECTION 5: WEEKLY TRENDS
-  ================================================================ -->
-  <section class="section" id="weekly-trends">
-    <div class="section-header">
-      <span class="section-number">05</span>
-      <h2>Weekly Inflow &amp; Price Reduction Trends</h2>
-    </div>
-
-    <div class="table-wrap" id="weekly-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Week Start</th>
-            <th class="right">Active Listings</th>
-            <th class="right">New Listings</th>
-            <th class="right">Price Reductions</th>
-            <th class="right">Median Price (NGN)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in weekly_aggregates %}
-          <tr>
-            <td style="font-family:var(--font-mono);font-size:0.82rem">{{ row.week }}</td>
-            <td class="right">{{ "{:,}".format(row.active_listing_count) }}</td>
-            <td class="right">{{ "{:,}".format(row.new_listings_count) }}</td>
-            <td class="right">{{ row.price_reduced_count }}</td>
-            <td class="price">
-              {% if row.median_price_ngn %}
-                {% if row.median_price_ngn >= 1_000_000 %}
-                  ₦{{ "{:.1f}".format(row.median_price_ngn / 1_000_000) }}M
-                {% else %}
-                  ₦{{ "{:,.0f}".format(row.median_price_ngn) }}
-                {% endif %}
-              {% else %}—{% endif %}
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 6: PRICE REDUCTION ANALYSIS
-  ================================================================ -->
-  <section class="section" id="price-reduction-analysis">
-    <div class="section-header">
-      <span class="section-number">06</span>
-      <h2>Price Reduction Analysis — Seller Behaviour</h2>
-    </div>
-
-    <div class="card">
-      <p>{{ narrative.price_reduction_narrative }}</p>
-      <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)">
-        <strong style="color:var(--text-secondary)">Peak reduction week:</strong>
-        {{ price_reduction_analysis.peak_week }} with
-        {{ price_reduction_analysis.peak_week_count }} events.
-      </p>
-    </div>
-
-    <!-- Price reductions by city bar chart -->
-    {% set max_reductions = price_reduction_analysis.by_city[0].total_reductions if price_reduction_analysis.by_city else 1 %}
-    <div class="bar-chart" id="reductions-chart">
-      {% for item in price_reduction_analysis.by_city %}
-      {% if item.total_reductions > 0 %}
-      <div class="bar-row">
-        <span class="bar-label">{{ item.city }}</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: {{ (item.total_reductions / max_reductions * 100) | round(1) }}%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">{{ item.total_reductions }}</span>
-      </div>
-      {% endif %}
-      {% endfor %}
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 7: OUTLOOK
-  ================================================================ -->
-  <section class="section" id="outlook">
-    <div class="section-header">
-      <span class="section-number">07</span>
-      <h2>Market Outlook</h2>
-    </div>
-    <div class="card">
-      <p>{{ narrative.outlook }}</p>
-    </div>
-  </section>
+  {% endfor %}
 
   <!-- ================================================================
        METHODOLOGY
@@ -1084,7 +1093,7 @@
       are exact integer divisions by 100.</p>
 
       <p><strong>Median vs. mean pricing:</strong> Median is used throughout to reduce skew from
-      outlier ultra-luxury listings. P25, P75, and P90 data are available in the source dataset
+      outlier luxury listings. P25, P75, and P90 data are available in the source dataset
       but excluded from this summary report for brevity.</p>
 
       <p><strong>Price reductions:</strong> An event is recorded when a listing's price decreases

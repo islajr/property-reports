@@ -66,18 +66,26 @@ NARRATIVE_SCHEMA = {
 }
 
 
-def build_prompt(metrics: dict) -> str:
-    ov = metrics["overall"]
-    weekly = metrics["weekly_aggregates"]
-    inv = metrics["inventory_ranking"]
-    pricing = metrics["pricing_tiers"]
-    city_bkd = metrics["city_breakdown"]
-    reductions = metrics["price_reduction_analysis"]
+def build_prompt_section(section_metrics: dict, market_type: str) -> str:
+    ov = section_metrics["overall"]
+    weekly = section_metrics["weekly_aggregates"]
+    inv = section_metrics["inventory_ranking"]
+    pricing = section_metrics["pricing_tiers"]
+    city_bkd = section_metrics["city_breakdown"]
+    reductions = section_metrics["price_reduction_analysis"]
 
     # Format weekly table for the prompt
     weekly_lines = []
     for w in weekly:
-        ngn = f"₦{w['median_price_ngn'] / 1_000_000:.1f}M" if w.get("median_price_ngn") else "N/A"
+        ngn = "N/A"
+        if w.get("median_price_ngn"):
+            val = w['median_price_ngn'] / 1_000_000
+            if val >= 1.0:
+                ngn = f"₦{val:.1f}M"
+            else:
+                ngn = f"₦{w['median_price_ngn']/1_000:.0f}k"
+        if market_type == "Rentals" and ngn != "N/A":
+            ngn = f"{ngn}/yr"
         weekly_lines.append(
             f"  {w['week']}: active={w['active_listing_count']:,}  "
             f"new={w['new_listings_count']:,}  reductions={w['price_reduced_count']}  "
@@ -92,72 +100,109 @@ def build_prompt(metrics: dict) -> str:
     ]
 
     # Format expensive
-    exp_lines = [
-        f"  {r['rank']}. {r['neighbourhood']} ({r['city']}): "
-        f"₦{r['avg_median_price_ngn']/1_000_000:.1f}M  DOM:{r['avg_days_on_market']}d"
-        for r in pricing["most_expensive"]
-        if r["avg_median_price_ngn"] is not None
-    ]
+    exp_lines = []
+    for r in pricing["most_expensive"]:
+        if r["avg_median_price_ngn"] is not None:
+            val = r['avg_median_price_ngn']/1_000_000
+            if val >= 1.0:
+                val_str = f"₦{val:.1f}M"
+            else:
+                val_str = f"₦{r['avg_median_price_ngn']/1_000:,.0f}k"
+            if market_type == "Rentals":
+                val_str = f"{val_str}/yr"
+            exp_lines.append(f"  {r['rank']}. {r['neighbourhood']} ({r['city']}): {val_str}  DOM:{r['avg_days_on_market']}d")
 
     # Format affordable
-    aff_lines = [
-        f"  {r['rank']}. {r['neighbourhood']} ({r['city']}): "
-        f"₦{r['avg_median_price_ngn']/1_000:,.0f}k  DOM:{r['avg_days_on_market']}d"
-        for r in pricing["most_affordable"]
-        if r["avg_median_price_ngn"] is not None
-    ]
+    aff_lines = []
+    for r in pricing["most_affordable"]:
+        if r["avg_median_price_ngn"] is not None:
+            val = r['avg_median_price_ngn']/1_000_000
+            if val >= 1.0:
+                val_str = f"₦{val:.1f}M"
+            else:
+                val_str = f"₦{r['avg_median_price_ngn']/1_000:,.0f}k"
+            if market_type == "Rentals":
+                val_str = f"{val_str}/yr"
+            aff_lines.append(f"  {r['rank']}. {r['neighbourhood']} ({r['city']}): {val_str}  DOM:{r['avg_days_on_market']}d")
 
-    city_lines = [
-        f"  {city}: {data['num_neighbourhoods']} neighbourhoods  "
-        f"top area={data['top_neighbourhood_by_activity']}  "
-        f"median=₦{data['median_price_ngn']/1_000_000:.1f}M"
-        for city, data in city_bkd.items()
-        if data.get("median_price_ngn")
-    ]
+    city_lines = []
+    for city, c in city_bkd.items():
+        med = "N/A"
+        if c.get("median_price_ngn"):
+            val = c['median_price_ngn']/1_000_000
+            if val >= 1.0:
+                med = f"₦{val:.1f}M"
+            else:
+                med = f"₦{c['median_price_ngn']/1_000:.0f}k"
+        if market_type == "Rentals" and med != "N/A":
+            med = f"{med}/yr"
+        city_lines.append(
+            f"  - {city}: {c['num_neighbourhoods']} neighbourhoods, "
+            f"active={c['cumulative_active_listings']:,}, new={c['total_new_listings']:,}, "
+            f"reductions={c['total_price_reductions']:,}, median={med}, "
+            f"top={c['top_neighbourhood_by_activity']}"
+        )
 
-    prompt = f"""Generate a professional market report narrative for the following data.
-Return ONLY valid JSON matching this schema exactly:
-{json.dumps(NARRATIVE_SCHEMA, indent=2)}
+    reductions_by_city = [f"{c['city']}={c['total_reductions']}" for c in reductions["by_city"]]
 
---- METRICS ---
+    return f"""
+=========================================
+MARKET DATA FOR {market_type.upper()}
+=========================================
+Overview:
+- Period: {ov['report_period_label']}
+- Unique neighbourhoods: {ov['unique_neighbourhoods']}
+- Cumulative active listings: {ov['cumulative_active_listings']:,}
+- Total new listings: {ov['total_new_listings']:,}
+- Total price reductions: {ov['total_price_reductions']:,}
+- Peak active listings (latest week): {ov['peak_active_listings']:,}
+- Growth in active listings (first to last week): {ov['active_listings_growth_pct']}%
 
-PERIOD: {ov['report_period_label']} ({ov['date_range']['start']} to {ov['date_range']['end']})
-WEEKS COVERED: {ov['num_weeks']}
-CITIES: {', '.join(ov['cities'])}
-UNIQUE NEIGHBOURHOODS: {ov['unique_neighbourhoods']}
-TOTAL SNAPSHOT RECORDS: {ov['total_snapshot_records']:,}
+Weekly aggregates:
+{"\n".join(weekly_lines)}
 
-CUMULATIVE ACTIVE LISTINGS (sum across all weeks): {ov['cumulative_active_listings']:,}
-TOTAL NEW LISTINGS DISCOVERED: {ov['total_new_listings']:,}
-TOTAL PRICE REDUCTION EVENTS: {ov['total_price_reductions']:,}
-PEAK ACTIVE LISTINGS (latest week): {ov['peak_active_listings']:,}
-EARLIEST ACTIVE LISTINGS (first week): {ov['earliest_active_listings']:,}
-GROWTH FIRST→LAST WEEK: {ov['active_listings_growth_pct']}%
+Top 10 neighbourhoods by active listings:
+{"\n".join(inv_lines)}
 
-WEEKLY AGGREGATES:
-{chr(10).join(weekly_lines)}
+Top 10 most expensive neighbourhoods (average weekly median price):
+{"\n".join(exp_lines)}
 
-TOP 10 NEIGHBOURHOODS BY ACTIVITY:
-{chr(10).join(inv_lines)}
+Top 10 most affordable neighbourhoods (average weekly median price):
+{"\n".join(aff_lines)}
 
-TOP 10 MOST EXPENSIVE (avg median price, min {pricing['filter_note']['expensive_min_listings']} avg listings):
-{chr(10).join(exp_lines)}
+City-by-city breakdown:
+{"\n".join(city_lines)}
 
-TOP 10 MOST AFFORDABLE (avg median price, min {pricing['filter_note']['affordable_min_listings']} avg listings):
-{chr(10).join(aff_lines)}
+Price reduction analysis:
+- Total price reduction events: {reductions['total_price_reductions']}
+- Peak week: {reductions['peak_week']} ({reductions['peak_week_count']} reductions)
+- Reductions by city: {', '.join(reductions_by_city)}
+"""
 
-PER-CITY SUMMARY:
-{chr(10).join(city_lines)}
 
-PRICE REDUCTIONS:
-  Total: {reductions['total_price_reductions']}
-  Peak week: {reductions['peak_week']} ({reductions['peak_week_count']} reductions)
-  By city: {json.dumps({r['city']: r['total_reductions'] for r in reductions['by_city']})}
+def build_prompt(metrics: dict) -> str:
+    prompt_sections = []
+    expected_schema = {}
 
---- END METRICS ---
+    if metrics.get("sales"):
+        prompt_sections.append(build_prompt_section(metrics["sales"], "Sales"))
+        expected_schema["sales"] = NARRATIVE_SCHEMA
+    else:
+        expected_schema["sales"] = "null"
 
-Return only the JSON object. No markdown. No explanation."""
+    if metrics.get("rentals"):
+        prompt_sections.append(build_prompt_section(metrics["rentals"], "Rentals"))
+        expected_schema["rentals"] = NARRATIVE_SCHEMA
+    else:
+        expected_schema["rentals"] = "null"
 
+    prompt = f"""Write a real estate market analysis based on the following weekly snapshots.
+
+{"\n".join(prompt_sections)}
+
+You must return valid JSON matching the following schema. Write a separate analysis block for each populated market type:
+{json.dumps(expected_schema, indent=2)}
+"""
     return prompt
 
 
@@ -165,7 +210,7 @@ Return only the JSON object. No markdown. No explanation."""
 # Placeholder narrative (no API key mode)
 # ---------------------------------------------------------------------------
 
-PLACEHOLDER_NARRATIVE = {
+PLACEHOLDER_NARRATIVE_SUB = {
     "executive_summary": (
         "[PLACEHOLDER — set GEMINI_API_KEY and re-run to generate narrative.] "
         "The market report for this period covers data collected by PS-0 PropertyScraper."
@@ -258,7 +303,7 @@ def main() -> None:
 
     if not metrics_path.exists():
         print(f"ERROR: Metrics file not found: {metrics_path}", file=sys.stderr)
-        print("Run scripts/compute_metrics.py --month {args.month} first.", file=sys.stderr)
+        print(f"Run scripts/compute_metrics.py --month {args.month} first.", file=sys.stderr)
         sys.exit(1)
 
     with open(metrics_path) as f:
@@ -275,7 +320,18 @@ def main() -> None:
         if use_placeholder:
             if not api_key:
                 print("GEMINI_API_KEY not set — writing placeholder narrative.")
-            narrative = PLACEHOLDER_NARRATIVE
+            
+            # Construct placeholder narrative based on what types are present in metrics
+            narrative = {}
+            if metrics.get("sales") is not None:
+                narrative["sales"] = PLACEHOLDER_NARRATIVE_SUB
+            else:
+                narrative["sales"] = None
+                
+            if metrics.get("rentals") is not None:
+                narrative["rentals"] = PLACEHOLDER_NARRATIVE_SUB
+            else:
+                narrative["rentals"] = None
         else:
             prompt = build_prompt(metrics)
             narrative = call_gemini(prompt, api_key)
