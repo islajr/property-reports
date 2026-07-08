@@ -219,18 +219,19 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     @media print { :root { --bg:#fff; --bg-card:#f8f9fa; --border:#d0d7de; --text:#1a1f2e; --text2:#4a5568; --text3:#718096; --gold:#7a5f20; --gold-light:#7a5f20; } h1 { -webkit-text-fill-color: var(--text); } }
 
     @media (max-width: 600px) {
-      .wrap { padding: 0 1rem 3rem; }
-      .global-header { padding: 1rem 0; margin-bottom: 1.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
-      .global-header .nav-links { gap: 0.5rem 1rem; }
-      .reports-header { margin-top: 1.5rem; margin-bottom: 2rem; }
+      .wrap { padding: 0 1.25rem 3rem; }
+      .global-header { padding: 1rem 0; margin-bottom: 1.5rem; flex-direction: column; gap: 1rem; align-items: center; text-align: center; }
+      .global-header .nav-links { gap: 0.5rem 1rem; justify-content: center; }
+      .reports-header { margin-top: 1.5rem; margin-bottom: 2rem; text-align: center; }
       h1 { font-size: 1.5rem; }
       .sub { font-size: 0.9rem; }
-      .controls { padding: 1rem; gap: 0.75rem; }
-      .filters { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-      .filter-group { flex-direction: column; align-items: flex-start; gap: 0.35rem; width: 100%; }
-      .pills { flex-wrap: wrap; gap: 0.25rem; }
-      .pill { font-size: 0.72rem; padding: 0.25rem 0.6rem; }
-      .report-card { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; }
+      .controls { padding: 1.25rem 1rem; gap: 1rem; align-items: center; }
+      .search-box { width: 100%; }
+      .filters { flex-direction: column; align-items: center; gap: 1rem; width: 100%; }
+      .filter-group { flex-direction: column; align-items: center; gap: 0.5rem; width: 100%; }
+      .pills { flex-wrap: wrap; justify-content: center; gap: 0.35rem; width: 100%; }
+      .pill { font-size: 0.74rem; padding: 0.28rem 0.65rem; }
+      .report-card { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.25rem; }
       .report-card .links { width: 100%; justify-content: flex-start; }
       .report-card .btn { flex: 1; text-align: center; font-size: 0.75rem; }
     }
