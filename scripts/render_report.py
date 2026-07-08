@@ -203,7 +203,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 0.75rem; }
     h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, var(--text) 60%, var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
     .sub { color: var(--text2); font-size: 1rem; }
-    .reports-grid { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem; }
+    .reports-grid { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
     .report-card { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; transition: border-color 0.15s, background 0.15s; }
     .report-card:hover { border-color: var(--gold); background: rgba(201,168,76,0.04); }
     .report-card .info {}
@@ -217,6 +217,36 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     footer a { color: var(--text2); text-decoration: none; }
     footer a:hover { color: var(--gold-light); }
     @media print { :root { --bg:#fff; --bg-card:#f8f9fa; --border:#d0d7de; --text:#1a1f2e; --text2:#4a5568; --text3:#718096; --gold:#7a5f20; --gold-light:#7a5f20; } h1 { -webkit-text-fill-color: var(--text); } }
+
+    /* Search & Filter Bar Styling */
+    .controls { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; margin-bottom: 2rem; background: var(--bg-card); border: 1px solid var(--border); padding: 1.25rem 1.5rem; border-radius: var(--radius); }
+    .search-box { position: relative; }
+    .search-box input { width: 100%; padding: 0.75rem 1rem; border-radius: var(--radius); background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: inherit; font-size: 0.9rem; transition: border-color 0.15s; }
+    .search-box input:focus { border-color: var(--gold); outline: none; }
+    .filters { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; }
+    .filter-group { display: flex; align-items: center; gap: 0.5rem; }
+    .filter-label { font-size: 0.78rem; text-transform: uppercase; color: var(--text3); font-weight: 600; letter-spacing: 0.5px; }
+    .pills { display: flex; gap: 0.35rem; }
+    .pill { font-size: 0.76rem; padding: 0.3rem 0.75rem; border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--text2); cursor: pointer; transition: all 0.15s; font-weight: 500; }
+    .pill:hover { border-color: var(--text3); color: var(--text); }
+    .pill.active { background: rgba(201,168,76,0.15); border-color: var(--gold); color: var(--gold-light); }
+
+    /* Badges */
+    .badge { font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; display: inline-flex; align-items: center; }
+    .badge-monthly { background: rgba(201,168,76,0.12); color: var(--gold-light); border: 1px solid rgba(201,168,76,0.3); }
+    .badge-quarterly { background: rgba(98,125,152,0.15); color: #9fb3c8; border: 1px solid rgba(98,125,152,0.3); }
+    .badge-biannual { background: rgba(200,122,83,0.15); color: #e2947a; border: 1px solid rgba(200,122,83,0.3); }
+    .badge-yearly { background: rgba(212,175,55,0.15); color: #f3e5ab; border: 1px solid rgba(212,175,55,0.3); }
+    .badge-sale { background: rgba(49,130,206,0.15); color: #63b3ed; border: 1px solid rgba(49,130,206,0.3); }
+    .badge-rent { background: rgba(56,161,105,0.15); color: #68d391; border: 1px solid rgba(56,161,105,0.3); }
+    .badge-combined { background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border); }
+
+    .report-card .meta-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; margin-top: 0.45rem; }
+    .report-card .stats-text { font-size: 0.78rem; color: var(--text3); }
+    .no-results { text-align: center; padding: 3rem 0; color: var(--text3); font-size: 0.95rem; }
+    .show-more-wrap { display: flex; justify-content: center; margin-top: 2rem; }
+    .btn-show-more { background: rgba(255,255,255,0.06); color: var(--text); border: 1px solid var(--border); padding: 0.5rem 1.5rem; border-radius: var(--radius); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: border-color 0.15s, background 0.15s; }
+    .btn-show-more:hover { border-color: var(--gold); background: rgba(201,168,76,0.04); }
   </style>
 </head>
 <body>
@@ -240,19 +270,64 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     <p class="sub">Monthly data intelligence on Nigeria's property market, powered by PS-0 PropertyScraper.</p>
   </header>
 
-  <div class="reports-grid">
-    {% for report in reports %}
-    <a class="report-card" href="/{{ report.month }}/" id="report-{{ report.month }}">
-      <div class="info">
-        <div class="month">{{ report.label }}</div>
-        <div class="meta">Published {{ report.published }} · {{ report.cities }} cities · {{ report.neighbourhoods }} neighbourhoods</div>
+  <!-- Controls Section (Search & Filter) -->
+  <div class="controls" id="dashboard-controls" style="display: none;">
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="Search reports by month or year (e.g. June, 2026)..." />
+    </div>
+    <div class="filters">
+      <div class="filter-group">
+        <span class="filter-label">Market:</span>
+        <div class="pills" id="type-pills">
+          <button class="pill active" data-type="all">All</button>
+          <button class="pill" data-type="sale">Sales</button>
+          <button class="pill" data-type="rent">Rentals</button>
+        </div>
       </div>
-      <div class="links">
-        <span class="btn btn-html">View Report</span>
-        {% if report.has_pdf %}<span class="btn btn-pdf">PDF</span>{% endif %}
+      <div class="filter-group">
+        <span class="filter-label">Frequency:</span>
+        <div class="pills" id="period-pills">
+          <button class="pill active" data-period="all">All</button>
+          <button class="pill" data-period="1mo">Monthly</button>
+          <button class="pill" data-period="3mo">Quarterly</button>
+          <button class="pill" data-period="6mo">Bi-Annual</button>
+          <button class="pill" data-period="12mo">Yearly</button>
+        </div>
       </div>
-    </a>
-    {% endfor %}
+    </div>
+  </div>
+
+  <!-- Featured Publications (Recent Reports) -->
+  <div id="featured-section" style="display: none; margin-bottom: 2.5rem;">
+    <h2 style="font-size: 1.1rem; text-transform: uppercase; color: var(--text3); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 1rem;">Featured Publication</h2>
+    <div id="featured-grid"></div>
+  </div>
+
+  <!-- Dynamic Grid Container -->
+  <div id="reports-dynamic-container" style="display: none;">
+    <h2 style="font-size: 1.1rem; text-transform: uppercase; color: var(--text3); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 1rem;" id="grid-header">All Publications</h2>
+    <div class="reports-grid" id="dynamic-grid"></div>
+    <div class="show-more-wrap" id="show-more-wrap" style="display: none;">
+      <button class="btn-show-more" id="btn-show-more">Show More</button>
+    </div>
+  </div>
+
+  <!-- SEO Fallback Container (for crawlers without JS) -->
+  <div id="reports-fallback">
+    <div class="reports-grid">
+      {% for report in reports %}
+      <a class="report-card" href="/{{ report.month }}/" id="report-{{ report.month }}">
+        <div class="info">
+          <div class="month">{{ report.label }}</div>
+          <div class="meta">Published {{ report.published }} · {{ report.cities }} cities · {{ report.neighbourhoods }} neighbourhoods</div>
+        </div>
+        <div class="links">
+          <span class="btn btn-html">View Report</span>
+          {% if report.has_pdf %}<span class="btn btn-pdf">PDF</span>{% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    </div>
   </div>
 
   <footer>
@@ -263,6 +338,162 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     </div>
   </footer>
 </div>
+
+<script id="reports-data" type="application/json">
+  {{ reports_json | safe }}
+</script>
+
+<script>
+  (function() {
+    // 1. Load data
+    const reports = JSON.parse(document.getElementById('reports-data').textContent);
+    if (!reports || reports.length === 0) return;
+
+    // 2. Hide fallback, show dynamic container & controls
+    document.getElementById('reports-fallback').style.display = 'none';
+    document.getElementById('dashboard-controls').style.display = 'flex';
+    document.getElementById('reports-dynamic-container').style.display = 'block';
+
+    // 3. UI references
+    const searchInput = document.getElementById('search-input');
+    const typePills = document.querySelectorAll('#type-pills .pill');
+    const periodPills = document.querySelectorAll('#period-pills .pill');
+    const dynamicGrid = document.getElementById('dynamic-grid');
+    const featuredSection = document.getElementById('featured-section');
+    const featuredGrid = document.getElementById('featured-grid');
+    const showMoreWrap = document.getElementById('show-more-wrap');
+    const btnShowMore = document.getElementById('btn-show-more');
+    const gridHeader = document.getElementById('grid-header');
+
+    // State
+    let filterType = 'all';
+    let filterPeriod = 'all';
+    let searchQuery = '';
+    let pageSize = 6;
+    let visibleCount = pageSize;
+
+    // Badges builder helper
+    function getPeriodBadge(period) {
+      if (period === '3mo') return '<span class="badge badge-quarterly">Quarterly</span>';
+      if (period === '6mo') return '<span class="badge badge-biannual">Bi-Annual</span>';
+      if (period === '12mo') return '<span class="badge badge-yearly">Yearly</span>';
+      return '<span class="badge badge-monthly">Monthly</span>';
+    }
+
+    function getTypeBadge(type) {
+      if (type === 'sale') return '<span class="badge badge-sale">Sales</span>';
+      if (type === 'rent') return '<span class="badge badge-rent">Rentals</span>';
+      return '<span class="badge badge-combined">Combined</span>';
+    }
+
+    // Render a single report card HTML
+    function renderCard(report) {
+      const pdfBtn = report.has_pdf ? `<span class="btn btn-pdf" style="margin-left:0.5rem">PDF</span>` : '';
+      return `
+        <a class="report-card" href="/${report.month}/" id="card-${report.month}">
+          <div class="info">
+            <div class="month">${report.label}</div>
+            <div class="meta-row">
+              ${getPeriodBadge(report.period)}
+              ${getTypeBadge(report.type)}
+              <span class="stats-text">• Published ${report.published} • ${report.cities} cities • ${report.neighbourhoods} hoods</span>
+            </div>
+          </div>
+          <div class="links">
+            <span class="btn btn-html">View Report</span>
+            ${pdfBtn}
+          </div>
+        </a>
+      `;
+    }
+
+    // Render Dashboard
+    function render() {
+      // Filter
+      const filtered = reports.filter(r => {
+        // Type filter
+        if (filterType !== 'all' && r.type !== filterType) return false;
+        // Period filter
+        if (filterPeriod !== 'all' && r.period !== filterPeriod) return false;
+        // Search query
+        if (searchQuery) {
+          const query = searchQuery.toLowerCase();
+          return r.label.toLowerCase().includes(query) || r.month.toLowerCase().includes(query);
+        }
+        return true;
+      });
+
+      // Set up Featured Publications (only show the top 1 if no filtering is active, else hide)
+      if (filterType === 'all' && filterPeriod === 'all' && !searchQuery && filtered.length > 0) {
+        featuredSection.style.display = 'block';
+        featuredGrid.innerHTML = renderCard(reports[0]);
+        // Filter out the featured report from all reports list so we don't repeat
+        const remaining = filtered.slice(1);
+        gridHeader.textContent = 'All Publications';
+        renderGrid(remaining);
+      } else {
+        featuredSection.style.display = 'none';
+        gridHeader.textContent = 'Search Results';
+        renderGrid(filtered);
+      }
+    }
+
+    function renderGrid(list) {
+      if (list.length === 0) {
+        dynamicGrid.innerHTML = '<div class="no-results">No reports found matching selected criteria.</div>';
+        showMoreWrap.style.display = 'none';
+        return;
+      }
+
+      const sliced = list.slice(0, visibleCount);
+      dynamicGrid.innerHTML = sliced.map(renderCard).join('');
+
+      if (list.length > visibleCount) {
+        showMoreWrap.style.display = 'flex';
+      } else {
+        showMoreWrap.style.display = 'none';
+      }
+    }
+
+    // Event Listeners
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      visibleCount = pageSize; // Reset pagination
+      render();
+    });
+
+    // Type pills toggle
+    document.getElementById('type-pills').addEventListener('click', (e) => {
+      const btn = e.target.closest('.pill');
+      if (!btn) return;
+      typePills.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      filterType = btn.dataset.type;
+      visibleCount = pageSize;
+      render();
+    });
+
+    // Period pills toggle
+    document.getElementById('period-pills').addEventListener('click', (e) => {
+      const btn = e.target.closest('.pill');
+      if (!btn) return;
+      periodPills.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      filterPeriod = btn.dataset.period;
+      visibleCount = pageSize;
+      render();
+    });
+
+    // Pagination
+    btnShowMore.addEventListener('click', () => {
+      visibleCount += pageSize;
+      render();
+    });
+
+    // Init
+    render();
+  })();
+</script>
 </body>
 </html>
 """
@@ -291,13 +522,17 @@ def regenerate_index(reports_dir: Path) -> None:
         parts = month_str.split("_")
         base_month = parts[0]
 
-        period_suffix = "1mo"
-        mtype_suffix = "all"
-        for p in parts[1:]:
-            if p in ("3mo", "6mo", "12mo"):
-                period_suffix = p
-            elif p in ("sale", "rent"):
-                mtype_suffix = p
+        period_suffix = meta.get("period")
+        mtype_suffix = meta.get("type")
+
+        if not period_suffix or not mtype_suffix:
+            period_suffix = "1mo"
+            mtype_suffix = "all"
+            for p in parts[1:]:
+                if p in ("3mo", "6mo", "12mo"):
+                    period_suffix = p
+                elif p in ("sale", "rent"):
+                    mtype_suffix = p
 
         try:
             dt = date.fromisoformat(f"{base_month}-01")
@@ -319,6 +554,8 @@ def regenerate_index(reports_dir: Path) -> None:
         report_entries.append({
             "month": month_str,
             "label": label,
+            "period": period_suffix,
+            "type": mtype_suffix,
             "published": meta.get("published_date", "—"),
             "cities": meta.get("num_cities", "—"),
             "neighbourhoods": meta.get("unique_neighbourhoods", "—"),
@@ -327,7 +564,10 @@ def regenerate_index(reports_dir: Path) -> None:
 
     env = Environment(autoescape=select_autoescape(["html"]))
     template = env.from_string(INDEX_TEMPLATE)
-    html = template.render(reports=report_entries)
+    html = template.render(
+        reports=report_entries,
+        reports_json=json.dumps(report_entries)
+    )
 
     index_path = reports_dir / "index.html"
     with open(index_path, "w") as f:
@@ -472,12 +712,13 @@ def main() -> None:
     # Write meta.json for index generation
     meta = {
         "month": args.month,
+        "period": args.period,
+        "type": metrics.get("type", "all"),
         "issue_number": issue_number,
         "published_date": published_date,
         "num_cities": primary["overall"]["num_cities"],
         "unique_neighbourhoods": primary["overall"]["unique_neighbourhoods"],
         "peak_active_listings": primary["overall"]["peak_active_listings"],
-        "type": metrics.get("type", "all"),
     }
     with open(out_dir / "meta.json", "w") as f:
         json.dump(meta, f, indent=2)
