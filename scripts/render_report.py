@@ -452,6 +452,8 @@ def main() -> None:
         "overall": primary["overall"],
         "metrics": metrics,
         "narrative": narrative,
+        "period": args.period,
+        "type": metrics.get("type", "all"),
         "issue_number": issue_number,
         "published_date": published_date,
         "published_date_iso": published_date_iso,
