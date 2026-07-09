@@ -703,6 +703,7 @@
       .kpi-card { padding: 0.85rem 1.1rem; }
       .card { padding: 1.25rem 1.5rem; }
       .section-header h2 { font-size: 1.15rem; }
+      table { min-width: 600px; }
     }
   </style>
 </head>
@@ -899,10 +900,10 @@
           </div>
           {% endif %}
 
-          <div class="card-grid">
+          <div class="stacked-tables">
             <!-- Most Expensive -->
-            <div>
-              <h3>Most Expensive Areas</h3>
+            <div style="margin-bottom: 2rem;">
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.75rem; border-left: 3px solid var(--accent-red); padding-left: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Most Expensive Areas</h3>
               <div class="table-wrap">
                 <table>
                   <thead>
@@ -946,8 +947,8 @@
             </div>
 
             <!-- Most Affordable -->
-            <div>
-              <h3>Most Affordable Areas</h3>
+            <div style="margin-top: 2rem;">
+              <h3 style="font-size: 1.15rem; margin-bottom: 0.75rem; border-left: 3px solid var(--accent-green); padding-left: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">Most Affordable Areas</h3>
               <div class="table-wrap">
                 <table>
                   <thead>
