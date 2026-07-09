@@ -668,6 +668,196 @@ def generate_sitemap_and_robots(reports_dir: Path) -> None:
     print(f"✓ Sitemap.xml generated: {sitemap_path} ({len(entries)} URLs listed)")
 
 
+def generate_regional_bar_chart(city_breakdown: dict) -> str:
+    # Filter cities with valid median price
+    cities_data = []
+    for city, stats in city_breakdown.items():
+        price = stats.get("median_price_ngn")
+        if price:
+            cities_data.append((city, price))
+    
+    # Sort cities by price descending
+    cities_data = sorted(cities_data, key=lambda x: x[1], reverse=True)
+    if not cities_data:
+        return ""
+    
+    # SVG Dimensions
+    width = 600
+    row_height = 30
+    padding_top = 40
+    padding_bottom = 20
+    left_margin = 120
+    right_margin = 80
+    chart_width = width - left_margin - right_margin
+    height = len(cities_data) * row_height + padding_top + padding_bottom
+    
+    max_price = max(c[1] for c in cities_data)
+    
+    svg = []
+    svg.append(f'<svg width="100%" height="{height}" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" style="background:var(--bg-card); border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-sans); margin-top: 1.5rem; margin-bottom: 1.5rem;">')
+    
+    # Add title/header
+    svg.append(f'<text x="20" y="25" fill="var(--text-primary)" font-size="12" font-weight="600" letter-spacing="0.5">MEDIAN PRICE COMPARISON BY REGION (NGN)</text>')
+    
+    y = padding_top
+    for city, price in cities_data:
+        # Scale bar width
+        bar_width = int((price / max_price) * chart_width) if max_price > 0 else 0
+        bar_width = max(5, bar_width) # Min 5px width
+        
+        # Price formatting
+        if price >= 1_000_000_000:
+            price_str = f"₦{price / 1_000_000_000:.1f}B"
+        elif price >= 1_000_000:
+            price_str = f"₦{price / 1_000_000:.1f}M"
+        else:
+            price_str = f"₦{price / 1_000:.0f}k"
+            
+        # Draw label
+        svg.append(f'<text x="{left_margin - 15}" y="{y + 16}" fill="var(--text-secondary)" font-size="11" font-weight="600" text-anchor="end">{city}</text>')
+        
+        # Draw bar track
+        svg.append(f'<rect x="{left_margin}" y="{y + 4}" width="{chart_width}" height="16" rx="3" fill="var(--border)" opacity="0.3"/>')
+        
+        # Draw bar fill
+        svg.append(f'<rect x="{left_margin}" y="{y + 4}" width="{bar_width}" height="16" rx="3" fill="var(--gold-light)"/>')
+        
+        # Draw value label
+        svg.append(f'<text x="{left_margin + bar_width + 8}" y="{y + 16}" fill="var(--gold-light)" font-size="11" font-weight="600">{price_str}</text>')
+        
+        y += row_height
+        
+    svg.append('</svg>')
+    return '\n'.join(svg)
+
+
+def generate_trajectory_line_chart(weeks_data: list) -> str:
+    if not weeks_data or len(weeks_data) < 2:
+        return ""
+    
+    # Sort weeks chronologically
+    weeks_data = sorted(weeks_data, key=lambda x: x["week"])
+    
+    # SVG Dimensions
+    width = 600
+    height = 240
+    padding_left = 55
+    padding_right = 65
+    padding_top = 40
+    padding_bottom = 45
+    chart_width = width - padding_left - padding_right
+    chart_height = height - padding_top - padding_bottom
+    
+    # Extract values
+    weeks = [w["week"] for w in weeks_data]
+    active_counts = [w["active_listing_count"] for w in weeks_data]
+    median_prices = [w["median_price_ngn"] for w in weeks_data]
+    
+    min_active = min(active_counts)
+    max_active = max(active_counts)
+    min_price = min(median_prices)
+    max_price = max(median_prices)
+    
+    # Guard against flat lines
+    active_range = (max_active - min_active) if max_active != min_active else 1.0
+    price_range = (max_price - min_price) if max_price != min_price else 1.0
+    
+    # Add padding to ranges
+    active_min_y = max(0, min_active - active_range * 0.1)
+    active_max_y = max_active + active_range * 0.1
+    active_range_padded = active_max_y - active_min_y
+    
+    price_min_y = max(0, min_price - price_range * 0.1)
+    price_max_y = max_price + price_range * 0.1
+    price_range_padded = price_max_y - price_min_y
+    
+    svg = []
+    svg.append(f'<svg width="100%" height="{height}" viewBox="0 0 {width} {height}" xmlns="http://www.w3.org/2000/svg" style="background:var(--bg-card); border: 1px solid var(--border); border-radius: 8px; font-family: var(--font-sans); margin-top: 1.5rem; margin-bottom: 1.5rem;">')
+    
+    # Title
+    svg.append('<text x="20" y="25" fill="var(--text-primary)" font-size="12" font-weight="600" letter-spacing="0.5">WEEKLY MARKET TRAJECTORY TREND</text>')
+    
+    # Legend
+    svg.append(f'<rect x="360" y="15" width="10" height="10" fill="var(--gold-light)" rx="2"/>')
+    svg.append(f'<text x="375" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Active Listings (Left)</text>')
+    svg.append(f'<rect x="490" y="15" width="10" height="10" fill="#4B9CD3" rx="2"/>')
+    svg.append(f'<text x="505" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Median Price (Right)</text>')
+    
+    # X coordinates of points
+    num_points = len(weeks_data)
+    x_coords = []
+    for i in range(num_points):
+        x = padding_left + (i / (num_points - 1)) * chart_width
+        x_coords.append(x)
+        
+    # Grid lines (horizontal)
+    num_grid_lines = 4
+    for i in range(num_grid_lines):
+        y = padding_top + (i / (num_grid_lines - 1)) * chart_height
+        svg.append(f'<line x1="{padding_left}" y1="{y}" x2="{width - padding_right}" y2="{y}" stroke="var(--border)" stroke-dasharray="4 4" opacity="0.3"/>')
+        
+        # Grid labels
+        # Left scale: Active listings
+        active_val = int(active_max_y - (i / (num_grid_lines - 1)) * active_range_padded)
+        svg.append(f'<text x="{padding_left - 8}" y="{y + 4}" fill="var(--gold-light)" font-size="9" font-weight="600" text-anchor="end">{active_val}</text>')
+        
+        # Right scale: Price
+        price_val = price_max_y - (i / (num_grid_lines - 1)) * price_range_padded
+        if price_val >= 1_000_000_000:
+            price_str = f"₦{price_val / 1_000_000_000:.1f}B"
+        elif price_val >= 1_000_000:
+            price_str = f"₦{price_val / 1_000_000:.0f}M"
+        else:
+            price_str = f"₦{price_val / 1_000:.0f}k"
+        svg.append(f'<text x="{width - padding_right + 8}" y="{y + 4}" fill="#4B9CD3" font-size="9" font-weight="600" text-anchor="start">{price_str}</text>')
+
+    # Plot active listings path
+    active_points = []
+    for i, val in enumerate(active_counts):
+        x = x_coords[i]
+        y = padding_top + chart_height - ((val - active_min_y) / active_range_padded) * chart_height
+        active_points.append((x, y))
+        
+    # Plot median price path
+    price_points = []
+    for i, val in enumerate(median_prices):
+        x = x_coords[i]
+        y = padding_top + chart_height - ((val - price_min_y) / price_range_padded) * chart_height
+        price_points.append((x, y))
+        
+    # Draw Active Listings Line & Area
+    active_path_str = " ".join([f"{'M' if i==0 else 'L'} {pt[0]:.1f} {pt[1]:.1f}" for i, pt in enumerate(active_points)])
+    active_area_str = f"{active_path_str} L {active_points[-1][0]:.1f} {padding_top + chart_height:.1f} L {active_points[0][0]:.1f} {padding_top + chart_height:.1f} Z"
+    svg.append(f'<path d="{active_area_str}" fill="var(--gold)" opacity="0.06"/>')
+    svg.append(f'<path d="{active_path_str}" fill="none" stroke="var(--gold-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
+    
+    # Draw Price Line & Area
+    price_path_str = " ".join([f"{'M' if i==0 else 'L'} {pt[0]:.1f} {pt[1]:.1f}" for i, pt in enumerate(price_points)])
+    price_area_str = f"{price_path_str} L {price_points[-1][0]:.1f} {padding_top + chart_height:.1f} L {price_points[0][0]:.1f} {padding_top + chart_height:.1f} Z"
+    svg.append(f'<path d="{price_area_str}" fill="#4B9CD3" opacity="0.06"/>')
+    svg.append(f'<path d="{price_path_str}" fill="none" stroke="#4B9CD3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
+    
+    # Draw markers & labels
+    for i, week in enumerate(weeks):
+        x = x_coords[i]
+        y = padding_top + chart_height
+        
+        svg.append(f'<line x1="{x}" y1="{y}" x2="{x}" y2="{y + 4}" stroke="var(--border)" opacity="0.5"/>')
+        
+        ap = active_points[i]
+        svg.append(f'<circle cx="{ap[0]:.1f}" cy="{ap[1]:.1f}" r="4" fill="var(--gold-light)" stroke="var(--bg-card)" stroke-width="1.5"/>')
+        
+        pp = price_points[i]
+        svg.append(f'<circle cx="{pp[0]:.1f}" cy="{pp[1]:.1f}" r="4" fill="#4B9CD3" stroke="var(--bg-card)" stroke-width="1.5"/>')
+        
+        parts = week.split("-")
+        week_lbl = f"{parts[1]}/{parts[2]}"
+        svg.append(f'<text x="{x}" y="{y + 18}" fill="var(--text-secondary)" font-size="8.5" font-weight="600" text-anchor="middle">{week_lbl}</text>')
+        
+    svg.append('</svg>')
+    return '\n'.join(svg)
+
+
 # ---------------------------------------------------------------------------
 # Entrypoint
 # ---------------------------------------------------------------------------
@@ -723,6 +913,22 @@ def main() -> None:
     # Determine descriptive PDF filename
     pdf_filename = get_descriptive_pdf_filename(args.month, args.period, metrics.get("type", "all"))
 
+    # Generate SVG charts
+    sales_trajectory_chart = ""
+    rentals_trajectory_chart = ""
+    sales_regional_chart = ""
+    rentals_regional_chart = ""
+
+    if "sales" in metrics and metrics["sales"].get("weekly_aggregates"):
+        sales_trajectory_chart = generate_trajectory_line_chart(metrics["sales"]["weekly_aggregates"])
+    if "rentals" in metrics and metrics["rentals"].get("weekly_aggregates"):
+        rentals_trajectory_chart = generate_trajectory_line_chart(metrics["rentals"]["weekly_aggregates"])
+        
+    if "sales" in metrics and metrics["sales"].get("city_breakdown"):
+        sales_regional_chart = generate_regional_bar_chart(metrics["sales"]["city_breakdown"])
+    if "rentals" in metrics and metrics["rentals"].get("city_breakdown"):
+        rentals_regional_chart = generate_regional_bar_chart(metrics["rentals"]["city_breakdown"])
+
     # Prepare Jinja template context
     template_vars = {
         "overall": primary["overall"],
@@ -735,6 +941,10 @@ def main() -> None:
         "published_date_iso": published_date_iso,
         "embedded_fonts_css": embedded_fonts_css,
         "pdf_filename": pdf_filename,
+        "sales_trajectory_chart": sales_trajectory_chart,
+        "rentals_trajectory_chart": rentals_trajectory_chart,
+        "sales_regional_chart": sales_regional_chart,
+        "rentals_regional_chart": rentals_regional_chart,
     }
 
     # Render HTML
