@@ -819,154 +819,10 @@
         </section>
         {% endif %}
 
-        <!-- SECTION 2: INVENTORY DISTRIBUTION -->
+        <!-- SECTION 2: REGIONAL DEEP DIVE -->
         <section class="section">
           <div class="section-header">
             <span class="section-number">02</span>
-            <h2>Inventory Distribution — Most Active Areas</h2>
-          </div>
-
-          {% if mnarr %}
-          <div class="card">
-            <p>{{ mnarr.inventory_narrative }}</p>
-          </div>
-          {% endif %}
-
-          {% if mdata.inventory_ranking %}
-          {% set max_active = mdata.inventory_ranking[0].avg_weekly_active_listings %}
-          <div class="bar-chart">
-            {% for item in mdata.inventory_ranking %}
-            <div class="bar-row">
-              <span class="bar-label" title="{{ item.neighbourhood }}, {{ item.city }}">
-                {{ item.neighbourhood }}
-              </span>
-              <div class="bar-track">
-                <div class="bar-fill" style="width: {{ (item.avg_weekly_active_listings / max_active * 100) | round(1) }}%"></div>
-              </div>
-              <span class="bar-value">{{ item.avg_weekly_active_listings }}</span>
-            </div>
-            {% endfor %}
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Neighbourhood</th>
-                  <th>City / State</th>
-                  <th class="right">Avg. Weekly Active Listings</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for item in mdata.inventory_ranking %}
-                <tr>
-                  <td class="rank">{{ item.rank }}</td>
-                  <td class="hood">{{ item.neighbourhood }}</td>
-                  <td class="city">{{ item.city }}</td>
-                  <td class="right">{{ "{:,.1f}".format(item.avg_weekly_active_listings) }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% endif %}
-        </section>
-
-        <!-- SECTION 3: PRICING TIERS -->
-        <section class="section">
-          <div class="section-header">
-            <span class="section-number">03</span>
-            <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
-          </div>
-
-          {% if mnarr %}
-          <div class="card">
-            <p>{{ mnarr.pricing_narrative }}</p>
-          </div>
-          {% endif %}
-
-          <div class="card-grid">
-            <!-- Most Expensive -->
-            <div>
-              <h3>Most Expensive Areas</h3>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Neighbourhood</th>
-                      <th class="right">Avg. Median Price</th>
-                      <th class="right">Avg. DOM</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for item in mdata.pricing_tiers.most_expensive %}
-                    <tr>
-                      <td class="rank">{{ item.rank }}</td>
-                      <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
-                      <td class="price">
-                        {% if item.avg_median_price_ngn %}
-                          {% if item.avg_median_price_ngn >= 1_000_000_000 %}
-                            ₦{{ "{:.2f}".format(item.avg_median_price_ngn / 1_000_000_000) }}B{{ suffix }}
-                          {% elif item.avg_median_price_ngn >= 1_000_000 %}
-                            ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M{{ suffix }}
-                          {% else %}
-                            ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k{{ suffix }}
-                          {% endif %}
-                        {% else %}N/A{% endif %}
-                      </td>
-                      <td class="right">{{ item.avg_days_on_market }}d</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- Most Affordable -->
-            <div>
-              <h3>Most Affordable Areas</h3>
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Neighbourhood</th>
-                      <th class="right">Avg. Median Price</th>
-                      <th class="right">Avg. DOM</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for item in mdata.pricing_tiers.most_affordable %}
-                    <tr>
-                      <td class="rank">{{ item.rank }}</td>
-                      <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
-                      <td class="price">
-                        {% if item.avg_median_price_ngn %}
-                          {% if item.avg_median_price_ngn >= 1_000_000 %}
-                            ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M{{ suffix }}
-                          {% elif item.avg_median_price_ngn >= 1_000 %}
-                            ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k{{ suffix }}
-                          {% else %}
-                            ₦{{ "{:,.0f}".format(item.avg_median_price_ngn) }}{{ suffix }}
-                          {% endif %}
-                        {% else %}N/A{% endif %}
-                      </td>
-                      <td class="right">{{ item.avg_days_on_market }}d</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- SECTION 4: REGIONAL DEEP DIVE -->
-        <section class="section">
-          <div class="section-header">
-            <span class="section-number">04</span>
             <h2>Regional Deep Dive</h2>
           </div>
 
@@ -1028,51 +884,10 @@
           {% endif %}
         </section>
 
-        <!-- SECTION 5: WEEKLY TRENDS -->
+        <!-- SECTION 3: PRICE REDUCTION ANALYSIS -->
         <section class="section">
           <div class="section-header">
-            <span class="section-number">05</span>
-            <h2>Weekly Market Trajectory</h2>
-          </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Week Start</th>
-                  <th class="right">Active Listings</th>
-                  <th class="right">New Listings</th>
-                  <th class="right">Price Reductions</th>
-                  <th class="right">Median Price (NGN)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in mdata.weekly_aggregates %}
-                <tr>
-                  <td style="font-family:var(--font-mono);font-size:0.82rem">{{ row.week }}</td>
-                  <td class="right">{{ "{:,}".format(row.active_listing_count) }}</td>
-                  <td class="right">{{ "{:,}".format(row.new_listings_count) }}</td>
-                  <td class="right">{{ row.price_reduced_count }}</td>
-                  <td class="price">
-                    {% if row.median_price_ngn %}
-                      {% if row.median_price_ngn >= 1_000_000 %}
-                        ₦{{ "{:.1f}".format(row.median_price_ngn / 1_000_000) }}M{{ suffix }}
-                      {% else %}
-                        ₦{{ "{:,.0f}".format(row.median_price_ngn / 1_000) }}k{{ suffix }}
-                      {% endif %}
-                    {% else %}—{% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <!-- SECTION 6: PRICE REDUCTION ANALYSIS -->
-        <section class="section">
-          <div class="section-header">
-            <span class="section-number">06</span>
+            <span class="section-number">03</span>
             <h2>Price Reduction Analysis</h2>
           </div>
 
@@ -1105,11 +920,11 @@
           {% endif %}
         </section>
 
-        <!-- SECTION 7: OUTLOOK -->
+        <!-- SECTION 4: OUTLOOK -->
         {% if mnarr %}
         <section class="section">
           <div class="section-header">
-            <span class="section-number">07</span>
+            <span class="section-number">04</span>
             <h2>Market Outlook</h2>
           </div>
           <div class="card">
@@ -1117,9 +932,204 @@
           </div>
         </section>
         {% endif %}
+
+        <!-- SECTION 5: SEGMENTED PROPERTY CLASSES ANALYSIS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">05</span>
+            <h2>Segmented Property Class Breakdowns</h2>
+          </div>
+
+          {% for prop_class, class_data in mdata.classes.items() %}
+          <div class="property-class-container" style="margin-top: 3.5rem; page-break-inside: avoid; border: 1px solid var(--border); padding: 2rem; border-radius: var(--radius); background: var(--bg-card);">
+            <h2 style="font-size: 1.6rem; font-weight: 700; color: var(--gold-light); margin-top: 0; margin-bottom: 2rem; border-bottom: 2px solid var(--gold); padding-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.5px;">
+              {{ prop_class | replace('_', ' ') }}
+            </h2>
+
+            <!-- Class Sub-KPIs -->
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 120px; background: var(--bg); padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem;">Peak Active</div>
+                <div style="font-size: 1.4rem; font-weight: 700; color: var(--text);">{{ "{:,}".format(class_data.overall.peak_active_listings) }}</div>
+              </div>
+              <div style="flex: 1; min-width: 120px; background: var(--bg); padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem;">New Listings</div>
+                <div style="font-size: 1.4rem; font-weight: 700; color: var(--green);">{{ "{:,}".format(class_data.overall.total_new_listings) }}</div>
+              </div>
+              <div style="flex: 1; min-width: 120px; background: var(--bg); padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem;">Median Price</div>
+                <div style="font-size: 1.4rem; font-weight: 700; color: var(--gold-light);">
+                  {% if class_data.overall.overall_median_price_ngn %}
+                    {% if class_data.overall.overall_median_price_ngn >= 1_000_000_000 %}
+                      ₦{{ "{:.2f}".format(class_data.overall.overall_median_price_ngn / 1_000_000_000) }}B{{ suffix }}
+                    {% elif class_data.overall.overall_median_price_ngn >= 1_000_000 %}
+                      ₦{{ "{:.1f}".format(class_data.overall.overall_median_price_ngn / 1_000_000) }}M{{ suffix }}
+                    {% else %}
+                      ₦{{ "{:,.0f}".format(class_data.overall.overall_median_price_ngn / 1_000) }}k{{ suffix }}
+                    {% endif %}
+                  {% else %}N/A{% endif %}
+                </div>
+              </div>
+              <div style="flex: 1; min-width: 120px; background: var(--bg); padding: 1rem; border-radius: var(--radius); border: 1px solid var(--border);">
+                <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.3rem;">Areas Tracked</div>
+                <div style="font-size: 1.4rem; font-weight: 700; color: var(--text);">{{ class_data.overall.unique_neighbourhoods }}</div>
+              </div>
+            </div>
+
+            <!-- Inventory Distribution for Class -->
+            {% if class_data.inventory_ranking %}
+            <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 1rem; border-left: 3px solid var(--gold); padding-left: 0.5rem;">Most Active Areas</h3>
+            {% set max_class_active = class_data.inventory_ranking[0].avg_weekly_active_listings %}
+            <div class="bar-chart" style="margin-bottom: 1.5rem;">
+              {% for item in class_data.inventory_ranking %}
+              <div class="bar-row">
+                <span class="bar-label" title="{{ item.neighbourhood }}, {{ item.city }}">
+                  {{ item.neighbourhood }}
+                </span>
+                <div class="bar-track">
+                  <div class="bar-fill" style="width: {{ (item.avg_weekly_active_listings / max_class_active * 100) | round(1) }}%"></div>
+                </div>
+                <span class="bar-value">{{ item.avg_weekly_active_listings }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Pricing Tiers for Class -->
+            <div class="card-grid" style="margin-top: 2rem; margin-bottom: 2rem;">
+              <!-- Most Expensive Areas -->
+              <div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.8rem;">Most Expensive Areas</h4>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Neighbourhood</th>
+                        <th class="right">Avg. Median</th>
+                        <th class="right">Avg. DOM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if class_data.pricing_tiers.most_expensive %}
+                        {% for item in class_data.pricing_tiers.most_expensive %}
+                        <tr>
+                          <td class="rank">{{ item.rank }}</td>
+                          <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
+                          <td class="price">
+                            {% if item.avg_median_price_ngn %}
+                              {% if item.avg_median_price_ngn >= 1_000_000_000 %}
+                                ₦{{ "{:.2f}".format(item.avg_median_price_ngn / 1_000_000_000) }}B{{ suffix }}
+                              {% elif item.avg_median_price_ngn >= 1_000_000 %}
+                                ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M{{ suffix }}
+                              {% else %}
+                                ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k{{ suffix }}
+                              {% endif %}
+                            {% else %}N/A{% endif %}
+                          </td>
+                          <td class="right">{{ item.avg_days_on_market }}d</td>
+                        </tr>
+                        {% endfor %}
+                      {% else %}
+                        <tr>
+                          <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1rem;">No areas meet volume thresholds</td>
+                        </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Most Affordable Areas -->
+              <div>
+                <h4 style="font-size: 1rem; color: var(--text); margin-bottom: 0.8rem;">Most Affordable Areas</h4>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Neighbourhood</th>
+                        <th class="right">Avg. Median</th>
+                        <th class="right">Avg. DOM</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if class_data.pricing_tiers.most_affordable %}
+                        {% for item in class_data.pricing_tiers.most_affordable %}
+                        <tr>
+                          <td class="rank">{{ item.rank }}</td>
+                          <td class="hood">{{ item.neighbourhood }}<br><span style="font-size:0.75rem;color:var(--text-muted)">{{ item.city }}</span></td>
+                          <td class="price">
+                            {% if item.avg_median_price_ngn %}
+                              {% if item.avg_median_price_ngn >= 1_000_000_000 %}
+                                ₦{{ "{:.2f}".format(item.avg_median_price_ngn / 1_000_000_000) }}B{{ suffix }}
+                              {% elif item.avg_median_price_ngn >= 1_000_000 %}
+                                ₦{{ "{:.1f}".format(item.avg_median_price_ngn / 1_000_000) }}M{{ suffix }}
+                              {% else %}
+                                ₦{{ "{:,.0f}".format(item.avg_median_price_ngn / 1_000) }}k{{ suffix }}
+                              {% endif %}
+                            {% else %}N/A{% endif %}
+                          </td>
+                          <td class="right">{{ item.avg_days_on_market }}d</td>
+                        </tr>
+                        {% endfor %}
+                      {% else %}
+                        <tr>
+                          <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1rem;">No areas meet volume thresholds</td>
+                        </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Weekly Market Trajectory for Class -->
+            {% if class_data.weekly_aggregates %}
+            <h3 style="font-size: 1.1rem; color: var(--text); margin-bottom: 1rem; border-left: 3px solid var(--gold); padding-left: 0.5rem;">Weekly Market Trajectory</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Week Start</th>
+                    <th class="right">Active Listings</th>
+                    <th class="right">New Listings</th>
+                    <th class="right">Price Reductions</th>
+                    <th class="right">Median Price (NGN)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in class_data.weekly_aggregates %}
+                  <tr>
+                    <td style="font-family:var(--font-mono);font-size:0.82rem">{{ row.week }}</td>
+                    <td class="right">{{ "{:,}".format(row.active_listing_count) }}</td>
+                    <td class="right">{{ "{:,}".format(row.new_listings_count) }}</td>
+                    <td class="right">{{ row.price_reduced_count }}</td>
+                    <td class="price">
+                      {% if row.median_price_ngn %}
+                        {% if row.median_price_ngn >= 1_000_000_000 %}
+                          ₦{{ "{:.2f}".format(row.median_price_ngn / 1_000_000_000) }}B{{ suffix }}
+                        {% elif row.median_price_ngn >= 1_000_000 %}
+                          ₦{{ "{:.1f}".format(row.median_price_ngn / 1_000_000) }}M{{ suffix }}
+                        {% else %}
+                          ₦{{ "{:,.0f}".format(row.median_price_ngn / 1_000) }}k{{ suffix }}
+                        {% endif %}
+                      {% else %}—{% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% endif %}
+
+          </div>
+          {% endfor %}
+        </section>
       </div>
     {% endif %}
   {% endfor %}
+
 
   <!-- ================================================================
        METHODOLOGY
