@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>June 2026 — Nigerian Residential Real Estate Market Report | akinmokun.com</title>
-  <meta name="description" content="Monthly intelligence report on the Nigerian residential real estate market for June 2026, powered by PS-0 PropertyScraper. Data covers 8 cities and 194 neighbourhoods." />
+  <meta name="description" content="Monthly intelligence report on the Nigerian residential real estate market for June 2026, powered by PS-0 PropertyScraper. Data covers 8 cities and 67 neighbourhoods." />
   <meta name="author" content="Isaac Akinmokun" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://reports.akinmokun.com/2026-06/" />
@@ -58,11 +58,11 @@
           "@id": "https://reports.akinmokun.com/2026-06/"
         },
         "headline": "June 2026 — Nigerian Residential Real Estate Market Report",
-        "description": "Monthly intelligence report on the Nigerian residential real estate market for June 2026, powered by PS-0 PropertyScraper. Data covers 8 cities and 194 neighbourhoods.",
+        "description": "Monthly intelligence report on the Nigerian residential real estate market for June 2026, powered by PS-0 PropertyScraper. Data covers 8 cities and 67 neighbourhoods.",
         "inLanguage": "en-US",
         "mainEntityOfPage": "https://reports.akinmokun.com/2026-06/",
-        "datePublished": "2026-07-02",
-        "dateModified": "2026-07-02",
+        "datePublished": "2026-07-09",
+        "dateModified": "2026-07-09",
         "author": {
           "@id": "https://akinmokun.com/#person"
         },
@@ -166,6 +166,49 @@
       --font-mono: 'JetBrains Mono', monospace;
 
       --max-width: 920px;
+    }
+
+    /* ===================================================================
+       THEME OVERRIDES (Period & Type scoping)
+    =================================================================== */
+
+    /* Type overrides (Sales/Rentals) */
+    .type-sale {
+      --gold:         #3182ce;
+      --gold-light:   #63b3ed;
+      --gold-dim:     #2b6cb0;
+    }
+
+    .type-rent {
+      --gold:         #38a169;
+      --gold-light:   #68d391;
+      --gold-dim:     #2f855a;
+    }
+
+    /* Period overrides (Quarterly, Bi-Annual, Yearly - takes precedence) */
+    .period-3mo {
+      --gold:         #829ab1;
+      --gold-light:   #9fb3c8;
+      --gold-dim:     #627d98;
+    }
+
+    .period-6mo {
+      --gold:         #c87a53;
+      --gold-light:   #e2947a;
+      --gold-dim:     #a65f3c;
+    }
+
+    .period-12mo {
+      --gold:         #d4af37;
+      --gold-light:   #f3e5ab;
+      --gold-dim:     #aa8c2c;
+    }
+
+    .period-12mo h1,
+    .period-12mo h2,
+    .period-12mo h3 {
+      font-family: 'Playfair Display', Georgia, serif !important;
+      letter-spacing: -0.2px;
     }
 
     /* ===================================================================
@@ -353,7 +396,7 @@
        SECTION
     =================================================================== */
     .section {
-      margin-bottom: 3rem;
+      margin-bottom: 4rem;
     }
 
     .section-header {
@@ -691,16 +734,23 @@
        RESPONSIVE
     =================================================================== */
     @media (max-width: 680px) {
-      h1 { font-size: 1.5rem; }
-      .card-grid { grid-template-columns: 1fr; }
-      .bar-row { grid-template-columns: 100px 1fr 70px; }
-      .kpi-strip { grid-template-columns: 1fr 1fr; }
+      .page-wrapper { padding: 0 1.5rem 3rem; }
+      h1 { font-size: 1.6rem; line-height: 1.25; }
+      .global-header { flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
+      .report-header { padding: 1.5rem 0; margin-bottom: 1.5rem; }
+      .header-meta { flex-wrap: wrap; gap: 0.5rem 1rem; }
+      .card-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .bar-row { grid-template-columns: 110px 1fr 70px; gap: 0.6rem; }
+      .kpi-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+      .kpi-card { padding: 0.85rem 1.1rem; }
+      .card { padding: 1.25rem 1.5rem; }
+      .section-header h2 { font-size: 1.15rem; }
     }
   </style>
 </head>
 
 <body>
-<div class="page-wrapper">
+<div class="page-wrapper period-1mo type-all">
 
   <header class="global-header">
     <a class="logo-link" href="https://akinmokun.com/">
@@ -724,7 +774,7 @@
       <span class="dot">·</span>
       <span>Market Intelligence</span>
       <span class="dot">·</span>
-      <span>Issue 1</span>
+      <span>Issue 2</span>
     </div>
     <h1>Nigerian Residential Real Estate<br>Market Report</h1>
     <p class="header-sub">
@@ -735,9 +785,9 @@
       <div class="header-tags">
         <span class="tag gold">PS-0 PropertyScraper</span>
         <span class="tag">8 Cities</span>
-        <span class="tag">194 Neighbourhoods</span>
+        <span class="tag">67 Neighbourhoods</span>
         <span class="tag">4 Weeks of Data</span>
-        <span class="tag">Published July 2, 2026</span>
+        <span class="tag">Published July 9, 2026</span>
       </div>
       <a href="nigerian-residential-real-estate-market-report-2026-06.pdf" class="download-pdf-btn" download>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
@@ -749,845 +799,1791 @@
   <!-- ================================================================
        KPI STRIP
   ================================================================ -->
-  <div class="kpi-strip" id="kpi-strip">
-    <div class="kpi-card">
-      <span class="kpi-label">Peak Active Listings</span>
-      <span class="kpi-value">12,131</span>
-      <span class="kpi-sub">Latest week total</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">New Listings</span>
-      <span class="kpi-value green">3,752</span>
-      <span class="kpi-sub">Discovered this period</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Price Reductions</span>
-      <span class="kpi-value red">263</span>
-      <span class="kpi-sub">Seller adjustments tracked</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Inventory Growth</span>
-      <span class="kpi-value gold">23.0%</span>
-      <span class="kpi-sub">First → last week</span>
-    </div>
-    <div class="kpi-card">
-      <span class="kpi-label">Neighbourhoods Tracked</span>
-      <span class="kpi-value">194</span>
-      <span class="kpi-sub">Across 8 cities</span>
-    </div>
-  </div>
-
-  <!-- ================================================================
-       SECTION 1: EXECUTIVE SUMMARY
-  ================================================================ -->
-  <section class="section" id="executive-summary">
-    <div class="section-header">
-      <span class="section-number">01</span>
-      <h2>Executive Summary</h2>
-    </div>
-    <div class="card">
-      The Nigerian residential property market demonstrated notable expansion in June 2026, with active listings growing by 23.0% from 9,864 in the first week to a peak of 12,131 in the final week. Across the 194 unique neighbourhoods analysed, cumulative tracked listings reached 14,218, supported by the discovery of 3,752 new listings. This supply injection reflects heightened developer activity and a concerted push to bring inventory to market before the mid-year close.</p><p>Pricing dynamics remained volatile but consolidated towards a median of ₦15.0M by the final week of June, down from a mid-month peak of ₦17.2M. This fluctuation was accompanied by 263 price reduction events, peaking at 78 in the week of 8 June 2026. The high volume of price adjustments, particularly in Lagos, suggests a tactical recalibration by sellers to stimulate absorption amid rising inventory levels.</p><p>Regional performance highlights a stark divergence between primary commercial hubs and secondary markets. While Lagos continues to dominate transaction volumes with 115 active neighbourhoods, premium enclaves in Enugu and Port Harcourt recorded high median prices of ₦175.0M and ₦120.0M respectively, albeit on highly concentrated listing volumes. Abuja maintained a stable secondary position with 48 active neighbourhoods and a median price of ₦30.0M.
-    </div>
-
-    <!-- Key Takeaways -->
-    <h3>Key Takeaways</h3>
-    <ul class="takeaways" id="key-takeaways">
-      
-      <li>Active listings grew by 23.0% over the four-week period, peaking at 12,131 properties in the final week.</li>
-      
-      <li>Lagos dominated market activity, accounting for 115 neighbourhoods and 222 of the 263 total price reduction events.</li>
-      
-      <li>Apapa and Pinnock Beach Estate established the luxury ceiling with median prices of ₦1,300.0M and ₦1,000.0M respectively.</li>
-      
-      <li>Enugu and Port Harcourt recorded high median prices of ₦175.0M and ₦120.0M, indicating strong premium pricing in secondary hubs.</li>
-      
-      <li>A total of 263 price reduction events, peaking in early June, signals rising seller capitulation to maintain transaction velocity.</li>
-      
-    </ul>
-  </section>
-
-  <!-- ================================================================
-       SECTION 2: INVENTORY DISTRIBUTION
-  ================================================================ -->
-  <section class="section" id="inventory-distribution">
-    <div class="section-header">
-      <span class="section-number">02</span>
-      <h2>Inventory Distribution — Most Active Markets</h2>
-    </div>
-
-    <div class="card">
-      <p>Inventory distribution remains heavily concentrated in Lagos, which accounts for 115 of the 194 unique neighbourhoods tracked. The weekly active listing volume expanded steadily from 9,864 to 12,131, representing a 23.0% expansion over the four-week period. This growth was driven by a strong influx of 3,752 new listings, with notable weekly spikes of 1,268 and 1,361 new properties in the first and fourth weeks respectively.
-
-The concentration of active listings is highly localised, with Lekki Phase 1 leading activity with an average of 1434.0 active listings per week, followed by Lekki at 816.2 and Victoria Island at 617.5. This clustering in the Lekki-Ajah corridor and premium Lagos Island nodes signals a sustained developer focus on high-density residential developments, which may lead to localised oversupply if absorption rates do not match the 23.0% inventory growth rate.</p>
-    </div>
-
-    <!-- Bar chart: top neighbourhoods -->
+  
     
-    <div class="bar-chart" id="inventory-chart">
+    
+    
       
-      <div class="bar-row">
-        <span class="bar-label" title="Lekki Phase 1, LAGOS">
-          Lekki Phase 1
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 100.0%"></div>
-        </div>
-        <span class="bar-value">1434.0</span>
-      </div>
       
-      <div class="bar-row">
-        <span class="bar-label" title="Lekki, LAGOS">
-          Lekki
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 56.9%"></div>
-        </div>
-        <span class="bar-value">816.2</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Victoria Island, LAGOS">
-          Victoria Island
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 43.1%"></div>
-        </div>
-        <span class="bar-value">617.5</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Ikoyi, LAGOS">
-          Ikoyi
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 43.0%"></div>
-        </div>
-        <span class="bar-value">617.0</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Ikate, LAGOS">
-          Ikate
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 32.6%"></div>
-        </div>
-        <span class="bar-value">468.2</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Ikota, LAGOS">
-          Ikota
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 29.4%"></div>
-        </div>
-        <span class="bar-value">421.8</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Ikeja, LAGOS">
-          Ikeja
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 24.1%"></div>
-        </div>
-        <span class="bar-value">345.2</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Orchid, LAGOS">
-          Orchid
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 20.8%"></div>
-        </div>
-        <span class="bar-value">298.0</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Elegushi, LAGOS">
-          Elegushi
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 16.5%"></div>
-        </div>
-        <span class="bar-value">236.5</span>
-      </div>
-      
-      <div class="bar-row">
-        <span class="bar-label" title="Banana Island, LAGOS">
-          Banana Island
-        </span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 16.0%"></div>
-        </div>
-        <span class="bar-value">229.2</span>
-      </div>
-      
-    </div>
+      <div class="market-section" style="margin-top: 4rem; page-break-before: always;">
+        <hr class="divider" style="margin-bottom: 3rem; opacity: 0.25;" />
+        <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.7px; color: var(--gold-light); margin-bottom: 2.5rem; text-transform: uppercase;">
+          Sales Market Analysis
+        </h1>
 
-    <div class="table-wrap" id="inventory-table">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Neighbourhood</th>
-            <th>City / State</th>
-            <th class="right">Avg. Weekly Active Listings</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr>
-            <td class="rank">1</td>
-            <td class="hood">Lekki Phase 1</td>
-            <td class="city">LAGOS</td>
-            <td class="right">1,434.0</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">2</td>
-            <td class="hood">Lekki</td>
-            <td class="city">LAGOS</td>
-            <td class="right">816.2</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">3</td>
-            <td class="hood">Victoria Island</td>
-            <td class="city">LAGOS</td>
-            <td class="right">617.5</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">4</td>
-            <td class="hood">Ikoyi</td>
-            <td class="city">LAGOS</td>
-            <td class="right">617.0</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">5</td>
-            <td class="hood">Ikate</td>
-            <td class="city">LAGOS</td>
-            <td class="right">468.2</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">6</td>
-            <td class="hood">Ikota</td>
-            <td class="city">LAGOS</td>
-            <td class="right">421.8</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">7</td>
-            <td class="hood">Ikeja</td>
-            <td class="city">LAGOS</td>
-            <td class="right">345.2</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">8</td>
-            <td class="hood">Orchid</td>
-            <td class="city">LAGOS</td>
-            <td class="right">298.0</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">9</td>
-            <td class="hood">Elegushi</td>
-            <td class="city">LAGOS</td>
-            <td class="right">236.5</td>
-          </tr>
-          
-          <tr>
-            <td class="rank">10</td>
-            <td class="hood">Banana Island</td>
-            <td class="city">LAGOS</td>
-            <td class="right">229.2</td>
-          </tr>
-          
-        </tbody>
-      </table>
-    </div>
-
-    <div class="methodology-note">
-      Average computed across all snapshot weeks in the reporting period.
-      Neighbourhoods with fewer than 10 average weekly listings are excluded from pricing tables.
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 3: PRICING TIERS
-  ================================================================ -->
-  <section class="section" id="pricing-tiers">
-    <div class="section-header">
-      <span class="section-number">03</span>
-      <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
-    </div>
-
-    <div class="card">
-      <p>The market exhibits a wide pricing spectrum, with the luxury ceiling established by Apapa at a median price of ₦1,300.0M and Pinnock Beach Estate at ₦1,000.0M, showing average days on market (DOM) of 44.0 and 41.5 days respectively. Other premium nodes such as Omole Phase 2 (₦650.0M) and Omole Phase 1 (₦488.5M) continue to command high valuations, though Royal Garden Estate recorded the fastest turnaround among high-end locations with a DOM of 16.9 days at a median price of ₦485.0M.
-
-Conversely, the affordable end of the spectrum is characterised by micro-unit listings and rental-dominated data points, with Eko Atlantic and Wuse recording low median entries of ₦448k and ₦656k respectively, reflecting short-term lease or fractional investment listings. Established mainland residential areas like Mushin (₦1,000k), Onipanu (₦1,200k), and Ilupeju (₦1,200k) represent the entry-level threshold for low-cost residential options, maintaining average days on market between 33.1 and 41.2 days.</p>
-    </div>
-
-    <div class="card-grid">
-      <!-- Most Expensive -->
-      <div>
-        <h3>Most Expensive Areas</h3>
-        <div class="table-wrap" id="expensive-table">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Neighbourhood</th>
-                <th class="right">Avg. Median Price</th>
-                <th class="right">Avg. DOM</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td class="rank">1</td>
-                <td class="hood">Apapa<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.30B
-                    
-                  
-                </td>
-                <td class="right">44.0d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">2</td>
-                <td class="hood">Pinnock Beach Estate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1000.0M
-                    
-                  
-                </td>
-                <td class="right">41.5d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">3</td>
-                <td class="hood">Omole Phase 2<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦650.0M
-                    
-                  
-                </td>
-                <td class="right">35.2d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">4</td>
-                <td class="hood">Omole Phase 1<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦488.5M
-                    
-                  
-                </td>
-                <td class="right">38.0d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">5</td>
-                <td class="hood">Royal Garden Estate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦485.0M
-                    
-                  
-                </td>
-                <td class="right">16.9d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">6</td>
-                <td class="hood">Nicon Town<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦373.8M
-                    
-                  
-                </td>
-                <td class="right">37.5d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">7</td>
-                <td class="hood">Amuwo Odofin<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦286.2M
-                    
-                  
-                </td>
-                <td class="right">20.8d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">8</td>
-                <td class="hood">Guzape<br><span style="font-size:0.75rem;color:var(--text-muted)">ABUJA</span></td>
-                <td class="price">
-                  
-                    
-                      ₦270.0M
-                    
-                  
-                </td>
-                <td class="right">32.3d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">9</td>
-                <td class="hood">Ojodu Berger<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦268.8M
-                    
-                  
-                </td>
-                <td class="right">39.5d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">10</td>
-                <td class="hood">Kado<br><span style="font-size:0.75rem;color:var(--text-muted)">ABUJA</span></td>
-                <td class="price">
-                  
-                    
-                      ₦241.2M
-                    
-                  
-                </td>
-                <td class="right">34.2d</td>
-              </tr>
-              
-            </tbody>
-          </table>
+        <!-- KPI Strip -->
+        <div class="kpi-strip">
+          <div class="kpi-card">
+            <span class="kpi-label">Peak Active Listings</span>
+            <span class="kpi-value">33</span>
+            <span class="kpi-sub">Latest week total</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">New Listings</span>
+            <span class="kpi-value green">351</span>
+            <span class="kpi-sub">Discovered this period</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Price Reductions</span>
+            <span class="kpi-value red">71</span>
+            <span class="kpi-sub">Seller adjustments tracked</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Inventory Growth</span>
+            <span class="kpi-value gold">-71.6%</span>
+            <span class="kpi-sub">First → last week</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Neighbourhoods Tracked</span>
+            <span class="kpi-value">67</span>
+            <span class="kpi-sub">Across 8 cities</span>
+          </div>
         </div>
-      </div>
 
-      <!-- Most Affordable -->
-      <div>
-        <h3>Most Affordable Areas</h3>
-        <div class="table-wrap" id="affordable-table">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Neighbourhood</th>
-                <th class="right">Avg. Median Price</th>
-                <th class="right">Avg. DOM</th>
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td class="rank">1</td>
-                <td class="hood">Eko Atlantic<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦448k
-                    
-                  
-                </td>
-                <td class="right">40.8d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">2</td>
-                <td class="hood">Wuse<br><span style="font-size:0.75rem;color:var(--text-muted)">ABUJA</span></td>
-                <td class="price">
-                  
-                    
-                      ₦656k
-                    
-                  
-                </td>
-                <td class="right">32.5d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">3</td>
-                <td class="hood">Mushin<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.0M
-                    
-                  
-                </td>
-                <td class="right">33.1d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">4</td>
-                <td class="hood">Onipanu<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.2M
-                    
-                  
-                </td>
-                <td class="right">39.2d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">5</td>
-                <td class="hood">Ilupeju<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.2M
-                    
-                  
-                </td>
-                <td class="right">41.2d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">6</td>
-                <td class="hood">Kosofe<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.6M
-                    
-                  
-                </td>
-                <td class="right">38.1d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">7</td>
-                <td class="hood">Badore<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.8M
-                    
-                  
-                </td>
-                <td class="right">28.2d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">8</td>
-                <td class="hood">Seaside Estate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦1.8M
-                    
-                  
-                </td>
-                <td class="right">18.9d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">9</td>
-                <td class="hood">Lagos Business School<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦2.0M
-                    
-                  
-                </td>
-                <td class="right">40.8d</td>
-              </tr>
-              
-              <tr>
-                <td class="rank">10</td>
-                <td class="hood">Shomolu<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
-                <td class="price">
-                  
-                    
-                      ₦2.0M
-                    
-                  
-                </td>
-                <td class="right">30.8d</td>
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 4: REGIONAL DEEP DIVE
-  ================================================================ -->
-  <section class="section" id="regional-deep-dive">
-    <div class="section-header">
-      <span class="section-number">04</span>
-      <h2>Regional Deep Dive</h2>
-    </div>
-
-    <div class="card-grid">
-      
-      <div class="card" id="lagos-section">
-        <h3>Lagos</h3>
-        <p>Lagos remains the undisputed anchor of the national residential market, containing 115 active neighbourhoods and posting a median price of ₦15.0M. The state's activity is heavily concentrated in Lekki Phase 1, which averaged 1434.0 active listings per week, alongside premium nodes like Victoria Island (617.5) and Ikoyi (617.0). The market's depth is further evidenced by its dominance in price corrections, accounting for 222 of the 263 total price reduction events, indicating that Lagos sellers are highly sensitive to liquidity constraints and actively adjusting expectations to clear stock.</p>
         
-        <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
-            <div style="font-size:1.1rem;font-weight:600">115</div>
+
+        <!-- SECTION 2: INVENTORY DISTRIBUTION -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">02</span>
+            <h2>Inventory Distribution — Most Active Areas</h2>
           </div>
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
-            <div style="font-size:1.1rem;font-weight:600">Lekki Phase 1</div>
+
+          
+
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                2 BED FLAT
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Lekki Phase 1, LAGOS">
+                    Lekki Phase 1
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                3 BED FLAT
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikate, LAGOS">
+                    Ikate
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">7.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikota, LAGOS">
+                    Ikota
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 57.1%"></div>
+                  </div>
+                  <span class="bar-value">4.0</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                COMMERCIAL OFFICE RETAIL
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Sangotedo, LAGOS">
+                    Sangotedo
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                DETACHED HOUSE
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Pinnock Beach Estate, LAGOS">
+                    Pinnock Beach Estate
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                LAND RESIDENTIAL
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ibeju-Lekki, LAGOS">
+                    Ibeju-Lekki
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">3.5</span>
+                </div>
+                
+              </div>
+            
+          
+
+          <div class="table-wrap" style="margin-top: 2rem;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Property Class</th>
+                  <th>Neighbourhood</th>
+                  <th>City / State</th>
+                  <th class="right">Avg. Weekly Active Listings</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          2 BED FLAT
+                        </td>
+                      
+                      <td class="hood">Lekki Phase 1</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          3 BED FLAT
+                        </td>
+                      
+                      <td class="hood">Ikate</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">7.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Ikota</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">4.0</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          COMMERCIAL OFFICE RETAIL
+                        </td>
+                      
+                      <td class="hood">Sangotedo</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          DETACHED HOUSE
+                        </td>
+                      
+                      <td class="hood">Pinnock Beach Estate</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          LAND RESIDENTIAL
+                        </td>
+                      
+                      <td class="hood">Ibeju-Lekki</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.5</td>
+                    </tr>
+                    
+                  
+                
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 3: PRICING TIERS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">03</span>
+            <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
+          </div>
+
+          
+
+          <div class="card-grid">
+            <!-- Most Expensive -->
+            <div>
+              <h3>Most Expensive Areas</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Property Class</th>
+                      <th>Neighbourhood</th>
+                      <th class="right">Avg. Median Price</th>
+                      <th class="right">Avg. DOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              3 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Ikate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦150.0M
+                              
+                            
+                          </td>
+                          <td class="right">3.1d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Most Affordable -->
+            <div>
+              <h3>Most Affordable Areas</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Property Class</th>
+                      <th>Neighbourhood</th>
+                      <th class="right">Avg. Median Price</th>
+                      <th class="right">Avg. DOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              2 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Lekki Phase 1<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦195.0M
+                              
+                            
+                          </td>
+                          <td class="right">23.9d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              3 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Ikota<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦120.0M
+                              
+                            
+                          </td>
+                          <td class="right">58.2d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Ikate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦150.0M
+                              
+                            
+                          </td>
+                          <td class="right">3.1d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              COMMERCIAL OFFICE RETAIL
+                            </td>
+                          
+                          <td class="hood">Sangotedo<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦108.0M
+                              
+                            
+                          </td>
+                          <td class="right">27.5d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              DETACHED HOUSE
+                            </td>
+                          
+                          <td class="hood">Pinnock Beach Estate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦1.65B
+                              
+                            
+                          </td>
+                          <td class="right">21.5d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              LAND RESIDENTIAL
+                            </td>
+                          
+                          <td class="hood">Ibeju-Lekki<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦24.6M
+                              
+                            
+                          </td>
+                          <td class="right">39.1d</td>
+                        </tr>
+                        
+                      
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: REGIONAL DEEP DIVE -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">04</span>
+            <h2>Regional Deep Dive</h2>
+          </div>
+
+          <div class="card-grid">
+            
+
+            
+          </div>
+
+          
+        </section>
+
+        <!-- SECTION 5: WEEKLY MARKET TRAJECTORY -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">05</span>
+            <h2>Weekly Market Trajectory</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Property Class</th>
+                  <th>Week Start</th>
+                  <th class="right">Active Listings</th>
+                  <th class="right">New Listings</th>
+                  <th class="right">Price Reductions</th>
+                  <th class="right">Median Price (NGN)</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          2 BED FLAT
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">3</td>
+                      <td class="right">16</td>
+                      <td class="right">0</td>
+                      <td class="price">
+                        
+                          
+                            ₦195.0M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-15</td>
+                      <td class="right">3</td>
+                      <td class="right">0</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦195.0M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          3 BED FLAT
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">11</td>
+                      <td class="right">3</td>
+                      <td class="right">0</td>
+                      <td class="price">
+                        
+                          
+                            ₦135.0M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">4</td>
+                      <td class="right">0</td>
+                      <td class="right">0</td>
+                      <td class="price">
+                        
+                          
+                            ₦120.0M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          COMMERCIAL OFFICE RETAIL
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">3</td>
+                      <td class="right">0</td>
+                      <td class="right">3</td>
+                      <td class="price">
+                        
+                          
+                            ₦108.0M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          DETACHED HOUSE
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">3</td>
+                      <td class="right">0</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦1.65B
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          LAND RESIDENTIAL
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">4</td>
+                      <td class="right">0</td>
+                      <td class="right">1</td>
+                      <td class="price">
+                        
+                          
+                            ₦34.8M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">3</td>
+                      <td class="right">8</td>
+                      <td class="right">1</td>
+                      <td class="price">
+                        
+                          
+                            ₦14.5M
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 6: PRICE REDUCTION ANALYSIS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">06</span>
+            <h2>Price Reduction Analysis</h2>
+          </div>
+
+          
+
+          
+          
+          <div class="bar-chart">
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">LAGOS</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 100.0%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">49</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">ABUJA</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 26.5%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">13</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">PH</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 8.2%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">4</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">IBADAN</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 4.1%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">2</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">OGUN</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 4.1%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">2</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">EDO</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 2.0%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">1</span>
+            </div>
+            
+            
+            
+            
+            
+            
           </div>
           
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
-            <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦15.0M</div>
-          </div>
-          
-        </div>
+        </section>
+
+        <!-- SECTION 7: OUTLOOK -->
         
-      </div>
-      
 
-      
-      <div class="card" id="abuja-section">
-        <h3>Abuja (FCT)</h3>
-        <p>Abuja represents the second-largest market by footprint, spanning 48 active neighbourhoods with Katampe emerging as the top area and the territory maintaining a median price of ₦30.0M. Premium demand is concentrated in Guzape and Kado, which posted high median prices of ₦270.0M (DOM of 32.3 days) and ₦241.2M (DOM of 34.2 days) respectively. The capital territory recorded 29 price reduction events, reflecting a relatively stable pricing environment compared to Lagos, supported by steady institutional demand.</p>
-        <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
-            <div style="font-size:1.1rem;font-weight:600">48</div>
-          </div>
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
-            <div style="font-size:1.1rem;font-weight:600">Katampe</div>
-          </div>
-          
-          <div>
-            <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
-            <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦30.0M</div>
-          </div>
-          
-        </div>
       </div>
-      
-    </div>
-
     
-    <div class="card" id="other-cities-section">
-      <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
-      <p>Beyond the two primary hubs, secondary markets showed highly concentrated, high-value activity. Enugu led these secondary markets with a median price of ₦175.0M across 2 neighbourhoods, followed by Port Harcourt at ₦120.0M across 2 neighbourhoods, reflecting premium, low-volume listings. Edo (5 neighbourhoods) and Ibadan (5 neighbourhoods) recorded median prices of ₦72.5M and ₦20.0M respectively, while Ogun (15 neighbourhoods) and Imo (3 neighbourhoods) represented more affordable entry points with medians of ₦7.4M and ₦4.6M.</p>
-    </div>
+  
     
-  </section>
-
-  <!-- ================================================================
-       SECTION 5: WEEKLY TRENDS
-  ================================================================ -->
-  <section class="section" id="weekly-trends">
-    <div class="section-header">
-      <span class="section-number">05</span>
-      <h2>Weekly Inflow &amp; Price Reduction Trends</h2>
-    </div>
-
-    <div class="table-wrap" id="weekly-table">
-      <table>
-        <thead>
-          <tr>
-            <th>Week Start</th>
-            <th class="right">Active Listings</th>
-            <th class="right">New Listings</th>
-            <th class="right">Price Reductions</th>
-            <th class="right">Median Price (NGN)</th>
-          </tr>
-        </thead>
-        <tbody>
-          
-          <tr>
-            <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
-            <td class="right">9,864</td>
-            <td class="right">1,268</td>
-            <td class="right">54</td>
-            <td class="price">
-              
-                
-                  ₦15.0M
-                
-              
-            </td>
-          </tr>
-          
-          <tr>
-            <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
-            <td class="right">10,881</td>
-            <td class="right">1,123</td>
-            <td class="right">78</td>
-            <td class="price">
-              
-                
-                  ₦17.0M
-                
-              
-            </td>
-          </tr>
-          
-          <tr>
-            <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-15</td>
-            <td class="right">10,772</td>
-            <td class="right">0</td>
-            <td class="right">71</td>
-            <td class="price">
-              
-                
-                  ₦17.2M
-                
-              
-            </td>
-          </tr>
-          
-          <tr>
-            <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-22</td>
-            <td class="right">12,131</td>
-            <td class="right">1,361</td>
-            <td class="right">60</td>
-            <td class="price">
-              
-                
-                  ₦15.0M
-                
-              
-            </td>
-          </tr>
-          
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ================================================================
-       SECTION 6: PRICE REDUCTION ANALYSIS
-  ================================================================ -->
-  <section class="section" id="price-reduction-analysis">
-    <div class="section-header">
-      <span class="section-number">06</span>
-      <h2>Price Reduction Analysis — Seller Behaviour</h2>
-    </div>
-
-    <div class="card">
-      <p>The occurrence of 263 price reduction events across the four-week period serves as a critical indicator of market resistance and seller capitulation. This trend peaked during the week of 8 June 2026 with 78 reductions, coinciding with a rise in active listings to 10,881. The overwhelming concentration of these reductions in Lagos (222 events) compared to Abuja (29 events) and other cities highlights a highly competitive environment where developers are forced to discount prices to maintain transaction velocity in the face of a 23.0% expansion in active inventory.</p>
-      <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--text-muted)">
-        <strong style="color:var(--text-secondary)">Peak reduction week:</strong>
-        2026-06-08 with
-        78 events.
-      </p>
-    </div>
-
-    <!-- Price reductions by city bar chart -->
     
-    <div class="bar-chart" id="reductions-chart">
+    
       
       
-      <div class="bar-row">
-        <span class="bar-label">LAGOS</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 100.0%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">222</span>
-      </div>
-      
-      
-      
-      <div class="bar-row">
-        <span class="bar-label">ABUJA</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 13.1%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">29</span>
-      </div>
-      
-      
-      
-      <div class="bar-row">
-        <span class="bar-label">IBADAN</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 2.3%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">5</span>
-      </div>
-      
-      
-      
-      <div class="bar-row">
-        <span class="bar-label">PH</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 1.8%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">4</span>
-      </div>
-      
-      
-      
-      <div class="bar-row">
-        <span class="bar-label">OGUN</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 0.9%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">2</span>
-      </div>
-      
-      
-      
-      <div class="bar-row">
-        <span class="bar-label">EDO</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width: 0.5%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
-        </div>
-        <span class="bar-value">1</span>
-      </div>
-      
-      
-      
-      
-      
-      
-    </div>
-  </section>
+      <div class="market-section" style="margin-top: 4rem; page-break-before: always;">
+        <hr class="divider" style="margin-bottom: 3rem; opacity: 0.25;" />
+        <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.7px; color: var(--gold-light); margin-bottom: 2.5rem; text-transform: uppercase;">
+          Rentals Market Analysis
+        </h1>
 
-  <!-- ================================================================
-       SECTION 7: OUTLOOK
-  ================================================================ -->
-  <section class="section" id="outlook">
-    <div class="section-header">
-      <span class="section-number">07</span>
-      <h2>Market Outlook</h2>
-    </div>
-    <div class="card">
-      <p>Looking ahead, the 23.0% growth in active listings to a peak of 12,131 in the final week of June suggests that supply will continue to outpace demand in the near term, keeping downward pressure on median prices. The stabilisation of the median price at ₦15.0M, coupled with persistent price reductions, indicates that the market is transitioning into a buyer's market, particularly in high-density corridors like Lekki. Developers will likely focus on optimising days on market, which currently averages 30 to 44 days in premium areas, by offering flexible payment structures rather than outright price cuts.</p>
-    </div>
-  </section>
+        <!-- KPI Strip -->
+        <div class="kpi-strip">
+          <div class="kpi-card">
+            <span class="kpi-label">Peak Active Listings</span>
+            <span class="kpi-value">51</span>
+            <span class="kpi-sub">Latest week total</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">New Listings</span>
+            <span class="kpi-value green">559</span>
+            <span class="kpi-sub">Discovered this period</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Price Reductions</span>
+            <span class="kpi-value red">120</span>
+            <span class="kpi-sub">Seller adjustments tracked</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Inventory Growth</span>
+            <span class="kpi-value gold">-58.9%</span>
+            <span class="kpi-sub">First → last week</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Neighbourhoods Tracked</span>
+            <span class="kpi-value">54</span>
+            <span class="kpi-sub">Across 5 cities</span>
+          </div>
+        </div>
+
+        
+
+        <!-- SECTION 2: INVENTORY DISTRIBUTION -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">02</span>
+            <h2>Inventory Distribution — Most Active Areas</h2>
+          </div>
+
+          
+
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                1 BED FLAT
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Lekki Phase 1, LAGOS">
+                    Lekki Phase 1
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">6.3</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Orchid, LAGOS">
+                    Orchid
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 79.4%"></div>
+                  </div>
+                  <span class="bar-value">5.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Chevy View Estate, LAGOS">
+                    Chevy View Estate
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 63.5%"></div>
+                  </div>
+                  <span class="bar-value">4.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikate, LAGOS">
+                    Ikate
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 47.6%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ajah, LAGOS">
+                    Ajah
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 47.6%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Lekki, LAGOS">
+                    Lekki
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 47.6%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikota, LAGOS">
+                    Ikota
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 47.6%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                2 BED FLAT
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ologolo, LAGOS">
+                    Ologolo
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">3.5</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                3 BED FLAT
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikeja GRA, LAGOS">
+                    Ikeja GRA
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">4.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikoyi, LAGOS">
+                    Ikoyi
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">4.0</span>
+                </div>
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Lekki Phase 1, LAGOS">
+                    Lekki Phase 1
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">4.0</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                DETACHED HOUSE
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Lekki, LAGOS">
+                    Lekki
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">4.3</span>
+                </div>
+                
+              </div>
+            
+          
+            
+              <h3 style="font-size: 1.1rem; color: var(--gold-light); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                TERRACED HOUSE
+              </h3>
+              
+              <div class="bar-chart" style="margin-bottom: 1.5rem;">
+                
+                <div class="bar-row">
+                  <span class="bar-label" title="Ikoyi, LAGOS">
+                    Ikoyi
+                  </span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 100.0%"></div>
+                  </div>
+                  <span class="bar-value">3.0</span>
+                </div>
+                
+              </div>
+            
+          
+
+          <div class="table-wrap" style="margin-top: 2rem;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Property Class</th>
+                  <th>Neighbourhood</th>
+                  <th>City / State</th>
+                  <th class="right">Avg. Weekly Active Listings</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="7" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          1 BED FLAT
+                        </td>
+                      
+                      <td class="hood">Lekki Phase 1</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">6.3</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Orchid</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">5.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Chevy View Estate</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">4.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Ikate</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Ajah</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Lekki</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Ikota</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          2 BED FLAT
+                        </td>
+                      
+                      <td class="hood">Ologolo</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.5</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="3" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          3 BED FLAT
+                        </td>
+                      
+                      <td class="hood">Ikeja GRA</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">4.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Ikoyi</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">4.0</td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td class="hood">Lekki Phase 1</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">4.0</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          DETACHED HOUSE
+                        </td>
+                      
+                      <td class="hood">Lekki</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">4.3</td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          TERRACED HOUSE
+                        </td>
+                      
+                      <td class="hood">Ikoyi</td>
+                      <td class="city">LAGOS</td>
+                      <td class="right">3.0</td>
+                    </tr>
+                    
+                  
+                
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 3: PRICING TIERS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">03</span>
+            <h2>Pricing Tiers — Expensive &amp; Affordable</h2>
+          </div>
+
+          
+
+          <div class="card-grid">
+            <!-- Most Expensive -->
+            <div>
+              <h3>Most Expensive Areas</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Property Class</th>
+                      <th>Neighbourhood</th>
+                      <th class="right">Avg. Median Price</th>
+                      <th class="right">Avg. DOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              1 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Lekki Phase 1<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦9.1M/yr
+                              
+                            
+                          </td>
+                          <td class="right">38.5d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Orchid<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦2.9M/yr
+                              
+                            
+                          </td>
+                          <td class="right">28.1d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Most Affordable -->
+            <div>
+              <h3>Most Affordable Areas</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Property Class</th>
+                      <th>Neighbourhood</th>
+                      <th class="right">Avg. Median Price</th>
+                      <th class="right">Avg. DOM</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="7" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              1 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Ajah<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦2.0M/yr
+                              
+                            
+                          </td>
+                          <td class="right">10.2d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Lekki<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦2.0M/yr
+                              
+                            
+                          </td>
+                          <td class="right">22.4d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Chevy View Estate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦2.9M/yr
+                              
+                            
+                          </td>
+                          <td class="right">5.3d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Orchid<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦2.9M/yr
+                              
+                            
+                          </td>
+                          <td class="right">28.1d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Ikota<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦3.2M/yr
+                              
+                            
+                          </td>
+                          <td class="right">26.1d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Ikate<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦3.5M/yr
+                              
+                            
+                          </td>
+                          <td class="right">37.0d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Lekki Phase 1<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦9.1M/yr
+                              
+                            
+                          </td>
+                          <td class="right">38.5d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              2 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Ologolo<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦7.2M/yr
+                              
+                            
+                          </td>
+                          <td class="right">18.6d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="3" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              3 BED FLAT
+                            </td>
+                          
+                          <td class="hood">Lekki Phase 1<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦21.5M/yr
+                              
+                            
+                          </td>
+                          <td class="right">28.3d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Ikoyi<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦26.5M/yr
+                              
+                            
+                          </td>
+                          <td class="right">36.2d</td>
+                        </tr>
+                        
+                        <tr>
+                          
+                          <td class="hood">Ikeja GRA<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦47.5M/yr
+                              
+                            
+                          </td>
+                          <td class="right">17.8d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              DETACHED HOUSE
+                            </td>
+                          
+                          <td class="hood">Lekki<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦15.0M/yr
+                              
+                            
+                          </td>
+                          <td class="right">29.4d</td>
+                        </tr>
+                        
+                      
+                    
+                      
+                        
+                        <tr>
+                          
+                            <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                              TERRACED HOUSE
+                            </td>
+                          
+                          <td class="hood">Ikoyi<br><span style="font-size:0.75rem;color:var(--text-muted)">LAGOS</span></td>
+                          <td class="price">
+                            
+                              
+                                ₦60.0M/yr
+                              
+                            
+                          </td>
+                          <td class="right">36.8d</td>
+                        </tr>
+                        
+                      
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 4: REGIONAL DEEP DIVE -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">04</span>
+            <h2>Regional Deep Dive</h2>
+          </div>
+
+          <div class="card-grid">
+            
+
+            
+          </div>
+
+          
+        </section>
+
+        <!-- SECTION 5: WEEKLY MARKET TRAJECTORY -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">05</span>
+            <h2>Weekly Market Trajectory</h2>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Property Class</th>
+                  <th>Week Start</th>
+                  <th class="right">Active Listings</th>
+                  <th class="right">New Listings</th>
+                  <th class="right">Price Reductions</th>
+                  <th class="right">Median Price (NGN)</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="4" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          1 BED FLAT
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">27</td>
+                      <td class="right">51</td>
+                      <td class="right">3</td>
+                      <td class="price">
+                        
+                          
+                            ₦2.9M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">17</td>
+                      <td class="right">25</td>
+                      <td class="right">7</td>
+                      <td class="price">
+                        
+                          
+                            ₦3.1M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-15</td>
+                      <td class="right">12</td>
+                      <td class="right">0</td>
+                      <td class="right">6</td>
+                      <td class="price">
+                        
+                          
+                            ₦5.9M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-22</td>
+                      <td class="right">5</td>
+                      <td class="right">10</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦3.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="2" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          2 BED FLAT
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">3</td>
+                      <td class="right">2</td>
+                      <td class="right">0</td>
+                      <td class="price">
+                        
+                          
+                            ₦7.5M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-15</td>
+                      <td class="right">4</td>
+                      <td class="right">0</td>
+                      <td class="right">3</td>
+                      <td class="price">
+                        
+                          
+                            ₦7.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="4" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          3 BED FLAT
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">12</td>
+                      <td class="right">28</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦29.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">9</td>
+                      <td class="right">32</td>
+                      <td class="right">1</td>
+                      <td class="price">
+                        
+                          
+                            ₦25.2M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-15</td>
+                      <td class="right">8</td>
+                      <td class="right">0</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦23.1M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-22</td>
+                      <td class="right">7</td>
+                      <td class="right">34</td>
+                      <td class="right">5</td>
+                      <td class="price">
+                        
+                          
+                            ₦23.5M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="3" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          DETACHED HOUSE
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">5</td>
+                      <td class="right">6</td>
+                      <td class="right">0</td>
+                      <td class="price">
+                        
+                          
+                            ₦15.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-08</td>
+                      <td class="right">5</td>
+                      <td class="right">8</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦15.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-15</td>
+                      <td class="right">3</td>
+                      <td class="right">0</td>
+                      <td class="right">1</td>
+                      <td class="price">
+                        
+                          
+                            ₦15.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+                  
+                    
+                    <tr>
+                      
+                        <td rowspan="1" style="font-weight: 600; color: var(--gold-light); vertical-align: top; border-right: 1px solid var(--border);">
+                          TERRACED HOUSE
+                        </td>
+                      
+                      <td style="font-family:var(--font-mono);font-size:0.82rem">2026-06-01</td>
+                      <td class="right">3</td>
+                      <td class="right">2</td>
+                      <td class="right">2</td>
+                      <td class="price">
+                        
+                          
+                            ₦60.0M/yr
+                          
+                        
+                      </td>
+                    </tr>
+                    
+                  
+                
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 6: PRICE REDUCTION ANALYSIS -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-number">06</span>
+            <h2>Price Reduction Analysis</h2>
+          </div>
+
+          
+
+          
+          
+          <div class="bar-chart">
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">LAGOS</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 100.0%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">108</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">ABUJA</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 9.3%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">10</span>
+            </div>
+            
+            
+            
+            <div class="bar-row">
+              <span class="bar-label">IBADAN</span>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: 1.9%;background:linear-gradient(90deg,#8a3030,#e05c5c)"></div>
+              </div>
+              <span class="bar-value">2</span>
+            </div>
+            
+            
+            
+            
+            
+            
+          </div>
+          
+        </section>
+
+        <!-- SECTION 7: OUTLOOK -->
+        
+
+      </div>
+    
+  
+
 
   <!-- ================================================================
        METHODOLOGY
@@ -1611,7 +2607,7 @@ Conversely, the affordable end of the spectrum is characterised by micro-unit li
       are exact integer divisions by 100.</p>
 
       <p><strong>Median vs. mean pricing:</strong> Median is used throughout to reduce skew from
-      outlier ultra-luxury listings. P25, P75, and P90 data are available in the source dataset
+      outlier luxury listings. P25, P75, and P90 data are available in the source dataset
       but excluded from this summary report for brevity.</p>
 
       <p><strong>Price reductions:</strong> An event is recorded when a listing's price decreases
@@ -1626,6 +2622,26 @@ Conversely, the affordable end of the spectrum is characterised by micro-unit li
       active inventory is carried forward from the prior week. New listing counts are recorded as
       zero for that week. These weeks are noted in the weekly table.</p>
     </div>
+  <section class="section" id="disclaimer" style="page-break-inside: avoid;">
+    <div class="section-header">
+      <span class="section-number">09</span>
+      <h2>Disclaimer</h2>
+    </div>
+    <div class="card" style="font-size:0.8rem; color:var(--text-muted); line-height:1.6;">
+      <p><strong>General Information Only:</strong> The data, analysis, and narratives presented in this
+      report are provided for general informational, educational, and research purposes only. This report
+      does not constitute investment, financial, legal, tax, or real estate advice.</p>
+
+      <p style="margin-top: 0.75rem;"><strong>No Warranties:</strong> While reasonable efforts are made to ensure the accuracy and
+      reliability of the scraped listings and calculated metrics, all information is provided "as is"
+      without warranties of any kind, express or implied. Real estate market conditions are dynamic, and
+      historical scraping observations may not reflect future market cycles or performance.</p>
+
+      <p style="margin-top: 0.75rem;"><strong>Limitation of Liability:</strong> Isaac Akinmokun and the contributors to this platform
+      disclaim any and all liability for any direct, indirect, incidental, or consequential loss or damage
+      incurred by any party arising out of or in connection with the use of, reliance on, or decisions
+      made based on the data and analyses contained in this publication.</p>
+    </div>
   </section>
 
   <hr class="divider" />
@@ -1637,7 +2653,7 @@ Conversely, the affordable end of the spectrum is characterised by micro-unit li
     <div class="footer-brand">
       <strong>Isaac Akinmokun</strong><br>
       <span>Nigerian Residential Real Estate Market Intelligence</span><br>
-      <span>Published July 2, 2026 · reports.akinmokun.com</span>
+      <span>Published July 9, 2026 · reports.akinmokun.com</span>
     </div>
     <div class="footer-links">
       <a href="https://reports.akinmokun.com/">All Reports</a>
