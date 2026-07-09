@@ -703,8 +703,11 @@ def main() -> None:
     # Determine issue number
     issue_number = args.issue
     if issue_number is None:
-        existing = [d for d in REPORTS_DIR.iterdir() if d.is_dir() and d.name != ".gitkeep"]
-        issue_number = len(existing)
+        existing = sorted([d.name for d in REPORTS_DIR.iterdir() if d.is_dir() and (d / "meta.json").exists()])
+        try:
+            issue_number = existing.index(folder_name) + 1
+        except ValueError:
+            issue_number = len(existing) + 1
 
     published_date = date.today().strftime("%B %d, %Y").replace(" 0", " ")
     published_date_iso = date.today().isoformat()

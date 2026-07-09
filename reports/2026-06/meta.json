@@ -2,9 +2,9 @@
   "month": "2026-06",
   "period": "1mo",
   "type": "all",
-  "issue_number": 2,
+  "issue_number": 1,
   "published_date": "July 9, 2026",
-  "num_cities": 8,
-  "unique_neighbourhoods": 67,
-  "peak_active_listings": 33
+  "num_cities": 9,
+  "unique_neighbourhoods": 166,
+  "peak_active_listings": 303
 }

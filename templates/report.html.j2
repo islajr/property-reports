@@ -817,6 +817,13 @@
             <li>{{ point }}</li>
             {% endfor %}
           </ul>
+
+          <!-- Data Scope Callout -->
+          <div class="card" style="border-left: 4px solid var(--gold); background: var(--bg-card-alt); font-size: 0.85rem; margin-top: 1.5rem; page-break-inside: avoid;">
+            <p style="margin: 0; line-height: 1.5; color: var(--text-secondary)">
+              <strong>Data Scope &amp; Scraper Limitations:</strong> This report represents observations collected solely through the PS-0 PropertyScraper pipeline from advertised online listings. It should be understood as a specific digital lens on advertised prices and online inventory, not as an absolute, exhaustive generalisation of the entire physical real estate market across Nigeria.
+            </p>
+          </div>
         </section>
         {% endif %}
 
@@ -993,69 +1000,61 @@
           </div>
         </section>
 
-        <!-- SECTION 4: REGIONAL DEEP DIVE -->
+        <!-- SECTION 4: REGIONAL PERFORMANCE DEEP DIVE -->
         <section class="section">
           <div class="section-header">
             <span class="section-number">04</span>
-            <h2>Regional Deep Dive</h2>
+            <h2>Regional Performance Deep Dive</h2>
           </div>
 
-          <div class="card-grid">
-            {% if mnarr and mnarr.lagos_narrative %}
-            <div class="card">
-              <h3>Lagos</h3>
-              <p>{{ mnarr.lagos_narrative }}</p>
-              {% if mdata.city_breakdown.LAGOS %}
-              <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
-                <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
-                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.LAGOS.num_neighbourhoods }}</div>
-                </div>
-                <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
-                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.LAGOS.top_neighbourhood_by_activity }}</div>
-                </div>
-                {% if mdata.city_breakdown.LAGOS.median_price_ngn %}
-                <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
-                  <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(mdata.city_breakdown.LAGOS.median_price_ngn / 1_000_000) }}M{{ suffix }}</div>
-                </div>
-                {% endif %}
-              </div>
-              {% endif %}
-            </div>
-            {% endif %}
-
-            {% if mnarr and mnarr.abuja_narrative and mdata.city_breakdown.ABUJA %}
-            <div class="card">
-              <h3>Abuja (FCT)</h3>
-              <p>{{ mnarr.abuja_narrative }}</p>
-              <div style="margin-top:0.75rem;display:flex;gap:1.5rem;flex-wrap:wrap;">
-                <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Neighbourhoods</div>
-                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.ABUJA.num_neighbourhoods }}</div>
-                </div>
-                <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Top Area</div>
-                  <div style="font-size:1.1rem;font-weight:600">{{ mdata.city_breakdown.ABUJA.top_neighbourhood_by_activity }}</div>
-                </div>
-                {% if mdata.city_breakdown.ABUJA.median_price_ngn %}
-                <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px">Median Price</div>
-                  <div style="font-size:1.1rem;font-weight:600;color:var(--gold-light)">₦{{ "{:.1f}".format(mdata.city_breakdown.ABUJA.median_price_ngn / 1_000_000) }}M{{ suffix }}</div>
-                </div>
-                {% endif %}
-              </div>
-            </div>
-            {% endif %}
-          </div>
-
-          {% if mnarr and mnarr.other_cities_narrative %}
-          <div class="card" style="margin-top: 1.5rem;">
-            <h3>Other Cities (Ibadan, Enugu, Port Harcourt, Edo, Ogun, Imo)</h3>
-            <p>{{ mnarr.other_cities_narrative }}</p>
+          {% if mnarr %}
+          <div class="card" style="margin-bottom: 1.5rem;">
+            <p>
+              {{ mnarr.lagos_narrative }}
+              {{ mnarr.abuja_narrative }}
+              {{ mnarr.other_cities_narrative }}
+            </p>
           </div>
           {% endif %}
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>City / State</th>
+                  <th class="right">Neighbourhoods</th>
+                  <th class="right">Cumulative Active</th>
+                  <th class="right">New Listings</th>
+                  <th class="right">Price Reductions</th>
+                  <th class="right">Median Price (NGN)</th>
+                  <th>Top Active Area</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for city, stats in mdata.city_breakdown.items() %}
+                <tr>
+                  <td style="font-weight: 600; color: var(--gold-light);">{{ city }}</td>
+                  <td class="right">{{ stats.num_neighbourhoods }}</td>
+                  <td class="right">{{ "{:,}".format(stats.cumulative_active_listings) }}</td>
+                  <td class="right">{{ "{:,}".format(stats.total_new_listings) }}</td>
+                  <td class="right">{{ stats.total_price_reductions }}</td>
+                  <td class="price">
+                    {% if stats.median_price_ngn %}
+                      {% if stats.median_price_ngn >= 1_000_000_000 %}
+                        ₦{{ "{:.2f}".format(stats.median_price_ngn / 1_000_000_000) }}B{{ suffix }}
+                      {% elif stats.median_price_ngn >= 1_000_000 %}
+                        ₦{{ "{:.1f}".format(stats.median_price_ngn / 1_000_000) }}M{{ suffix }}
+                      {% else %}
+                        ₦{{ "{:,.0f}".format(stats.median_price_ngn / 1_000) }}k{{ suffix }}
+                      {% endif %}
+                    {% else %}—{% endif %}
+                  </td>
+                  <td class="hood">{{ stats.top_neighbourhood_by_activity | replace('_', ' ') }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <!-- SECTION 5: WEEKLY MARKET TRAJECTORY -->
