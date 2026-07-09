@@ -445,7 +445,7 @@
     tbody td.city { color: var(--text-muted); font-size: 0.8rem; }
     tbody td.rank { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.8rem; }
     tbody td.hood { color: var(--text-primary); font-weight: 500; }
-    tbody td.price { color: var(--gold-light); font-family: var(--font-mono); font-size: 0.82rem; }
+    tbody td.price { color: var(--gold-light); font-family: var(--font-mono); font-size: 0.82rem; text-align: right; }
     tbody td.growth-pos { color: var(--accent-green); font-family: var(--font-mono); }
     tbody td.growth-neg { color: var(--accent-red); font-family: var(--font-mono); }
 
@@ -683,15 +683,42 @@
         width: 100% !important;
       }
       .section { page-break-inside: auto !important; }
-      .card { page-break-inside: avoid !important; }
-      .table-wrap { page-break-inside: avoid !important; }
+      .table-wrap {
+        page-break-inside: auto !important;
+        overflow-x: visible !important;
+        overflow: visible !important;
+        border: none !important;
+      }
+      tr {
+        page-break-inside: avoid !important;
+      }
+      table {
+        width: 100% !important;
+        min-width: auto !important;
+        table-layout: auto !important;
+      }
+      thead th {
+        padding: 0.5rem 0.4rem !important;
+        font-size: 0.65rem !important;
+        white-space: normal !important;
+      }
+      tbody td {
+        padding: 0.5rem 0.4rem !important;
+        font-size: 0.75rem !important;
+      }
+      tbody td.right {
+        font-size: 0.75rem !important;
+      }
+      tbody td.price {
+        font-size: 0.75rem !important;
+      }
       a { color: var(--text-primary); text-decoration: none; }
     }
 
     /* ===================================================================
        RESPONSIVE
     =================================================================== */
-    @media (max-width: 680px) {
+    @media screen and (max-width: 680px) {
       .page-wrapper { padding: 0 1.5rem 3rem; }
       h1 { font-size: 1.6rem; line-height: 1.25; }
       .global-header { flex-wrap: wrap; gap: 1rem; justify-content: space-between; }
