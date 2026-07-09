@@ -124,7 +124,7 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
     required = {
         "city", "neighbourhood", "snapshot_week",
         "active_listing_count", "new_listings_count",
-        "price_reduced_count", "median_price_kobo",
+        "price_reduced_count", "median_price_kobo", "property_class",
     }
     missing = required - set(df.columns)
     if missing:
@@ -133,6 +133,7 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
     df["snapshot_week"] = pd.to_datetime(df["snapshot_week"]).dt.date
     df["city"] = df["city"].str.strip().str.upper()
     df["neighbourhood"] = df["neighbourhood"].str.strip()
+    df["property_class"] = df["property_class"].str.strip().str.upper()
 
     # Numeric safety — coerce bad values to NaN
     for col in ["active_listing_count", "new_listings_count",
@@ -468,6 +469,11 @@ def main() -> None:
         sales_df = period_df[period_df["price_type"] == "FOR_SALE"]
         if not sales_df.empty:
             metrics["sales"] = compute_all_metrics(sales_df, args.month, period_label_str, args.period)
+            metrics["sales"]["classes"] = {}
+            for prop_class, grp in sales_df.groupby("property_class"):
+                filtered_grp = grp[grp["active_listing_count"] >= 3].copy()
+                if not filtered_grp.empty:
+                    metrics["sales"]["classes"][prop_class] = compute_all_metrics(filtered_grp, args.month, period_label_str, args.period)
         else:
             print("  WARNING: No Sales records found in period.")
 
@@ -475,6 +481,11 @@ def main() -> None:
         rent_df = period_df[period_df["price_type"] == "FOR_RENT"]
         if not rent_df.empty:
             metrics["rentals"] = compute_all_metrics(rent_df, args.month, period_label_str, args.period)
+            metrics["rentals"]["classes"] = {}
+            for prop_class, grp in rent_df.groupby("property_class"):
+                filtered_grp = grp[grp["active_listing_count"] >= 3].copy()
+                if not filtered_grp.empty:
+                    metrics["rentals"]["classes"][prop_class] = compute_all_metrics(filtered_grp, args.month, period_label_str, args.period)
         else:
             print("  WARNING: No Rentals records found in period.")
 

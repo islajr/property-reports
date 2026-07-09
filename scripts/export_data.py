@@ -33,6 +33,7 @@ SELECT
     neighbourhood,
     snapshot_week,
     price_type,
+    property_class,
     avg_days_on_market,
     computed_at,
     active_listing_count,
@@ -43,7 +44,7 @@ SELECT
     p75,
     p90
 FROM market.neighbourhood_snapshots
-ORDER BY snapshot_week ASC, city ASC, neighbourhood ASC, price_type ASC;
+ORDER BY snapshot_week ASC, city ASC, neighbourhood ASC, price_type ASC, property_class ASC;
 """
 
 
