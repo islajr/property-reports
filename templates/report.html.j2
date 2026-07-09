@@ -1017,6 +1017,16 @@
           </div>
           {% endif %}
 
+          {% if mtype == 'sales' and sales_regional_chart %}
+            <div style="page-break-inside: avoid; margin-bottom: 1.5rem;">
+              {{ sales_regional_chart | safe }}
+            </div>
+          {% elif mtype == 'rentals' and rentals_regional_chart %}
+            <div style="page-break-inside: avoid; margin-bottom: 1.5rem;">
+              {{ rentals_regional_chart | safe }}
+            </div>
+          {% endif %}
+
           <div class="table-wrap">
             <table>
               <thead>
@@ -1063,6 +1073,16 @@
             <span class="section-number">05</span>
             <h2>Weekly Market Trajectory</h2>
           </div>
+
+          {% if mtype == 'sales' and sales_trajectory_chart %}
+            <div style="page-break-inside: avoid; margin-bottom: 1.5rem;">
+              {{ sales_trajectory_chart | safe }}
+            </div>
+          {% elif mtype == 'rentals' and rentals_trajectory_chart %}
+            <div style="page-break-inside: avoid; margin-bottom: 1.5rem;">
+              {{ rentals_trajectory_chart | safe }}
+            </div>
+          {% endif %}
 
           <div class="table-wrap">
             <table>
