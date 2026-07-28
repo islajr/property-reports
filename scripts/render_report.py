@@ -193,7 +193,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0d1117; --bg-card: #161b22; --border: #21262d;
+      --bg: #000000; --bg-card: #121212; --border: #262626;
       --gold: #c9a84c; --gold-light: #e0c070;
       --text: #e6edf3; --text2: #8b949e; --text3: #6e7681;
       --radius: 8px;
@@ -899,8 +899,15 @@ def main() -> None:
         except ValueError:
             issue_number = len(existing) + 1
 
-    published_date = date.today().strftime("%B %d, %Y").replace(" 0", " ")
-    published_date_iso = date.today().isoformat()
+    # Determine published date (preserve existing date from meta.json if present)
+    meta_file = out_dir / "meta.json"
+    if meta_file.exists():
+        existing_meta = load_json(meta_file, "meta.json")
+        published_date = existing_meta.get("published_date", date.today().strftime("%B %d, %Y").replace(" 0", " "))
+        published_date_iso = existing_meta.get("published_date_iso", date.today().isoformat())
+    else:
+        published_date = date.today().strftime("%B %d, %Y").replace(" 0", " ")
+        published_date_iso = date.today().isoformat()
 
     print("Embedding fonts ...")
     embedded_fonts_css = build_embedded_fonts_css()
