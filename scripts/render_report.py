@@ -32,12 +32,14 @@ REPORTS_DIR = Path(__file__).parent.parent / "reports"
 
 # Ordered list of (CSS font-family name, CSS weight, filename)
 EMBEDDED_FONTS = [
-    ("Inter",          "400", "Inter_400.woff2"),
-    ("Inter",          "500", "Inter_500.woff2"),
-    ("Inter",          "600", "Inter_600.woff2"),
-    ("Inter",          "700", "Inter_700.woff2"),
-    ("JetBrains Mono", "400", "JetBrains_Mono_400.woff2"),
-    ("JetBrains Mono", "500", "JetBrains_Mono_500.woff2"),
+    ("Inter",            "400", "Inter_400.woff2"),
+    ("Inter",            "500", "Inter_500.woff2"),
+    ("Inter",            "600", "Inter_600.woff2"),
+    ("Inter",            "700", "Inter_700.woff2"),
+    ("JetBrains Mono",   "400", "JetBrains_Mono_400.woff2"),
+    ("JetBrains Mono",   "500", "JetBrains_Mono_500.woff2"),
+    ("Menlo",            "400", "Menlo_400.woff2"),
+    ("Playfair Display", "700", "Playfair_Display_700.woff2"),
 ]
 
 
@@ -192,6 +194,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    {{ embedded_fonts_css }}
     :root {
       --bg: #000000; --bg-card: #121212; --border: #262626;
       --gold: #c9a84c; --gold-light: #e0c070;
@@ -210,7 +213,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
     .global-header .nav-links a:hover, .global-header .nav-links a.active { color: var(--text); }
     .reports-header { margin-top: 3rem; margin-bottom: 3rem; }
     .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text3); margin-bottom: 0.75rem; }
-    h1 { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, var(--text) 60%, var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Playfair Display', Georgia, serif; font-size: 2.2rem; font-weight: 700; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--text) 60%, var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
     .sub { color: var(--text2); font-size: 1rem; }
     .reports-grid { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; }
     .report-card { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; transition: border-color 0.15s, background 0.15s; }
@@ -591,11 +594,13 @@ def regenerate_index(reports_dir: Path) -> None:
             "pdf_name": pdf_file.name if pdf_file else None,
         })
 
+    embedded_fonts_css = build_embedded_fonts_css()
     env = Environment(autoescape=select_autoescape(["html"]))
     template = env.from_string(INDEX_TEMPLATE)
     html = template.render(
         reports=report_entries,
-        reports_json=json.dumps(report_entries)
+        reports_json=json.dumps(report_entries),
+        embedded_fonts_css=embedded_fonts_css,
     )
 
     index_path = reports_dir / "index.html"
