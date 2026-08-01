@@ -27,24 +27,86 @@ load_dotenv()
 DATA_DIR = Path(__file__).parent.parent / "data"
 
 EXPORT_QUERY = """
+WITH weeks AS (
+    SELECT DISTINCT date_trunc('week', snapshot_week)::DATE AS snapshot_week
+    FROM (
+        SELECT generate_series(
+            '2026-04-06'::DATE,
+            date_trunc('week', CURRENT_DATE)::DATE,
+            '1 week'::INTERVAL
+        )::DATE AS snapshot_week
+    ) s
+),
+active_listings_per_week AS (
+    SELECT
+        l.id AS listing_id,
+        l.city,
+        l.neighbourhood,
+        l.price_type,
+        market.classify_property(l.title, l.property_type, l.bedrooms) AS property_class,
+        l.price_kobo,
+        l.first_seen_at,
+        l.last_seen_at,
+        w.snapshot_week
+    FROM raw_data.scraped_listings l
+    CROSS JOIN weeks w
+    WHERE l.first_seen_at::DATE <= w.snapshot_week + 6
+      AND (l.listing_status = 'ACTIVE' OR l.last_seen_at::DATE >= w.snapshot_week)
+      AND l.city IS NOT NULL
+      AND l.neighbourhood IS NOT NULL
+      AND l.price_type IS NOT NULL
+),
+new_listings_per_week AS (
+    SELECT
+        l.city,
+        l.neighbourhood,
+        l.price_type,
+        market.classify_property(l.title, l.property_type, l.bedrooms) AS property_class,
+        w.snapshot_week,
+        COUNT(*) as new_count
+    FROM raw_data.scraped_listings l
+    CROSS JOIN weeks w
+    WHERE l.first_seen_at::DATE >= w.snapshot_week
+      AND l.first_seen_at::DATE <= w.snapshot_week + 6
+      AND l.city IS NOT NULL
+      AND l.neighbourhood IS NOT NULL
+      AND l.price_type IS NOT NULL
+    GROUP BY l.city, l.neighbourhood, l.price_type, property_class, w.snapshot_week
+),
+weekly_reductions AS (
+    SELECT
+        h.listing_id,
+        w.snapshot_week,
+        COUNT(*) as reduced_count
+    FROM raw_data.listing_history h
+    CROSS JOIN weeks w
+    WHERE h.event_type = 'PRICE_CHANGE'
+      AND h.new_value < h.old_value
+      AND h.event_date >= w.snapshot_week
+      AND h.event_date <= w.snapshot_week + 6
+    GROUP BY h.listing_id, w.snapshot_week
+)
 SELECT
-    id,
-    city,
-    neighbourhood,
-    snapshot_week,
-    price_type,
-    property_class,
-    avg_days_on_market,
-    computed_at,
-    active_listing_count,
-    new_listings_count,
-    price_reduced_count,
-    median_price_kobo,
-    p25,
-    p75,
-    p90
-FROM market.neighbourhood_snapshots
-ORDER BY snapshot_week ASC, city ASC, neighbourhood ASC, price_type ASC, property_class ASC;
+    md5(a.city || a.neighbourhood || a.snapshot_week::text || a.price_type || a.property_class) AS id,
+    a.city,
+    a.neighbourhood,
+    a.snapshot_week,
+    a.price_type,
+    a.property_class,
+    ROUND(AVG(GREATEST(1.0, EXTRACT(EPOCH FROM (LEAST(a.last_seen_at, (a.snapshot_week + 7)::TIMESTAMP) - a.first_seen_at)) / 86400.0))::NUMERIC, 1) AS avg_days_on_market,
+    NOW() AS computed_at,
+    COUNT(a.listing_id) AS active_listing_count,
+    COALESCE(MAX(n.new_count), 0) AS new_listings_count,
+    COALESCE(SUM(r.reduced_count), 0) AS price_reduced_count,
+    percentile_cont(0.50) WITHIN GROUP (ORDER BY a.price_kobo) AS median_price_kobo,
+    percentile_cont(0.25) WITHIN GROUP (ORDER BY a.price_kobo) AS p25,
+    percentile_cont(0.75) WITHIN GROUP (ORDER BY a.price_kobo) AS p75,
+    percentile_cont(0.90) WITHIN GROUP (ORDER BY a.price_kobo) AS p90
+FROM active_listings_per_week a
+LEFT JOIN new_listings_per_week n ON a.city = n.city AND a.neighbourhood = n.neighbourhood AND a.price_type = n.price_type AND a.property_class = n.property_class AND a.snapshot_week = n.snapshot_week
+LEFT JOIN weekly_reductions r ON a.listing_id = r.listing_id AND a.snapshot_week = r.snapshot_week
+GROUP BY a.city, a.neighbourhood, a.snapshot_week, a.price_type, a.property_class
+ORDER BY a.snapshot_week ASC, a.city ASC, a.neighbourhood ASC, a.price_type ASC, a.property_class ASC;
 """
 
 
