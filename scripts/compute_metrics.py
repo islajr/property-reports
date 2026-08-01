@@ -157,6 +157,18 @@ def filter_to_period(df: pd.DataFrame, first: date, last: date, label_str: str) 
             f"No snapshot rows found for period {label_str} "
             f"({first} to {last}). Check the CSV date range."
         )
+
+    # Prune incomplete trailing tail weeks (e.g. if the latest week's active count is < 30% of prior weeks' median)
+    weeks = sorted(filtered["snapshot_week"].unique())
+    if len(weeks) > 1:
+        weekly_totals = filtered.groupby("snapshot_week")["active_listing_count"].sum()
+        prior_median = weekly_totals.iloc[:-1].median()
+        latest_total = weekly_totals.iloc[-1]
+        if prior_median > 0 and (latest_total / prior_median) < 0.3:
+            incomplete_week = weeks[-1]
+            print(f"  ⚠  Excluding incomplete snapshot week {incomplete_week} (active volume {latest_total:,} is < 30% of prior median {prior_median:,.0f})")
+            filtered = filtered[filtered["snapshot_week"] != incomplete_week].copy()
+
     return filtered
 
 
@@ -173,18 +185,20 @@ def compute_overall(df: pd.DataFrame, month_str: str, period_label_str: str, per
     total_new_listings = int(df["new_listings_count"].sum())
     total_price_reductions = int(df["price_reduced_count"].sum())
 
-    # Peak active listings: latest week's sum across all neighbourhoods
-    latest_week = weeks[-1]
-    peak_active = int(df[df["snapshot_week"] == latest_week]["active_listing_count"].sum())
+    # Weekly active sums across all neighbourhoods
+    weekly_active_sums = df.groupby("snapshot_week")["active_listing_count"].sum().sort_index()
 
-    # Earliest week active total
-    earliest_week = weeks[0]
-    earliest_active = int(df[df["snapshot_week"] == earliest_week]["active_listing_count"].sum())
+    # True peak active listings: maximum weekly active sum in period
+    peak_active = int(weekly_active_sums.max()) if not weekly_active_sums.empty else 0
 
-    # Growth: (peak - earliest) / earliest
+    # Earliest & latest complete week active totals
+    earliest_active = int(weekly_active_sums.iloc[0]) if not weekly_active_sums.empty else 0
+    latest_active = int(weekly_active_sums.iloc[-1]) if not weekly_active_sums.empty else 0
+
+    # Growth: (latest - earliest) / earliest
     growth_pct = None
     if earliest_active > 0:
-        growth_pct = round((peak_active - earliest_active) / earliest_active * 100, 1)
+        growth_pct = round((latest_active - earliest_active) / earliest_active * 100, 1)
 
     # Overall median price across all snapshots (median of medians — note this
     # in the report as it conflates listing types; per-neighbourhood is more meaningful)
