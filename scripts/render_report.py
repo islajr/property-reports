@@ -608,6 +608,11 @@ def regenerate_index(reports_dir: Path) -> None:
         f.write(html)
     print(f"✓ Index regenerated: {index_path} ({len(report_entries)} reports listed)")
 
+    json_path = reports_dir / "reports.json"
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(report_entries, f, indent=2)
+    print(f"✓ Reports JSON exported: {json_path}")
+
 
 def generate_sitemap_and_robots(reports_dir: Path) -> None:
     """

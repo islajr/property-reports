@@ -1,0 +1,35 @@
+[
+  {
+    "month": "2026-07",
+    "label": "July 2026",
+    "period": "1mo",
+    "type": "all",
+    "published": "August 1, 2026",
+    "cities": 10,
+    "neighbourhoods": 236,
+    "has_pdf": true,
+    "pdf_name": "nigerian-residential-real-estate-market-report-2026-07.pdf"
+  },
+  {
+    "month": "2026-06_3mo",
+    "label": "June 2026 (3-Month)",
+    "period": "3mo",
+    "type": "all",
+    "published": "July 9, 2026",
+    "cities": 10,
+    "neighbourhoods": 229,
+    "has_pdf": true,
+    "pdf_name": "nigerian-residential-real-estate-market-report-2026-06-3mo.pdf"
+  },
+  {
+    "month": "2026-06",
+    "label": "June 2026",
+    "period": "1mo",
+    "type": "all",
+    "published": "July 9, 2026",
+    "cities": 10,
+    "neighbourhoods": 221,
+    "has_pdf": true,
+    "pdf_name": "nigerian-residential-real-estate-market-report-2026-06.pdf"
+  }
+]
