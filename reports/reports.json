@@ -1,5 +1,16 @@
 [
   {
+    "month": "2026-08",
+    "label": "August 2026",
+    "period": "1mo",
+    "type": "all",
+    "published": "September 1, 2026",
+    "cities": 10,
+    "neighbourhoods": 239,
+    "has_pdf": true,
+    "pdf_name": "nigerian-residential-real-estate-market-report-2026-08.pdf"
+  },
+  {
     "month": "2026-07",
     "label": "July 2026",
     "period": "1mo",
