@@ -30,6 +30,15 @@ def section():
 
 
 class RenderTests(unittest.TestCase):
+    def test_real_pdf_compilation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            html_path, pdf_path = root / "index.html", root / "report.pdf"
+            html_path.write_text("<!doctype html><html><body><p>PDF regression check</p></body></html>")
+            with contextlib.redirect_stdout(io.StringIO()):
+                rr.render_pdf(html_path, pdf_path)
+            self.assertTrue(pdf_path.read_bytes().startswith(b"%PDF-"))
+
     def test_missing_pdf_dependency_fails(self):
         with patch.dict(sys.modules, {"weasyprint": None}), self.assertRaisesRegex(RuntimeError, "--no-pdf"):
             rr.render_pdf(Path("unused.html"), Path("unused.pdf"))

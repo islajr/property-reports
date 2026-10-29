@@ -2,6 +2,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -21,8 +22,8 @@ class PipelineTests(unittest.TestCase):
             shutil.copy(ROOT / "run.sh", root)
             shutil.copytree(ROOT / "scripts", root / "scripts", ignore=shutil.ignore_patterns("__pycache__"))
             shutil.copytree(ROOT / "templates", root / "templates")
-            if (ROOT / ".venv/bin/python").exists():
-                (root / ".venv").symlink_to(ROOT / ".venv", target_is_directory=True)
+            if (Path(sys.prefix) / "bin/python").exists():
+                (root / ".venv").symlink_to(Path(sys.prefix), target_is_directory=True)
             (root / "data").mkdir()
             sales = snapshots()
             rentals = sales.assign(price_type="FOR_RENT", median_price_kobo=10_000)

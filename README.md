@@ -27,6 +27,8 @@ plain month (`2026-09`); examples of other keys are `2026-09_3mo` and
 
 Use Python **3.12 or newer**. PDF generation also requires WeasyPrint's native
 libraries (including Pango and Cairo); CI installs these on Ubuntu.
+Keep the `pydyf==0.10.0` pin with WeasyPrint 62.3: newer pydyf versions remove
+the stream API this renderer uses.
 
 ```bash
 python3 -m venv .venv
@@ -130,7 +132,8 @@ python -m http.server --directory reports 8000
 
 Visit `http://localhost:8000/` for the catalogue. The tests use synthetic input and
 temporary output directories; they do not call Supabase or Gemini or overwrite
-published reports. The regression workflow runs on PRs and pushes to `dev` and
+published reports. They include a real PDF smoke test and require the native PDF
+libraries above. The regression workflow runs on PRs and pushes to `dev` and
 `master`.
 
 ## Publishing and reproducibility

@@ -173,7 +173,9 @@ publication metadata. Inputs from older publications are not retroactively archi
 `data/` and `.env` are ignored; report HTML, PDFs, metadata, fonts, and static brand
 assets are tracked. Run tests with `python -m unittest discover -s tests -v`.
 Offline tests exercise rendering, identity, caching, aggregation, CLI failures,
-and PDF failure preservation without contacting external services.
+and real PDF compilation/failure preservation without contacting external services.
+WeasyPrint 62.3 requires the pinned pydyf 0.10.0 stream API; newer pydyf releases
+can install successfully but fail at PDF generation.
 
 Cloudflare serving is configured in Wrangler. No Cloudflare deployment action is
 included here. No runtime API server, client build framework, or database
