@@ -21,7 +21,7 @@ def strip_legacy_print_styles(html):
             and tinycss2.serialize(rule.prelude).strip().lower() == 'print')]
         return '<style>' + tinycss2.serialize(kept) + '</style>'
     head = re.sub(r'<style>\s*(.*?)</style>', clean, head, flags=re.S)
-    return head + '<body>' + body
+    return re.sub(r'[ \t]+(?=\n)', '', head) + '<body>' + body
 
 
 def pdf_compatible_svg(html):
