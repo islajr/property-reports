@@ -16,6 +16,18 @@ import render_report as rr
 
 
 class EditorialTests(unittest.TestCase):
+    def test_all_chart_text_uses_bundled_menlo_without_host_fallback(self):
+        import matplotlib.pyplot as plt
+        from matplotlib.text import Text
+        fig, ax = plt.subplots()
+        ax.plot([0, 1], [10, 20])
+        ax.set_title('₦ pricing benchmark')
+        ax.set_xlabel('Observed week')
+        editorial.enforce_chart_font(fig)
+        for text in fig.findobj(match=Text):
+            self.assertEqual(Path(text.get_fontproperties().get_file()), editorial.chart_font_path())
+        plt.close(fig)
+
     def test_figures_have_accessible_names_and_matching_benchmarks(self):
         data = section()
         result = editorial.build_publication({'sales': data, 'rentals': None})
