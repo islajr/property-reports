@@ -83,7 +83,7 @@ class RenderTests(unittest.TestCase):
                     if market_type in ("all", selected):
                         metrics[key] = section()
                         narrative[key] = dict(gn.PLACEHOLDER_NARRATIVE_SUB,
-                                              executive_summary='<script>alert("x")</script>\n\nSecond paragraph',
+                                              inventory_narrative='<script>alert("x")</script>\n\nSecond paragraph',
                                               abuja_narrative=None, other_cities_narrative=None)
                 metrics_path = root / "metrics.json"
                 narrative_path = root / "narrative.json"

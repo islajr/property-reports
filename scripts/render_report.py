@@ -30,6 +30,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from report_identity import report_key, validate_metrics_identity
+from editorial import build_publication, money
 from narrative_validation import metrics_digest, validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -106,6 +107,7 @@ def render_html(template_vars: dict) -> str:
         loader=FileSystemLoader(str(TEMPLATES_DIR)),
         autoescape=True,
     )
+    env.filters["money"] = money
     template = env.get_template("report.html.j2")
     return template.render(**template_vars)
 
@@ -137,7 +139,7 @@ def get_descriptive_pdf_filename(month: str, period: str, type_str: str) -> str:
 
 
 
-def regenerate_index(reports_dir: Path) -> None:
+def regenerate_index(reports_dir: Path, preview: bool = False) -> None:
     """Scan reports/ subdirectories and regenerate the index page."""
     from jinja2 import Environment
 
@@ -211,6 +213,7 @@ def regenerate_index(reports_dir: Path) -> None:
     template = env.get_template("index.html.j2")
     html = template.render(
         reports=report_entries,
+        preview=preview,
         collection_schema={"@context": "https://schema.org", "@type": "CollectionPage", "name": "PS-0 Market Reports", "url": "https://reports.akinmokun.com/", "mainEntity": {"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"https://reports.akinmokun.com/{r['month']}/", "name": r["label"]} for i, r in enumerate(report_entries)]}},
         embedded_fonts_css=embedded_fonts_css,
     )
@@ -505,10 +508,20 @@ def main() -> None:
     parser.add_argument("--metrics", default=None, help="Override metrics JSON path.")
     parser.add_argument("--narrative", default=None, help="Override narrative JSON path.")
     parser.add_argument("--issue", type=int, default=None, help="Issue number (e.g. 1 for first report).")
+    parser.add_argument("--output-root", type=Path, help="Render into an isolated directory instead of the publication archive.")
+    parser.add_argument("--preview", action="store_true", help="Mark the isolated output as an unpublished, noindex design preview.")
     parser.add_argument("--no-pdf", action="store_true", help="Skip PDF generation.")
     args = parser.parse_args()
 
+    if args.preview and not args.output_root:
+        parser.error("--preview requires --output-root outside reports/.")
+    output_root = args.output_root.resolve() if args.output_root else REPORTS_DIR
+    archive_root = Path(__file__).resolve().parents[1] / "reports"
+    if args.preview and (output_root == archive_root or archive_root in output_root.parents):
+        parser.error("Preview output must be outside reports/.")
     key = report_key(args.month, args.period, args.type)
+    if output_root == archive_root and (output_root / key / "index.html").exists():
+        parser.error("This issue is already published. Use --output-root for an isolated rebuild.")
     metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{key}.json"
     narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{key}.json"
 
@@ -523,11 +536,12 @@ def main() -> None:
         print("WARNING: Legacy narrative has no metrics provenance; its source metrics cannot be verified.", file=sys.stderr)
 
     folder_name = key
-    out_dir = REPORTS_DIR / folder_name
+    out_dir = output_root / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
     meta_file = out_dir / "meta.json"
-    existing_meta = load_json(meta_file, "meta.json") if meta_file.exists() else {}
+    reference_meta = archive_root / folder_name / "meta.json" if args.preview and not meta_file.exists() else meta_file
+    existing_meta = load_json(reference_meta, "meta.json") if reference_meta.exists() else {}
 
     # Preserve the assigned issue even when older reports are added later.
     issue_number = args.issue
@@ -535,11 +549,11 @@ def main() -> None:
         issue_number = existing_meta.get("issue_number")
     if issue_number is None:
         existing_issues = [load_json(d / "meta.json", "meta.json").get("issue_number", 0)
-                           for d in REPORTS_DIR.iterdir() if d.is_dir() and (d / "meta.json").exists()]
+                           for d in output_root.iterdir() if d.is_dir() and (d / "meta.json").exists()]
         issue_number = max(existing_issues, default=0) + 1
 
     # Determine published date (preserve existing date from meta.json if present)
-    if meta_file.exists():
+    if existing_meta:
         published_date = existing_meta.get("published_date", date.today().strftime("%B %d, %Y").replace(" 0", " "))
         published_date_iso = existing_meta.get("published_date_iso")
         if not published_date_iso:
@@ -581,6 +595,9 @@ def main() -> None:
     # Prepare Jinja template context
     template_vars = {
         "overall": overall,
+        "preview": args.preview,
+        "publication": build_publication(metrics),
+        "article_schema": {"@context": "https://schema.org", "@type": "Report", "headline": f"{overall['report_period_label']} — PS-0 Market Report", "datePublished": published_date_iso, "author": {"@type": "Person", "name": "Isaac Akinmokun", "url": "https://akinmokun.com/"}, "url": f"https://reports.akinmokun.com/{key}/", "inLanguage": "en-GB", "description": primary_narrative["key_takeaways"][0]},
         "report_key": key,
         "social_description": primary_narrative["key_takeaways"][0],
         "metrics": metrics,
@@ -638,10 +655,13 @@ def main() -> None:
     print(f"  ✓ HTML: {html_path}  ({html_path.stat().st_size / 1024:.0f} KB)")
 
     # Regenerate reports index
-    regenerate_index(REPORTS_DIR)
+    regenerate_index(output_root, preview=args.preview)
 
     # Regenerate sitemap.xml and robots.txt
-    generate_sitemap_and_robots(REPORTS_DIR)
+    if args.preview:
+        (output_root / "robots.txt").write_text("User-agent: *\nDisallow: /\n")
+    else:
+        generate_sitemap_and_robots(output_root)
 
     print(f"\n✓ Report complete: reports/{folder_name}/")
     print(f"  Open: file://{html_path.resolve()}")
