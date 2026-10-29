@@ -33,6 +33,7 @@ from dotenv import load_dotenv
 
 from report_identity import report_key, validate_metrics_identity
 from narrative_validation import metrics_digest, validate_narrative
+from report_evidence import evidence_for_market, takeaways
 
 load_dotenv()
 
@@ -198,37 +199,21 @@ Price reduction analysis:
 
 
 def build_prompt(metrics: dict) -> str:
-    prompt_sections = []
-    expected_schema = {}
-
-    if metrics.get("sales"):
-        prompt_sections.append(build_prompt_section(metrics["sales"], "Sales"))
-        expected_schema["sales"] = NARRATIVE_SCHEMA
-    else:
-        expected_schema["sales"] = "null"
-
-    if metrics.get("rentals"):
-        prompt_sections.append(build_prompt_section(metrics["rentals"], "Rentals"))
-        expected_schema["rentals"] = NARRATIVE_SCHEMA
-    else:
-        expected_schema["rentals"] = "null"
-
-    prompt = f"""Write a real estate market analysis based on the following weekly aggregates.
-
-Prices are advertised asking prices, not completed transactions. Weekly, city, and overall
-prices are unweighted medians of neighbourhood/property-class group medians. Pricing tiers
-use unweighted means of observed group medians. Cumulative active counts are listing-weeks,
-not distinct properties. Classifications include residential, land, and commercial property.
-Historical weeks are reconstructed using current listing status, prices, and classifications;
-they do not provide an immutable history of advertised prices. Do not infer actual historical
-price appreciation or explain inventory changes with unobserved economic causes.
-
-{"\n".join(prompt_sections)}
-
-You must return valid JSON matching the following schema. Write a separate analysis block for each populated market type:
-{json.dumps(expected_schema, indent=2)}
-"""
-    return prompt
+    evidence = {market: evidence_for_market(data, market) for market in ('sales', 'rentals') if (data := metrics.get(market))}
+    return """Write concise analysis of observed advertised property listings using ONLY these named facts.
+Return a JSON object with one block per populated market. Each block has exactly:
+inventory_narrative (at most 80 words), pricing_narrative (at most 80 words),
+price_reduction_narrative (at most 70 words), and evidence_refs mapping each field
+to a non-empty list of the fact IDs used in it.
+Use inventory.* facts for inventory, pricing.* for pricing, reductions.* for reductions.
+Use the formatted numbers exactly as supplied, including units. Do not introduce numbers
+or calculations absent from cited facts. Do not repeat sentences between sections.
+There is no need to restate a full executive summary or produce takeaways: those are
+computed separately. Explain the observations, not speculative causes. Do not discuss DOM,
+macroeconomic policy, demand, realised returns, transaction prices or historical appreciation.
+Independent pricing scales are class-specific; reductions are event counts, not rates.
+Unpopulated markets should be null. Return valid JSON without Markdown fences.
+EVIDENCE:\n""" + json.dumps(evidence, ensure_ascii=False, indent=2)
 
 
 # ---------------------------------------------------------------------------
@@ -353,6 +338,8 @@ def main() -> None:
             parser.error(str(exc))
         if not narrative.get("_provenance"):
             parser.error("Existing narrative has no metrics provenance. Preserve a copy if needed, then use --force to regenerate.")
+        if not use_placeholder and narrative.get('_quality_version') != 2:
+            parser.error('Cached commentary predates evidence validation. Use --force to regenerate.')
         if not use_placeholder and narrative["_provenance"].get("mode") == "placeholder":
             parser.error("Existing narrative is a placeholder. Use --force with GEMINI_API_KEY to generate commentary.")
         print(f"✓ Reusing narrative with matching metrics: {out_path}")
@@ -374,6 +361,12 @@ def main() -> None:
                 parser.error("GEMINI_API_KEY is required. Use --placeholder explicitly for an offline draft.")
             prompt = build_prompt(metrics)
             narrative = call_gemini(prompt, api_key, model_name)
+            if not isinstance(narrative, dict):
+                parser.error('Narrative response must be an object.')
+            narrative['_quality_version'] = 2
+            for market in ('sales', 'rentals'):
+                if metrics.get(market) and isinstance(narrative.get(market), dict):
+                    narrative[market]['key_takeaways'] = takeaways(metrics[market], market)
 
         try:
             validate_narrative(narrative, metrics)
