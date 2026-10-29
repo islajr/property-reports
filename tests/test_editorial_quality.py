@@ -39,3 +39,29 @@ class QualityTests(unittest.TestCase):
         self.assertIn('pricing.area.0', prompt)
         self.assertNotIn('avg_days_on_market', prompt)
         self.assertNotIn('executive_summary (', prompt)
+
+    def test_invalid_model_response_does_not_replace_cached_commentary(self):
+        import contextlib
+        import io
+        import json
+        import os
+        from pathlib import Path
+        import sys
+        import tempfile
+        from unittest.mock import patch
+        import generate_narrative as gn
+        from narrative_validation import metrics_digest
+        metrics=dict(self.metrics, type='all')
+        cached=evidence_narrative(metrics)
+        cached['_provenance']={'metrics_sha256':metrics_digest(metrics),'mode':'gemini','model':'test'}
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            source=root/'metrics.json';out=root/'narrative.json'
+            source.write_text(json.dumps(metrics));out.write_text(json.dumps(cached))
+            before=out.read_bytes()
+            invalid=copy.deepcopy(cached)
+            invalid['sales']['pricing_narrative']='The price was ₦999999M.'
+            args=['generate_narrative.py','--month','2026-09','--metrics',str(source),'--out',str(out),'--force']
+            with patch.dict(os.environ,{'GEMINI_API_KEY':'mock-key'}), patch.object(sys,'argv',args), patch.object(gn,'call_gemini',return_value=invalid), contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                gn.main()
+            self.assertEqual(out.read_bytes(),before)
