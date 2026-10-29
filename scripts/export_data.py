@@ -1,16 +1,15 @@
 """
 scripts/export_data.py
 
-Exports the neighbourhood_snapshots table from Supabase to a local CSV file
+Reconstructs weekly aggregates from Supabase listing records and price history
+and exports them to a local CSV file
 for offline report generation. Requires SUPABASE_DB_URL in .env.
 
 Usage:
     python scripts/export_data.py
     python scripts/export_data.py --out data/neighbourhood_snapshots.csv
 
-For one-off use during development, you can also export directly from the
-Supabase dashboard (Table Editor → Export CSV) and place the file at
-data/neighbourhood_snapshots.csv.
+Manually supplied CSVs must match the query output, including property_class.
 """
 
 from __future__ import annotations

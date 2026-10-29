@@ -2,7 +2,7 @@
 scripts/compute_metrics.py
 
 Reads the neighbourhood_snapshots CSV and produces a structured JSON metrics file
-for a given reporting period (defaults to the prior calendar month).
+for an explicitly selected reporting month and period.
 
 All internal prices are in kobo (integer). NGN conversions happen here for display,
 but the raw kobo values are preserved in the JSON for downstream verification.
@@ -10,11 +10,10 @@ but the raw kobo values are preserved in the JSON for downstream verification.
 Usage:
     python scripts/compute_metrics.py --month 2026-06
     python scripts/compute_metrics.py --csv path/to/snapshots.csv --month 2026-06
-    python scripts/compute_metrics.py --month 2026-06 --all-weeks
-        (includes weeks from prior months if the date range spans them)
+    python scripts/compute_metrics.py --month 2026-06 --period 3mo --type sale
 
 Output:
-    data/metrics_2026-06.json
+    data/metrics_YYYY-MM[_period][_type].json
 """
 
 from __future__ import annotations
@@ -514,7 +513,7 @@ def main() -> None:
     selected = period_df[period_df["price_type"].isin(selected_types)]
     coverage = compute_overall(selected, args.month, period_label_str, args.period)
     metrics["coverage"] = {field: coverage[field] for field in (
-        "report_period_label", "weeks", "num_weeks", "date_range", "cities", "num_cities", "unique_neighbourhoods",
+        "report_period_label", "weeks", "num_weeks", "date_range", "cities", "num_cities", "unique_neighbourhoods", "peak_active_listings",
     )}
     metrics["_source"] = {
         "report_key": key,

@@ -51,6 +51,7 @@ class MetricsTests(unittest.TestCase):
                 cm.main()
             report = json.loads(out_path.read_text())
             self.assertEqual(report["coverage"]["unique_neighbourhoods"], 3)
+            self.assertEqual(report["coverage"]["peak_active_listings"], 17)
             metrics = report["sales"]
             for field in ("cumulative_active_listings", "total_new_listings", "total_price_reductions"):
                 self.assertEqual(metrics["overall"][field], sum(c["overall"][field] for c in metrics["classes"].values()))

@@ -11,7 +11,8 @@ Usage:
 
 Output:
     reports/2026-06/index.html
-    reports/2026-06/report.pdf  (unless --no-pdf)
+    reports/2026-06/nigerian-residential-real-estate-market-report-2026-06.pdf
+    (unless --no-pdf)
 """
 
 from __future__ import annotations
@@ -1007,7 +1008,7 @@ def main() -> None:
         "published_date_iso": published_date_iso,
         "num_cities": overall["num_cities"],
         "unique_neighbourhoods": overall["unique_neighbourhoods"],
-        "peak_active_listings": primary["overall"]["peak_active_listings"],
+        "peak_active_listings": overall["peak_active_listings"],
         "pdf_filename": None if args.no_pdf else pdf_filename,
         "metrics_sha256": metrics_digest(metrics),
         "narrative_sha256": metrics_digest(narrative),
