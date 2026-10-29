@@ -164,3 +164,47 @@ or `report:`. Keep pipeline changes separate from regenerated publications so
 reviewers can distinguish behaviour changes from historical report revisions.
 
 Report data and narratives © Isaac Akinmokun.
+
+## Editorial edition and unpublished previews
+
+Future reports use New Computer Modern for the publication, a concise brief,
+class-specific asking-price benchmarks, and eight accessible SVG figures for a
+combined issue. The screen edition includes expandable weekly evidence tables;
+the PDF contains the core publication. DOM is discussed once in methodology.
+Chart counts and prices come from computed metrics; narrative instructions require
+distinct, concise findings and include the class benchmarks behind the figures.
+
+The archive uses shared editorial colours and fonts drawn from the personal and
+PS-0 sites, with a site directory, light/dark themes, search and independent PDF
+links. `templates/partials/` contains the shared header, footer, tokens and theme
+behaviour. This repository adapts those components for Jinja; it does not require
+React or a runtime server. Font licenses and origins are bundled in
+`templates/fonts/`. The social preview image is `reports/social-card.png`.
+
+Refresh just the archive without touching published issues:
+
+```bash
+python scripts/build_dashboard.py
+```
+
+Build an **unpublished** September design sample using the cached CSV:
+
+```bash
+python scripts/preview_report.py --month 2026-09
+python -m http.server --directory scratch/editorial-preview 8000
+```
+
+The preview includes evidence-derived commentary without a Gemini call. Its report
+HTML and PDF are in `scratch/editorial-preview/2026-09/`. It is explicitly marked
+as a design preview and uses `noindex` metadata and a disallowing robots file.
+`scratch/` is ignored and is outside the deployed static assets.
+
+`render_report.py --preview --output-root PATH` also accepts custom metrics and
+narrative inputs. Preview output inside `reports/` is rejected. Rendering an
+already-published issue into the real archive is rejected; use an isolated output
+root for review. Publication of a future issue remains an explicit normal build.
+This redesign does not create an October issue or rewrite historical reports.
+
+Validate with `python -m unittest discover -s tests -v`. The checks cover the
+publication archive's independent reading/download links, accessible figure names,
+all report variants, and preservation of existing issues.

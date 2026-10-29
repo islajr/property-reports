@@ -113,7 +113,7 @@ class RenderTests(unittest.TestCase):
                 self.assertIn('&lt;script&gt;alert', html)
                 self.assertIn('<p>Second paragraph</p>', html)
                 self.assertNotIn('<script>alert', html)
-                self.assertIn("font-family: 'Inter'", html)
+                self.assertTrue("font-family: 'New Computer Modern'" in html)
                 self.assertNotIn("None", html)
 
 

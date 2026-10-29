@@ -57,7 +57,7 @@ EMBEDDED_FONTS = [
 ]
 
 
-def build_embedded_fonts_css() -> str:
+def build_embedded_fonts_css(audience: str = "report") -> str:
     """
     Read each woff2 file from templates/fonts/, base64-encode it,
     and return a CSS string of @font-face declarations.
@@ -66,6 +66,10 @@ def build_embedded_fonts_css() -> str:
     blocks = ["/* === EMBEDDED FONTS (Inter + JetBrains Mono, latin subset) === */"]
     missing = []
     for family, weight, filename in EMBEDDED_FONTS:
+        if family in ("Inter", "JetBrains Mono") or (family == "Playfair Display" and weight == "700"):
+            continue
+        if audience == "dashboard" and family == "New Computer Modern":
+            continue
         path = FONTS_DIR / filename
         if not path.exists():
             missing.append(filename)
@@ -209,7 +213,7 @@ def regenerate_index(reports_dir: Path, preview: bool = False) -> None:
             "pdf_name": pdf_file.name if pdf_file else None,
         })
 
-    embedded_fonts_css = build_embedded_fonts_css()
+    embedded_fonts_css = build_embedded_fonts_css("dashboard")
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)), autoescape=True)
     template = env.get_template("index.html.j2")
     html = template.render(
