@@ -26,7 +26,7 @@ def pricing_benchmarks(data):
 
 
 def numeric_tokens(text):
-    return set(re.findall(r'\d[\d,]*(?:\.\d+)?(?:[BMk%])?', text))
+    return {value.replace(',', '') for value in re.findall(r'\d[\d,]*(?:\.\d+)?(?:[BMk%])?', text)}
 
 
 def evidence_for_market(data, market):
