@@ -26,6 +26,7 @@ def pricing_benchmarks(data):
 
 
 def numeric_tokens(text):
+    text = re.sub(r'\bPS-0\b', 'PropertyScraper', text, flags=re.I)
     return {value.replace(',', '') for value in re.findall(r'\d[\d,]*(?:\.\d+)?(?:[BMk%])?', text)}
 
 
