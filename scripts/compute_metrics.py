@@ -335,6 +335,7 @@ def compute_pricing_tiers(
                 "avg_median_price_ngn": kobo_to_ngn(kobo),
                 "avg_days_on_market": round(float(dom), 1) if pd.notna(dom) else None,
                 "num_weeks_observed": int(row["num_weeks"]),
+                "avg_weekly_active_listings": round(float(row["avg_weekly_active"]), 1),
             })
         return out
 
