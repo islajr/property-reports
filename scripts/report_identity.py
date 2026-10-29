@@ -31,3 +31,11 @@ def validate_metrics_identity(metrics: dict, month: str, period: str, market_typ
                 raise ValueError("Metrics month or period does not match the requested report.")
     if not found:
         raise ValueError("No populated market metrics found.")
+
+
+def require_closed_month(month: str, today: date | None = None) -> None:
+    """Publication uses completed calendar months; previews may inspect open periods."""
+    report_key(month)
+    today = today or date.today()
+    if date.fromisoformat(month + '-01') >= today.replace(day=1):
+        raise ValueError('The reporting month is still open or in the future. Publish only after month-end; use an isolated preview for drafts.')
