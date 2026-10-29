@@ -19,8 +19,10 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import math
 import sys
 from datetime import date
+from html import escape
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -95,7 +97,7 @@ def load_json(path: Path, label: str) -> dict:
 def render_html(template_vars: dict) -> str:
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATES_DIR)),
-        autoescape=select_autoescape(["html"]),
+        autoescape=True,
     )
     template = env.get_template("report.html.j2")
     return template.render(**template_vars)
@@ -193,11 +195,8 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    {{ embedded_fonts_css }}
+    {{ embedded_fonts_css | safe }}
     :root {
       --bg: #000000; --bg-card: #121212; --border: #262626;
       --gold: #c9a84c; --gold-light: #e0c070;
@@ -373,7 +372,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 </div>
 
 <script id="reports-data" type="application/json">
-  {{ reports_json | safe }}
+  {{ reports | tojson }}
 </script>
 
 <script>
@@ -727,7 +726,7 @@ def generate_regional_bar_chart(city_breakdown: dict) -> str:
             price_str = f"₦{price / 1_000:.0f}k"
             
         # Draw label
-        svg.append(f'<text x="{left_margin - 15}" y="{y + 16}" fill="var(--text-secondary)" font-size="11" font-weight="600" text-anchor="end">{city}</text>')
+        svg.append(f'<text x="{left_margin - 15}" y="{y + 16}" fill="var(--text-secondary)" font-size="11" font-weight="600" text-anchor="end">{escape(city)}</text>')
         
         # Draw bar track
         svg.append(f'<rect x="{left_margin}" y="{y + 4}" width="{chart_width}" height="16" rx="3" fill="var(--border)" opacity="0.3"/>')
@@ -768,8 +767,9 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     
     min_active = min(active_counts)
     max_active = max(active_counts)
-    min_price = min(median_prices)
-    max_price = max(median_prices)
+    valid_prices = [price for price in median_prices if price is not None and math.isfinite(price)]
+    min_price = min(valid_prices, default=0)
+    max_price = max(valid_prices, default=0)
     
     # Guard against flat lines
     active_range = (max_active - min_active) if max_active != min_active else 1.0
@@ -793,8 +793,9 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     # Legend
     svg.append(f'<rect x="360" y="15" width="10" height="10" fill="var(--gold-light)" rx="2"/>')
     svg.append(f'<text x="375" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Active Listings (Left)</text>')
-    svg.append(f'<rect x="490" y="15" width="10" height="10" fill="#4B9CD3" rx="2"/>')
-    svg.append(f'<text x="505" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Median Price (Right)</text>')
+    if valid_prices:
+        svg.append(f'<rect x="490" y="15" width="10" height="10" fill="#4B9CD3" rx="2"/>')
+        svg.append(f'<text x="505" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Median Price (Right)</text>')
     
     # X coordinates of points
     num_points = len(weeks_data)
@@ -822,7 +823,8 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
             price_str = f"₦{price_val / 1_000_000:.0f}M"
         else:
             price_str = f"₦{price_val / 1_000:.0f}k"
-        svg.append(f'<text x="{width - padding_right + 8}" y="{y + 4}" fill="#4B9CD3" font-size="9" font-weight="600" text-anchor="start">{price_str}</text>')
+        if valid_prices:
+            svg.append(f'<text x="{width - padding_right + 8}" y="{y + 4}" fill="#4B9CD3" font-size="9" font-weight="600" text-anchor="start">{price_str}</text>')
 
     # Plot active listings path
     active_points = []
@@ -834,6 +836,9 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     # Plot median price path
     price_points = []
     for i, val in enumerate(median_prices):
+        if val is None or not math.isfinite(val):
+            price_points.append(None)
+            continue
         x = x_coords[i]
         y = padding_top + chart_height - ((val - price_min_y) / price_range_padded) * chart_height
         price_points.append((x, y))
@@ -844,11 +849,13 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     svg.append(f'<path d="{active_area_str}" fill="var(--gold)" opacity="0.06"/>')
     svg.append(f'<path d="{active_path_str}" fill="none" stroke="var(--gold-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
     
-    # Draw Price Line & Area
-    price_path_str = " ".join([f"{'M' if i==0 else 'L'} {pt[0]:.1f} {pt[1]:.1f}" for i, pt in enumerate(price_points)])
-    price_area_str = f"{price_path_str} L {price_points[-1][0]:.1f} {padding_top + chart_height:.1f} L {price_points[0][0]:.1f} {padding_top + chart_height:.1f} Z"
-    svg.append(f'<path d="{price_area_str}" fill="#4B9CD3" opacity="0.06"/>')
-    svg.append(f'<path d="{price_path_str}" fill="none" stroke="#4B9CD3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
+    # Start a new segment after each missing price instead of inventing values.
+    price_path_str = " ".join(
+        f"{'M' if i == 0 or price_points[i - 1] is None else 'L'} {pt[0]:.1f} {pt[1]:.1f}"
+        for i, pt in enumerate(price_points) if pt is not None
+    )
+    if price_path_str:
+        svg.append(f'<path d="{price_path_str}" fill="none" stroke="#4B9CD3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
     
     # Draw markers & labels
     for i, week in enumerate(weeks):
@@ -861,7 +868,8 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
         svg.append(f'<circle cx="{ap[0]:.1f}" cy="{ap[1]:.1f}" r="4" fill="var(--gold-light)" stroke="var(--bg-card)" stroke-width="1.5"/>')
         
         pp = price_points[i]
-        svg.append(f'<circle cx="{pp[0]:.1f}" cy="{pp[1]:.1f}" r="4" fill="#4B9CD3" stroke="var(--bg-card)" stroke-width="1.5"/>')
+        if pp is not None:
+            svg.append(f'<circle cx="{pp[0]:.1f}" cy="{pp[1]:.1f}" r="4" fill="#4B9CD3" stroke-width="1.5"/>')
         
         parts = week.split("-")
         week_lbl = f"{parts[1]}/{parts[2]}"

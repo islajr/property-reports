@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from datetime import date
 from pathlib import Path
 from unittest.mock import patch
@@ -29,6 +30,18 @@ def section():
 
 
 class RenderTests(unittest.TestCase):
+    def test_charts_handle_missing_prices_and_escape_city_names(self):
+        weeks = [{"week": f"2026-09-{day}", "active_listing_count": 10, "median_price_ngn": price}
+                 for day, price in (("07", None), ("14", 100), ("21", None), ("28", 200))]
+        svg = rr.generate_trajectory_line_chart(weeks)
+        ET.fromstring(svg)
+        self.assertNotIn("None", svg)
+        self.assertNotIn("nan", svg)
+        for week in weeks:
+            week["median_price_ngn"] = None
+        self.assertNotIn("Median Price (Right)", rr.generate_trajectory_line_chart(weeks))
+        ET.fromstring(rr.generate_regional_bar_chart({"A & B <C>": {"median_price_ngn": 100}}))
+
     def test_combined_and_single_market_reports_render(self):
         for market_type in ("all", "sale", "rent"):
             with self.subTest(market_type=market_type), tempfile.TemporaryDirectory() as tmp:
@@ -39,7 +52,9 @@ class RenderTests(unittest.TestCase):
                 for key, selected in (("sales", "sale"), ("rentals", "rent")):
                     if market_type in ("all", selected):
                         metrics[key] = section()
-                        narrative[key] = gn.PLACEHOLDER_NARRATIVE_SUB
+                        narrative[key] = dict(gn.PLACEHOLDER_NARRATIVE_SUB,
+                                              executive_summary='<script>alert("x")</script>\n\nSecond paragraph',
+                                              abuja_narrative=None, other_cities_narrative=None)
                 metrics_path = root / "metrics.json"
                 narrative_path = root / "narrative.json"
                 metrics_path.write_text(json.dumps(metrics))
@@ -63,6 +78,11 @@ class RenderTests(unittest.TestCase):
                 self.assertEqual(meta["published_date_iso"], "2026-10-01")
                 self.assertEqual(meta["num_cities"], 2)
                 self.assertEqual(meta["unique_neighbourhoods"], 3)
+                self.assertIn('&lt;script&gt;alert', html)
+                self.assertIn('<p>Second paragraph</p>', html)
+                self.assertNotIn('<script>alert', html)
+                self.assertIn("font-family: 'Inter'", html)
+                self.assertNotIn("None", html)
 
 
 if __name__ == "__main__":

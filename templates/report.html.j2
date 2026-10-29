@@ -89,7 +89,7 @@
   </script>
 
   <style>
-    {{ embedded_fonts_css }}
+    {{ embedded_fonts_css | safe }}
     /* ===================================================================
        DESIGN TOKENS
     =================================================================== */
@@ -834,7 +834,9 @@
             <h2>Executive Summary</h2>
           </div>
           <div class="card">
-            {{ mnarr.executive_summary | replace('\n\n', '</p><p>') | replace('\n', ' ') }}
+            {% for paragraph in mnarr.executive_summary.split('\n\n') %}
+            <p>{{ paragraph | replace('\n', ' ') }}</p>
+            {% endfor %}
           </div>
 
           <!-- Key Takeaways -->
@@ -1038,8 +1040,8 @@
           <div class="card" style="margin-bottom: 1.5rem;">
             <p>
               {{ mnarr.lagos_narrative }}
-              {{ mnarr.abuja_narrative }}
-              {{ mnarr.other_cities_narrative }}
+              {{ mnarr.abuja_narrative or '' }}
+              {{ mnarr.other_cities_narrative or '' }}
             </p>
           </div>
           {% endif %}
