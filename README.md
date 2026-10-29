@@ -208,3 +208,16 @@ This redesign does not create an October issue or rewrite historical reports.
 Validate with `python -m unittest discover -s tests -v`. The checks cover the
 publication archive's independent reading/download links, accessible figure names,
 all report variants, and preservation of existing issues.
+
+For a presentation-only review of a published issue, preserving all original
+report prose, table markup, section order, methodology, issue number and dates:
+
+```bash
+python scripts/restyle_published.py --issue 2026-09 --output-root scratch/review
+```
+
+This creates a restyled HTML/PDF copy outside the archive. The script checks that
+the original report body is byte-for-byte unchanged after excluding the site navbar;
+only font/layout CSS, theme behaviour and shared navigation are added. Publication
+metadata is copied exactly. September remains the issue published October 1, 2026.
+The more substantial editorial structure is reserved for October's future issue.
