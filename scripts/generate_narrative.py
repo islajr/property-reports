@@ -159,7 +159,7 @@ Overview:
 - Cumulative active listings: {ov['cumulative_active_listings']:,}
 - Total new listings: {ov['total_new_listings']:,}
 - Total price reductions: {ov['total_price_reductions']:,}
-- Peak active listings (latest week): {ov['peak_active_listings']:,}
+- Peak active listings (highest weekly total): {ov['peak_active_listings']:,}
 - Growth in active listings (first to last week): {ov['active_listings_growth_pct']}%
 
 Weekly aggregates:
@@ -168,10 +168,10 @@ Weekly aggregates:
 Top 10 neighbourhoods by active listings:
 {"\n".join(inv_lines)}
 
-Top 10 most expensive neighbourhoods (average weekly median price):
+Top 10 most expensive neighbourhoods (unweighted mean of observed group median prices):
 {"\n".join(exp_lines)}
 
-Top 10 most affordable neighbourhoods (average weekly median price):
+Top 10 most affordable neighbourhoods (unweighted mean of observed group median prices):
 {"\n".join(aff_lines)}
 
 City-by-city breakdown:
@@ -200,7 +200,15 @@ def build_prompt(metrics: dict) -> str:
     else:
         expected_schema["rentals"] = "null"
 
-    prompt = f"""Write a real estate market analysis based on the following weekly snapshots.
+    prompt = f"""Write a real estate market analysis based on the following weekly aggregates.
+
+Prices are advertised asking prices, not completed transactions. Weekly, city, and overall
+prices are unweighted medians of neighbourhood/property-class group medians. Pricing tiers
+use unweighted means of observed group medians. Cumulative active counts are listing-weeks,
+not distinct properties. Classifications include residential, land, and commercial property.
+Historical weeks are reconstructed using current listing status, prices, and classifications;
+they do not provide an immutable history of advertised prices. Do not infer actual historical
+price appreciation or explain inventory changes with unobserved economic causes.
 
 {"\n".join(prompt_sections)}
 
