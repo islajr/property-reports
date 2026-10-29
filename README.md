@@ -228,3 +228,15 @@ publication details, the same reading hierarchy and table styling, repeating tab
 headers, and controlled page breaks. The PDF omits site navigation/download controls
 and adds page numbers. SVG colours/font variables are resolved for WeasyPrint without
 changing chart labels or values. A4 line wrapping will differ from a wide browser.
+
+After approving a presentation review, apply it to all existing issues:
+
+```bash
+python scripts/restyle_published.py --all --apply
+```
+
+Every HTML/PDF is built in staging before any archive file is replaced. Only HTML
+and PDF presentation files are applied; `meta.json`, dates, issue numbers, URLs,
+report wording, table data and methodology remain intact. The command can be rerun
+without duplicating the shared navbar or injected styles. It does not compute new
+metrics, call narrative APIs or generate a new reporting month.
