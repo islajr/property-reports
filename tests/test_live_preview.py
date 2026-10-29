@@ -41,6 +41,7 @@ class LivePreviewTests(unittest.TestCase):
             self.assertEqual(len(commands),2)
             self.assertTrue(all('generate_narrative.py' not in command[1] for command in commands))
             self.assertIn('--preview',commands[-1])
+            self.assertEqual(Path(commands[-1][commands[-1].index('--research-csv')+1]), output/'_inputs/snapshots.csv')
             self.assertEqual(Path(commands[-1][-1]),output/'site')
             manifest=json.loads((output/'manifest.json').read_text())
             self.assertTrue(manifest['regular_inputs_unchanged'])

@@ -82,7 +82,7 @@ def main():
                             '--metrics', str(metrics_path), '--out', str(narrative_path)], check=True)
         subprocess.run([sys.executable, str(ROOT / 'scripts/render_report.py'), '--month', key,
                         '--metrics', str(metrics_path), '--narrative', str(narrative_path),
-                        '--preview', '--as-of', cutoff.isoformat(), '--source-last-seen', str(latest_seen)[:10], '--output-root', str(output / 'site')], check=True)
+                        '--research-csv', str(csv_path), '--preview', '--as-of', cutoff.isoformat(), '--source-last-seen', str(latest_seen)[:10], '--output-root', str(output / 'site')], check=True)
         print('Private preview:', output / 'site' / key)
     finally:
         if before != protected_hashes():
