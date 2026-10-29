@@ -19,7 +19,7 @@ def restyle(source, destination, pdf=True):
     if not original_header:
         raise ValueError('Expected the original published report header.')
     env = Environment(loader=FileSystemLoader(str(ROOT / 'templates')), autoescape=True)
-    shared_header = env.get_template('partials/header.html.j2').render()
+    shared_header = env.get_template('partials/header.html.j2').render() + '<div id="main-content" tabindex="-1"></div>'
     css = (ROOT / 'templates/partials/site.css').read_text() + (ROOT / 'templates/partials/published-report.css').read_text()
     style = '<style id="publication-presentation">' + build_embedded_fonts_css() + css + '</style>'
     script = '<script>' + (ROOT / 'templates/partials/theme.js').read_text() + '</script>'
