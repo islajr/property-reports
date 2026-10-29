@@ -32,6 +32,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from report_identity import report_key
+from narrative_validation import metrics_digest, validate_narrative
 
 load_dotenv()
 
@@ -235,7 +236,7 @@ PLACEHOLDER_NARRATIVE_SUB = {
 # Gemini API call
 # ---------------------------------------------------------------------------
 
-def call_gemini(prompt: str, api_key: str) -> dict:
+def call_gemini(prompt: str, api_key: str, model_name: str) -> dict:
     try:
         import google.generativeai as genai
     except ImportError:
@@ -244,14 +245,14 @@ def call_gemini(prompt: str, api_key: str) -> dict:
 
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel(
-        model_name="gemini-3.5-flash",
+        model_name=model_name,
         system_instruction=SYSTEM_INSTRUCTION,
         generation_config=genai.types.GenerationConfig(
             temperature=0.3,    # Lower temperature for factual, consistent output
             response_mime_type="application/json",
         ),
     )
-    print("Calling Gemini API (gemini-3.5-flash) ...")
+    print(f"Calling Gemini API ({model_name}) ...")
     response = model.generate_content(prompt)
     raw = response.text.strip()
 
@@ -278,6 +279,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Generate LLM narrative for a monthly report.")
     parser.add_argument("--month", required=True, help="Reporting month in YYYY-MM format.")
     parser.add_argument("--type", default="all", choices=["all", "sale", "rent"])
+    parser.add_argument("--force", action="store_true", help="Replace an existing narrative using the current metrics.")
     parser.add_argument(
         "--period",
         default="1mo",
@@ -316,17 +318,23 @@ def main() -> None:
         parser.error("Metrics market type does not match --type.")
 
     api_key = os.getenv("GEMINI_API_KEY")
-    use_placeholder = args.placeholder or not api_key
+    use_placeholder = args.placeholder
+    model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash")
 
-    if out_path.exists():
-        print(f"✓ Narrative JSON already exists at {out_path}. Loading existing content. (Delete this file if you wish to regenerate).")
+    if out_path.exists() and not args.force:
         with open(out_path) as f:
             narrative = json.load(f)
+        try:
+            validate_narrative(narrative, metrics)
+        except ValueError as exc:
+            parser.error(str(exc))
+        if not narrative.get("_provenance"):
+            parser.error("Existing narrative has no metrics provenance. Preserve a copy if needed, then use --force to regenerate.")
+        if not use_placeholder and narrative["_provenance"].get("mode") == "placeholder":
+            parser.error("Existing narrative is a placeholder. Use --force with GEMINI_API_KEY to generate commentary.")
+        print(f"✓ Reusing narrative with matching metrics: {out_path}")
     else:
         if use_placeholder:
-            if not api_key:
-                print("GEMINI_API_KEY not set — writing placeholder narrative.")
-            
             # Construct placeholder narrative based on what types are present in metrics
             narrative = {}
             if metrics.get("sales") is not None:
@@ -339,8 +347,20 @@ def main() -> None:
             else:
                 narrative["rentals"] = None
         else:
+            if not api_key:
+                parser.error("GEMINI_API_KEY is required. Use --placeholder explicitly for an offline draft.")
             prompt = build_prompt(metrics)
-            narrative = call_gemini(prompt, api_key)
+            narrative = call_gemini(prompt, api_key, model_name)
+
+        try:
+            validate_narrative(narrative, metrics)
+        except ValueError as exc:
+            parser.error(str(exc))
+        narrative["_provenance"] = {
+            "metrics_sha256": metrics_digest(metrics),
+            "mode": "placeholder" if use_placeholder else "gemini",
+            "model": None if use_placeholder else model_name,
+        }
 
         out_path.parent.mkdir(parents=True, exist_ok=True)
         with open(out_path, "w") as f:

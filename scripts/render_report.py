@@ -26,6 +26,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from report_identity import report_key
+from narrative_validation import validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
@@ -895,6 +896,12 @@ def main() -> None:
 
     metrics = load_json(metrics_path, "metrics")
     narrative = load_json(narrative_path, "narrative")
+    try:
+        validate_narrative(narrative, metrics)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if not narrative.get("_provenance"):
+        print("WARNING: Legacy narrative has no metrics provenance; its source metrics cannot be verified.", file=sys.stderr)
 
     mtype = metrics.get("type", "all")
     if mtype != args.type:

@@ -20,6 +20,7 @@ PERIOD="1mo"
 TYPE="all"
 EXPORT=false
 PLACEHOLDER=false
+FORCE=false
 NO_PDF=false
 ISSUE=""
 MONTH=""
@@ -33,6 +34,7 @@ show_help() {
   echo "  -t, --type TYPE        Report type (all, sale, rent; default: all)"
   echo "  -e, --export           Pull fresh snapshots from Supabase first"
   echo "  --placeholder          Use placeholder narratives (bypasses Gemini API)"
+  echo "  --force                Replace existing narrative using current metrics"
   echo "  --no-pdf               Skip PDF generation via WeasyPrint"
   echo "  -i, --issue NUMBER     Set a custom issue number override"
   echo "  -h, --help             Show this help message"
@@ -60,6 +62,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --placeholder)
       PLACEHOLDER=true
+      shift
+      ;;
+    --force)
+      FORCE=true
       shift
       ;;
     --no-pdf)
@@ -110,6 +116,9 @@ echo "=== Step 3: Generating report narrative ==="
 NARRATIVE_ARGS=("--month" "$MONTH" "--period" "$PERIOD" "--type" "$TYPE")
 if [ "$PLACEHOLDER" = true ]; then
   NARRATIVE_ARGS+=("--placeholder")
+fi
+if [ "$FORCE" = true ]; then
+  NARRATIVE_ARGS+=("--force")
 fi
 "$PYTHON" "$DIR/scripts/generate_narrative.py" "${NARRATIVE_ARGS[@]}"
 
