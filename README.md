@@ -26,7 +26,7 @@ plain month (`2026-09`); examples of other keys are `2026-09_3mo` and
 ## Setup
 
 Use Python **3.12 or newer**. PDF generation also requires WeasyPrint's native
-libraries (including Pango and Cairo); CI installs these on Ubuntu.
+libraries (Pango, HarfBuzz, and fontconfig); CI installs these on Ubuntu 24.04.
 Keep the `pydyf==0.10.0` pin with WeasyPrint 62.3: newer pydyf versions remove
 the stream API this renderer uses.
 
