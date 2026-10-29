@@ -43,7 +43,7 @@ class RenderTests(unittest.TestCase):
                 narrative_path = root / "narrative.json"
                 metrics_path.write_text(json.dumps(metrics))
                 narrative_path.write_text(json.dumps(narrative))
-                argv = ["render_report.py", "--month", "2026-09", "--no-pdf",
+                argv = ["render_report.py", "--month", "2026-09", "--type", market_type, "--no-pdf",
                         "--metrics", str(metrics_path), "--narrative", str(narrative_path)]
                 with patch.object(rr, "REPORTS_DIR", root / "reports"), patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
                     rr.main()

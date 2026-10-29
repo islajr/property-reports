@@ -25,6 +25,8 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from report_identity import report_key
+
 DATA_DIR = Path(__file__).parent.parent / "data"
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
 FONTS_DIR = Path(__file__).parent.parent / "templates" / "fonts"
@@ -874,6 +876,7 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render monthly report HTML (and PDF).")
     parser.add_argument("--month", required=True, help="Reporting month in YYYY-MM format.")
+    parser.add_argument("--type", default="all", choices=["all", "sale", "rent"])
     parser.add_argument(
         "--period",
         default="1mo",
@@ -886,17 +889,17 @@ def main() -> None:
     parser.add_argument("--no-pdf", action="store_true", help="Skip PDF generation.")
     args = parser.parse_args()
 
-    suffix = "" if args.period == "1mo" else f"_{args.period}"
-    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}{suffix}.json"
-    narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{args.month}{suffix}.json"
+    key = report_key(args.month, args.period, args.type)
+    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{key}.json"
+    narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{key}.json"
 
     metrics = load_json(metrics_path, "metrics")
     narrative = load_json(narrative_path, "narrative")
 
-    folder_name = args.month if args.period == "1mo" else f"{args.month}_{args.period}"
     mtype = metrics.get("type", "all")
-    if mtype != "all":
-        folder_name = f"{folder_name}_{mtype}"
+    if mtype != args.type:
+        parser.error("Metrics market type does not match --type.")
+    folder_name = key
     out_dir = REPORTS_DIR / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -949,6 +952,7 @@ def main() -> None:
     # Prepare Jinja template context
     template_vars = {
         "overall": primary["overall"],
+        "report_key": key,
         "metrics": metrics,
         "narrative": narrative,
         "period": args.period,

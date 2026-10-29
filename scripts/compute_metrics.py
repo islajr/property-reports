@@ -29,6 +29,8 @@ from typing import Any
 
 import pandas as pd
 
+from report_identity import report_key
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -459,8 +461,8 @@ def main() -> None:
     # Determine start date, end date, and text label based on period
     first_date, last_date, period_label_str = get_period_dates(args.month, args.period)
 
-    suffix = "" if args.period == "1mo" else f"_{args.period}"
-    out_path = Path(args.out) if args.out else DATA_DIR / f"metrics_{args.month}{suffix}.json"
+    key = report_key(args.month, args.period, args.type)
+    out_path = Path(args.out) if args.out else DATA_DIR / f"metrics_{key}.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"Loading snapshots from {csv_path} ...")

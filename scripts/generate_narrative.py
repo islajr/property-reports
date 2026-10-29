@@ -31,6 +31,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from report_identity import report_key
+
 load_dotenv()
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -275,6 +277,7 @@ def call_gemini(prompt: str, api_key: str) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate LLM narrative for a monthly report.")
     parser.add_argument("--month", required=True, help="Reporting month in YYYY-MM format.")
+    parser.add_argument("--type", default="all", choices=["all", "sale", "rent"])
     parser.add_argument(
         "--period",
         default="1mo",
@@ -298,9 +301,9 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    suffix = "" if args.period == "1mo" else f"_{args.period}"
-    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}{suffix}.json"
-    out_path = Path(args.out) if args.out else DATA_DIR / f"narrative_{args.month}{suffix}.json"
+    key = report_key(args.month, args.period, args.type)
+    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{key}.json"
+    out_path = Path(args.out) if args.out else DATA_DIR / f"narrative_{key}.json"
 
     if not metrics_path.exists():
         print(f"ERROR: Metrics file not found: {metrics_path}", file=sys.stderr)
@@ -309,6 +312,8 @@ def main() -> None:
 
     with open(metrics_path) as f:
         metrics = json.load(f)
+    if metrics.get("type", "all") != args.type:
+        parser.error("Metrics market type does not match --type.")
 
     api_key = os.getenv("GEMINI_API_KEY")
     use_placeholder = args.placeholder or not api_key

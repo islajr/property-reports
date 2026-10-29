@@ -107,7 +107,7 @@ echo "=== Step 2: Computing metrics for $MONTH ($PERIOD period, type: $TYPE) ===
 
 # Step 3: Generate narrative
 echo "=== Step 3: Generating report narrative ==="
-NARRATIVE_ARGS=("--month" "$MONTH" "--period" "$PERIOD")
+NARRATIVE_ARGS=("--month" "$MONTH" "--period" "$PERIOD" "--type" "$TYPE")
 if [ "$PLACEHOLDER" = true ]; then
   NARRATIVE_ARGS+=("--placeholder")
 fi
@@ -115,7 +115,7 @@ fi
 
 # Step 4: Render reports
 echo "=== Step 4: Rendering HTML & PDF reports ==="
-RENDER_ARGS=("--month" "$MONTH" "--period" "$PERIOD")
+RENDER_ARGS=("--month" "$MONTH" "--period" "$PERIOD" "--type" "$TYPE")
 if [ "$NO_PDF" = true ]; then
   RENDER_ARGS+=("--no-pdf")
 fi
