@@ -65,3 +65,29 @@ class QualityTests(unittest.TestCase):
             with patch.dict(os.environ,{'GEMINI_API_KEY':'mock-key'}), patch.object(sys,'argv',args), patch.object(gn,'call_gemini',return_value=invalid), contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
                 gn.main()
             self.assertEqual(out.read_bytes(),before)
+
+    def test_valid_model_output_is_saved_with_computed_takeaways_and_reused(self):
+        import contextlib
+        import io
+        import json
+        import os
+        from pathlib import Path
+        import sys
+        import tempfile
+        from unittest.mock import patch
+        import generate_narrative as gn
+        metrics=dict(self.metrics, type='all')
+        response=evidence_narrative(metrics)
+        response['sales']['key_takeaways']=['Model supplied text must be replaced']
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);source=root/'metrics.json';out=root/'narrative.json'
+            source.write_text(json.dumps(metrics))
+            args=['generate_narrative.py','--month','2026-09','--metrics',str(source),'--out',str(out)]
+            with patch.dict(os.environ,{'GEMINI_API_KEY':'mock-key'}), patch.object(sys,'argv',args), patch.object(gn,'call_gemini',return_value=response) as model, contextlib.redirect_stdout(io.StringIO()):
+                gn.main()
+                saved=out.read_bytes()
+                gn.main()
+                self.assertEqual(model.call_count,1)
+                self.assertEqual(out.read_bytes(),saved)
+            validate_narrative(json.loads(saved),metrics)
+            self.assertEqual(json.loads(saved)['_quality_version'],2)
