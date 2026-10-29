@@ -17,8 +17,8 @@ Environment:
     GEMINI_API_KEY — from .env or environment (get one free at aistudio.google.com)
 
 Offline / no-key mode:
-    If GEMINI_API_KEY is not set, the script writes placeholder narrative strings
-    so you can still render and inspect the report template layout.
+    Pass --placeholder explicitly to create an offline draft. Missing API keys
+    otherwise fail generation. Use --force to replace existing commentary.
 """
 
 from __future__ import annotations
@@ -31,7 +31,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from report_identity import report_key
+from report_identity import report_key, validate_metrics_identity
 from narrative_validation import metrics_digest, validate_narrative
 
 load_dotenv()
@@ -322,8 +322,10 @@ def main() -> None:
 
     with open(metrics_path) as f:
         metrics = json.load(f)
-    if metrics.get("type", "all") != args.type:
-        parser.error("Metrics market type does not match --type.")
+    try:
+        validate_metrics_identity(metrics, args.month, args.period, args.type)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     api_key = os.getenv("GEMINI_API_KEY")
     use_placeholder = args.placeholder

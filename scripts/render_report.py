@@ -28,7 +28,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from report_identity import report_key
+from report_identity import report_key, validate_metrics_identity
 from narrative_validation import metrics_digest, validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -908,15 +908,13 @@ def main() -> None:
     metrics = load_json(metrics_path, "metrics")
     narrative = load_json(narrative_path, "narrative")
     try:
+        validate_metrics_identity(metrics, args.month, args.period, args.type)
         validate_narrative(narrative, metrics)
     except ValueError as exc:
         parser.error(str(exc))
     if not narrative.get("_provenance"):
         print("WARNING: Legacy narrative has no metrics provenance; its source metrics cannot be verified.", file=sys.stderr)
 
-    mtype = metrics.get("type", "all")
-    if mtype != args.type:
-        parser.error("Metrics market type does not match --type.")
     folder_name = key
     out_dir = REPORTS_DIR / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
