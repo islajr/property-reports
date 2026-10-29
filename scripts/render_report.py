@@ -11,7 +11,8 @@ Usage:
 
 Output:
     reports/2026-06/index.html
-    reports/2026-06/report.pdf  (unless --no-pdf)
+    reports/2026-06/nigerian-residential-real-estate-market-report-2026-06.pdf
+    (unless --no-pdf)
 """
 
 from __future__ import annotations
@@ -19,11 +20,17 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import math
 import sys
+import tempfile
 from datetime import date
+from html import escape
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+
+from report_identity import report_key, validate_metrics_identity
+from narrative_validation import metrics_digest, validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
@@ -92,7 +99,7 @@ def load_json(path: Path, label: str) -> dict:
 def render_html(template_vars: dict) -> str:
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATES_DIR)),
-        autoescape=select_autoescape(["html"]),
+        autoescape=True,
     )
     template = env.get_template("report.html.j2")
     return template.render(**template_vars)
@@ -101,10 +108,8 @@ def render_html(template_vars: dict) -> str:
 def render_pdf(html_path: Path, pdf_path: Path) -> None:
     try:
         from weasyprint import HTML
-    except ImportError:
-        print("WeasyPrint not installed — skipping PDF generation.", file=sys.stderr)
-        print("Install with: pip install weasyprint", file=sys.stderr)
-        return
+    except ImportError as exc:
+        raise RuntimeError("WeasyPrint is required for PDF generation. Install it or pass --no-pdf.") from exc
 
     print(f"Rendering PDF via WeasyPrint ...")
     HTML(filename=str(html_path)).write_pdf(str(pdf_path))
@@ -190,11 +195,8 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    {{ embedded_fonts_css }}
+    {{ embedded_fonts_css | safe }}
     :root {
       --bg: #000000; --bg-card: #121212; --border: #262626;
       --gold: #c9a84c; --gold-light: #e0c070;
@@ -370,7 +372,7 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
 </div>
 
 <script id="reports-data" type="application/json">
-  {{ reports_json | safe }}
+  {{ reports | tojson }}
 </script>
 
 <script>
@@ -548,6 +550,10 @@ def regenerate_index(reports_dir: Path) -> None:
         if meta_file.exists():
             with open(meta_file) as f:
                 meta = json.load(f)
+        if "pdf_filename" in meta:
+            pdf_file = sub / meta["pdf_filename"] if meta["pdf_filename"] else None
+            if pdf_file is not None and not pdf_file.exists():
+                pdf_file = None
 
         month_str = sub.name
         parts = month_str.split("_")
@@ -724,7 +730,7 @@ def generate_regional_bar_chart(city_breakdown: dict) -> str:
             price_str = f"₦{price / 1_000:.0f}k"
             
         # Draw label
-        svg.append(f'<text x="{left_margin - 15}" y="{y + 16}" fill="var(--text-secondary)" font-size="11" font-weight="600" text-anchor="end">{city}</text>')
+        svg.append(f'<text x="{left_margin - 15}" y="{y + 16}" fill="var(--text-secondary)" font-size="11" font-weight="600" text-anchor="end">{escape(city)}</text>')
         
         # Draw bar track
         svg.append(f'<rect x="{left_margin}" y="{y + 4}" width="{chart_width}" height="16" rx="3" fill="var(--border)" opacity="0.3"/>')
@@ -765,8 +771,9 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     
     min_active = min(active_counts)
     max_active = max(active_counts)
-    min_price = min(median_prices)
-    max_price = max(median_prices)
+    valid_prices = [price for price in median_prices if price is not None and math.isfinite(price)]
+    min_price = min(valid_prices, default=0)
+    max_price = max(valid_prices, default=0)
     
     # Guard against flat lines
     active_range = (max_active - min_active) if max_active != min_active else 1.0
@@ -790,8 +797,9 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     # Legend
     svg.append(f'<rect x="360" y="15" width="10" height="10" fill="var(--gold-light)" rx="2"/>')
     svg.append(f'<text x="375" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Active Listings (Left)</text>')
-    svg.append(f'<rect x="490" y="15" width="10" height="10" fill="#4B9CD3" rx="2"/>')
-    svg.append(f'<text x="505" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Median Price (Right)</text>')
+    if valid_prices:
+        svg.append(f'<rect x="490" y="15" width="10" height="10" fill="#4B9CD3" rx="2"/>')
+        svg.append(f'<text x="505" y="24" fill="var(--text-secondary)" font-size="10" font-weight="600">Median Price (Right)</text>')
     
     # X coordinates of points
     num_points = len(weeks_data)
@@ -819,7 +827,8 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
             price_str = f"₦{price_val / 1_000_000:.0f}M"
         else:
             price_str = f"₦{price_val / 1_000:.0f}k"
-        svg.append(f'<text x="{width - padding_right + 8}" y="{y + 4}" fill="#4B9CD3" font-size="9" font-weight="600" text-anchor="start">{price_str}</text>')
+        if valid_prices:
+            svg.append(f'<text x="{width - padding_right + 8}" y="{y + 4}" fill="#4B9CD3" font-size="9" font-weight="600" text-anchor="start">{price_str}</text>')
 
     # Plot active listings path
     active_points = []
@@ -831,6 +840,9 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     # Plot median price path
     price_points = []
     for i, val in enumerate(median_prices):
+        if val is None or not math.isfinite(val):
+            price_points.append(None)
+            continue
         x = x_coords[i]
         y = padding_top + chart_height - ((val - price_min_y) / price_range_padded) * chart_height
         price_points.append((x, y))
@@ -841,11 +853,13 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
     svg.append(f'<path d="{active_area_str}" fill="var(--gold)" opacity="0.06"/>')
     svg.append(f'<path d="{active_path_str}" fill="none" stroke="var(--gold-light)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
     
-    # Draw Price Line & Area
-    price_path_str = " ".join([f"{'M' if i==0 else 'L'} {pt[0]:.1f} {pt[1]:.1f}" for i, pt in enumerate(price_points)])
-    price_area_str = f"{price_path_str} L {price_points[-1][0]:.1f} {padding_top + chart_height:.1f} L {price_points[0][0]:.1f} {padding_top + chart_height:.1f} Z"
-    svg.append(f'<path d="{price_area_str}" fill="#4B9CD3" opacity="0.06"/>')
-    svg.append(f'<path d="{price_path_str}" fill="none" stroke="#4B9CD3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
+    # Start a new segment after each missing price instead of inventing values.
+    price_path_str = " ".join(
+        f"{'M' if i == 0 or price_points[i - 1] is None else 'L'} {pt[0]:.1f} {pt[1]:.1f}"
+        for i, pt in enumerate(price_points) if pt is not None
+    )
+    if price_path_str:
+        svg.append(f'<path d="{price_path_str}" fill="none" stroke="#4B9CD3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>')
     
     # Draw markers & labels
     for i, week in enumerate(weeks):
@@ -858,7 +872,8 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
         svg.append(f'<circle cx="{ap[0]:.1f}" cy="{ap[1]:.1f}" r="4" fill="var(--gold-light)" stroke="var(--bg-card)" stroke-width="1.5"/>')
         
         pp = price_points[i]
-        svg.append(f'<circle cx="{pp[0]:.1f}" cy="{pp[1]:.1f}" r="4" fill="#4B9CD3" stroke="var(--bg-card)" stroke-width="1.5"/>')
+        if pp is not None:
+            svg.append(f'<circle cx="{pp[0]:.1f}" cy="{pp[1]:.1f}" r="4" fill="#4B9CD3" stroke-width="1.5"/>')
         
         parts = week.split("-")
         week_lbl = f"{parts[1]}/{parts[2]}"
@@ -874,6 +889,7 @@ def generate_trajectory_line_chart(weeks_data: list) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render monthly report HTML (and PDF).")
     parser.add_argument("--month", required=True, help="Reporting month in YYYY-MM format.")
+    parser.add_argument("--type", default="all", choices=["all", "sale", "rent"])
     parser.add_argument(
         "--period",
         default="1mo",
@@ -886,35 +902,43 @@ def main() -> None:
     parser.add_argument("--no-pdf", action="store_true", help="Skip PDF generation.")
     args = parser.parse_args()
 
-    suffix = "" if args.period == "1mo" else f"_{args.period}"
-    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{args.month}{suffix}.json"
-    narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{args.month}{suffix}.json"
+    key = report_key(args.month, args.period, args.type)
+    metrics_path = Path(args.metrics) if args.metrics else DATA_DIR / f"metrics_{key}.json"
+    narrative_path = Path(args.narrative) if args.narrative else DATA_DIR / f"narrative_{key}.json"
 
     metrics = load_json(metrics_path, "metrics")
     narrative = load_json(narrative_path, "narrative")
+    try:
+        validate_metrics_identity(metrics, args.month, args.period, args.type)
+        validate_narrative(narrative, metrics)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if not narrative.get("_provenance"):
+        print("WARNING: Legacy narrative has no metrics provenance; its source metrics cannot be verified.", file=sys.stderr)
 
-    folder_name = args.month if args.period == "1mo" else f"{args.month}_{args.period}"
-    mtype = metrics.get("type", "all")
-    if mtype != "all":
-        folder_name = f"{folder_name}_{mtype}"
+    folder_name = key
     out_dir = REPORTS_DIR / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Determine issue number
+    meta_file = out_dir / "meta.json"
+    existing_meta = load_json(meta_file, "meta.json") if meta_file.exists() else {}
+
+    # Preserve the assigned issue even when older reports are added later.
     issue_number = args.issue
     if issue_number is None:
-        existing = sorted([d.name for d in REPORTS_DIR.iterdir() if d.is_dir() and (d / "meta.json").exists()])
-        try:
-            issue_number = existing.index(folder_name) + 1
-        except ValueError:
-            issue_number = len(existing) + 1
+        issue_number = existing_meta.get("issue_number")
+    if issue_number is None:
+        existing_issues = [load_json(d / "meta.json", "meta.json").get("issue_number", 0)
+                           for d in REPORTS_DIR.iterdir() if d.is_dir() and (d / "meta.json").exists()]
+        issue_number = max(existing_issues, default=0) + 1
 
     # Determine published date (preserve existing date from meta.json if present)
-    meta_file = out_dir / "meta.json"
     if meta_file.exists():
-        existing_meta = load_json(meta_file, "meta.json")
         published_date = existing_meta.get("published_date", date.today().strftime("%B %d, %Y").replace(" 0", " "))
-        published_date_iso = existing_meta.get("published_date_iso", date.today().isoformat())
+        published_date_iso = existing_meta.get("published_date_iso")
+        if not published_date_iso:
+            from datetime import datetime
+            published_date_iso = datetime.strptime(published_date, "%B %d, %Y").date().isoformat()
     else:
         published_date = date.today().strftime("%B %d, %Y").replace(" 0", " ")
         published_date_iso = date.today().isoformat()
@@ -926,6 +950,8 @@ def main() -> None:
     if not primary:
         print("ERROR: No metrics data found (neither sales nor rentals)", file=sys.stderr)
         sys.exit(1)
+    overall = metrics.get("coverage", primary["overall"])
+    primary_narrative = narrative["sales"] if metrics.get("sales") else narrative["rentals"]
 
     # Determine descriptive PDF filename
     pdf_filename = get_descriptive_pdf_filename(args.month, args.period, metrics.get("type", "all"))
@@ -936,19 +962,21 @@ def main() -> None:
     sales_regional_chart = ""
     rentals_regional_chart = ""
 
-    if "sales" in metrics and metrics["sales"].get("weekly_aggregates"):
+    if metrics.get("sales") and metrics["sales"].get("weekly_aggregates"):
         sales_trajectory_chart = generate_trajectory_line_chart(metrics["sales"]["weekly_aggregates"])
-    if "rentals" in metrics and metrics["rentals"].get("weekly_aggregates"):
+    if metrics.get("rentals") and metrics["rentals"].get("weekly_aggregates"):
         rentals_trajectory_chart = generate_trajectory_line_chart(metrics["rentals"]["weekly_aggregates"])
         
-    if "sales" in metrics and metrics["sales"].get("city_breakdown"):
+    if metrics.get("sales") and metrics["sales"].get("city_breakdown"):
         sales_regional_chart = generate_regional_bar_chart(metrics["sales"]["city_breakdown"])
-    if "rentals" in metrics and metrics["rentals"].get("city_breakdown"):
+    if metrics.get("rentals") and metrics["rentals"].get("city_breakdown"):
         rentals_regional_chart = generate_regional_bar_chart(metrics["rentals"]["city_breakdown"])
 
     # Prepare Jinja template context
     template_vars = {
-        "overall": primary["overall"],
+        "overall": overall,
+        "report_key": key,
+        "social_description": primary_narrative["key_takeaways"][0],
         "metrics": metrics,
         "narrative": narrative,
         "period": args.period,
@@ -958,6 +986,7 @@ def main() -> None:
         "published_date_iso": published_date_iso,
         "embedded_fonts_css": embedded_fonts_css,
         "pdf_filename": pdf_filename,
+        "has_pdf": not args.no_pdf,
         "sales_trajectory_chart": sales_trajectory_chart,
         "rentals_trajectory_chart": rentals_trajectory_chart,
         "sales_regional_chart": sales_regional_chart,
@@ -968,10 +997,6 @@ def main() -> None:
     print(f"Rendering HTML report for {args.month} ...")
     html_content = render_html(template_vars)
     html_path = out_dir / "index.html"
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html_content)
-    size_kb = html_path.stat().st_size / 1024
-    print(f"  ✓ HTML: {html_path}  ({size_kb:.0f} KB)")
 
     # Write meta.json for index generation
     meta = {
@@ -980,17 +1005,31 @@ def main() -> None:
         "type": metrics.get("type", "all"),
         "issue_number": issue_number,
         "published_date": published_date,
-        "num_cities": primary["overall"]["num_cities"],
-        "unique_neighbourhoods": primary["overall"]["unique_neighbourhoods"],
-        "peak_active_listings": primary["overall"]["peak_active_listings"],
+        "published_date_iso": published_date_iso,
+        "num_cities": overall["num_cities"],
+        "unique_neighbourhoods": overall["unique_neighbourhoods"],
+        "peak_active_listings": overall["peak_active_listings"],
+        "pdf_filename": None if args.no_pdf else pdf_filename,
+        "metrics_sha256": metrics_digest(metrics),
+        "narrative_sha256": metrics_digest(narrative),
+        "source_csv_sha256": metrics.get("_source", {}).get("csv_sha256"),
     }
-    with open(out_dir / "meta.json", "w") as f:
-        json.dump(meta, f, indent=2)
-
-    # Render PDF
-    if not args.no_pdf:
-        pdf_path = out_dir / pdf_filename
-        render_pdf(html_path, pdf_path)
+    # Compile every requested format before replacing an existing publication.
+    with tempfile.TemporaryDirectory(prefix="property-report-") as tmp:
+        staging = Path(tmp)
+        staged_html = staging / "index.html"
+        staged_html.write_text(html_content, encoding="utf-8")
+        if not args.no_pdf:
+            render_pdf(staged_html, staging / pdf_filename)
+        (staging / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+        # Copy across filesystems before replacing each destination atomically.
+        import shutil
+        for artifact in staging.iterdir():
+            destination = out_dir / artifact.name
+            pending = out_dir / (artifact.name + ".tmp")
+            shutil.copyfile(artifact, pending)
+            pending.replace(destination)
+    print(f"  ✓ HTML: {html_path}  ({html_path.stat().st_size / 1024:.0f} KB)")
 
     # Regenerate reports index
     regenerate_index(REPORTS_DIR)
@@ -998,7 +1037,7 @@ def main() -> None:
     # Regenerate sitemap.xml and robots.txt
     generate_sitemap_and_robots(REPORTS_DIR)
 
-    print(f"\n✓ Report complete: reports/{args.month}/")
+    print(f"\n✓ Report complete: reports/{folder_name}/")
     print(f"  Open: file://{html_path.resolve()}")
 
 

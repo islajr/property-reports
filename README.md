@@ -1,224 +1,166 @@
-# Nigerian Real Estate Market Reports — Pipeline Documentation
+# Nigerian Real Estate Market Reports
 
-Monthly market intelligence reports for the Nigerian residential real estate market, powered by **PS-0 PropertyScraper** — an autonomous data pipeline tracking active listings from major portals across Lagos, Abuja, and other primary cities.
+Python pipeline for the PS-0 PropertyScraper market reports, published at
+[reports.akinmokun.com](https://reports.akinmokun.com).
 
-Published at [reports.akinmokun.com](https://reports.akinmokun.com).
+The repository builds static HTML reports, PDFs, and a searchable report catalogue.
+The scraper, database schema, and `market.classify_property` function live upstream
+in `property-intel`; this repository does not implement ingestion or migrations.
 
----
+## How it works
 
-## Architecture Overview
-
-The system operates as a multi-stage compilation pipeline that extracts data from a PostgreSQL database, calculates statistical snapshots, generates narrative summaries via the Gemini API, and builds a static web dashboard containing PDF download links.
-
-```
-+------------------+
-| Supabase Database|  <--- Scraped listing data
-+------------------+
-         |
-         | (export_data.py via SQL query)
-         v
-+-----------------------------+
-| neighbourhood_snapshots.csv |  <--- Local CSV data cache
-+-----------------------------+
-         |
-         | (compute_metrics.py --month --period --type)
-         v
-+-----------------------+
-| metrics_2026-07.json  |  <--- Statistical JSON data structure
-+-----------------------+
-         |
-         | (generate_narrative.py --placeholder / Gemini API)
-         v
-+-------------------------+
-| narrative_2026-07.json  |  <--- Gemini-generated narrative blocks
-+-------------------------+
-         |
-         | (render_report.py --no-pdf)
-         +-------------------------------------+
-         |                                     |
-         v                                     v
-+-------------------------+          +--------------------+
-| reports/2026-07/        |          | reports/index.html |  <--- Dynamic Filter
-|  - index.html (Theme)   |          |  - sitemap.xml     |       Dashboard & SEO
-|  - report.pdf           |          |  - robots.txt      |       Index list
-+-------------------------+          +--------------------+
+```text
+Supabase listing records + price-change history
+  → export_data.py → data/neighbourhood_snapshots.csv
+  → compute_metrics.py → data/metrics_{key}.json
+  → generate_narrative.py → data/narrative_{key}.json
+  → render_report.py → reports/{key}/{index.html, meta.json, descriptive-name.pdf}
+                    → reports/{index.html, reports.json, sitemap.xml, robots.txt}
 ```
 
----
+A report key is `YYYY-MM[_period][_type]`. Monthly combined reports retain the
+plain month (`2026-09`); examples of other keys are `2026-09_3mo` and
+`2026-09_3mo_sale`. Periods are `1mo`, `3mo`, `6mo`, or `12mo`; types are `all`,
+`sale`, or `rent`. All stages use the same key, including intermediate files.
 
-## Installation & Setup
+## Setup
 
-### 1. Prerequisites
-Ensure you have the following installed on your machine:
-* Python 3.10 or higher
-* `pip` (Python package manager)
-* `libweasyprint` (Required for PDF rendering via WeasyPrint. On Linux: `sudo apt-get install weasyprint` or `shared-mime-info`)
+Use Python **3.12 or newer**. PDF generation also requires WeasyPrint's native
+libraries (Pango, HarfBuzz, and fontconfig); CI installs these on Ubuntu 24.04.
+Keep the `pydyf==0.10.0` pin with WeasyPrint 62.3: newer pydyf versions remove
+the stream API this renderer uses.
 
-### 2. Virtual Environment Setup
-Initialize a Python virtual environment and install the required dependencies:
 ```bash
-# Clone the repository and navigate to its root directory
-cd property-reports
-
-# Create virtual environment
 python3 -m venv .venv
-
-# Activate virtual environment
 source .venv/bin/activate
-
-# Install required dependencies
 pip install -r requirements-pipeline.txt
-```
-
-### 3. Configuration
-Copy the sample environment file and enter your API keys and database credentials:
-```bash
 cp .env.example .env
 ```
-Open `.env` in your editor and configure the variables:
-```ini
-# Supabase PostgreSQL Credentials (Used by export_data.py)
-DB_HOST=your-supabase-db-host.supabase.co
-DB_NAME=postgres
-DB_USER=postgres
-DB_PASSWORD=your-secure-db-password
-DB_PORT=5432
 
-# Gemini API Credentials (Used by generate_narrative.py)
-GEMINI_API_KEY=AIzaSy...
+Configure `SUPABASE_DB_URL` for database export and `GEMINI_API_KEY` for narrative
+generation. `GEMINI_MODEL` optionally overrides the code's default model name,
+`gemini-3.5-flash`. Model access must be verified with your own Gemini account;
+the offline checks do not call the service.
+
+Fonts are already committed in `templates/fonts/` and embedded in generated
+pages. `scripts/download_fonts.py` can refresh the six Inter and JetBrains Mono
+files; it does not download the bundled Menlo or Playfair Display files.
+
+## Build reports
+
+```bash
+# Use the local CSV and explicit offline draft commentary; render HTML only.
+./run.sh --month 2026-09 --placeholder --no-pdf
+
+# Export fresh data and build a quarterly sales report with Gemini and a PDF.
+./run.sh --month 2026-09 --period 3mo --type sale --export
+
+# Replace an existing narrative after its metrics change.
+./run.sh --month 2026-09 --force
+
+./run.sh --help
 ```
 
----
+`--export` replaces the local CSV. Without it, the cached CSV must already exist.
+Metrics are recomputed on each run. `--issue NUMBER` overrides the assigned issue;
+otherwise existing issue numbers and publication dates are preserved.
 
-## Detailed Pipeline Execution Commands
+Narrative generation requires an API key unless `--placeholder` is explicit.
+Existing commentary is reused only when its metrics fingerprint matches. A stale
+narrative, a legacy narrative without provenance, or a placeholder being reused
+for a production build causes an error. Preserve any hand-edited commentary
+before using `--force`, which replaces the narrative. Gemini responses are checked
+for required fields and types; this does not verify the factual accuracy of prose.
 
-While the root-level `run.sh` script is the standard orchestrator, you can invoke individual python scripts manually for granular control.
+The renderer can still open structurally valid legacy narrative JSON, with a
+warning that its metrics cannot be verified. It rejects a fingerprint mismatch.
 
-### Step 1: Export Snapshot Data
-Pulls weekly snapshots from the Supabase `market.neighbourhood_snapshots` table and exports them to `data/neighbourhood_snapshots.csv`:
+PDF errors fail the build before existing HTML and metadata are replaced. Use
+`--no-pdf` for HTML-only output; the report and catalogue will omit PDF links.
+An older PDF already on disk is retained but is no longer advertised by that build.
+
+## Run individual stages
+
+Pass the same month, period, and type to every stage:
+
 ```bash
 python scripts/export_data.py
+python scripts/compute_metrics.py --month 2026-09 --period 3mo --type sale
+python scripts/generate_narrative.py --month 2026-09 --period 3mo --type sale --placeholder
+python scripts/render_report.py --month 2026-09 --period 3mo --type sale --no-pdf
 ```
 
-### Step 2: Compute Market Metrics
-Calculates inventory statistics, pricing percentiles, days on market (DOM) averages, price reduction records, and regional breakdowns.
-```bash
-# Calculate 1-Month Combined metrics for July 2026
-python scripts/compute_metrics.py --month 2026-07 --period 1mo --type all
+The exporter accepts `--out`; metrics accept `--csv` and `--out`; narrative
+accepts `--metrics` and `--out`; rendering accepts `--metrics` and `--narrative`.
+Run a script with `--help` for its options. Paths default to this repository's
+`data/`, `templates/`, and `reports/` directories; there is no `DATA_DIR`
+environment override.
 
-# Calculate 3-Month Sales-only metrics ending July 2026
-python scripts/compute_metrics.py --month 2026-07 --period 3mo --type sale
+## Data interpretation
 
-# Calculate 6-Month Rentals-only metrics ending June 2026
-python scripts/compute_metrics.py --month 2026-06 --period 6mo --type rent
-```
-*Outputs: `data/metrics_{month}_{period}.json`*
+- Source rows group listings by city, neighbourhood, week, market type, and
+  property class. Sales and rentals are separate; short lets are excluded.
+  The dataset includes land and commercial classes alongside residential classes.
+- Inventory rankings sum classes within a neighbourhood-week before averaging
+  observed weeks. Class tables retain small groups so additive totals reconcile.
+- Peak inventory is the highest weekly total. Cumulative active inventory counts
+  listing-weeks, so a listing can contribute more than once. Growth compares the
+  first and last included weeks.
+- Weekly, city, and overall prices are unweighted medians of source group medians.
+  Pricing tiers use means of observed group medians, with average weekly inventory
+  thresholds of five listings for expensive areas and three for affordable areas.
+  These summaries are not exact medians of individual listings.
+- Reports select weeks by their start date. A final week can extend past month-end.
+  A trailing week below 30% of the previous weeks' median active volume is excluded
+  as a possible partial export; the heuristic can also remove a real decline.
+- The exporter reconstructs history using current listing status, prices, and
+  classification. It does not restore historical prices or explicitly mark outages
+  and carry forward weekly totals. Historical pricing is not an immutable time series.
+- DOM uses first observation through the earlier of last observation and the
+  end-of-week boundary, with a one-day floor. It cannot recover the actual listing
+  date for properties already online before discovery.
 
-### Step 3: Generate Gemini Narrative Commentary
-Prompts the Gemini API (`gemini-1.5-flash`) for executive summaries, inventory narratives, pricing deep-dives, regional reports, and market outlooks.
-```bash
-# Generate real Gemini narrative using API key
-python scripts/generate_narrative.py --month 2026-07 --period 1mo
+See [CODEBASE.md](CODEBASE.md) for implementation details.
 
-# Generate placeholder draft text (skips API key requirement)
-python scripts/generate_narrative.py --month 2026-07 --period 1mo --placeholder
-```
-*Outputs: `data/narrative_{month}_{period}.json`*
-
-### Step 4: Compile HTML & PDF Reports
-Generates the statically styled HTML pages and compiles the print-optimized PDF documents.
-```bash
-# Render HTML and PDF using default configurations
-python scripts/render_report.py --month 2026-07 --period 1mo
-
-# Render HTML only (skip WeasyPrint PDF compilation)
-python scripts/render_report.py --month 2026-07 --period 1mo --no-pdf
-
-# Render report with custom issue number override (e.g. Issue #5)
-python scripts/render_report.py --month 2026-07 --period 1mo --issue 5
-```
-*Outputs:*
-* *Report Page: `reports/{month}_{period}_{type}/index.html`*
-* *PDF Download: `reports/{month}_{period}_{type}/report.pdf`*
-* *Directory Index: `reports/index.html`*
-* *Sitemap: `reports/sitemap.xml`*
-* *Robots: `reports/robots.txt`*
-
----
-
-## Unified Orchestration (`run.sh`)
-
-For convenience, use `run.sh` to run the entire pipeline end-to-end:
+## Validation and preview
 
 ```bash
-# Generate a standard monthly combined report with placeholders
-./run.sh --month 2026-07 --placeholder
-
-# Export fresh database data first, then compile a 3-month sales report
-./run.sh --month 2026-07 --period 3mo --type sale --export
-
-# Compile a 12-month (Yearly) combined report with real Gemini narratives
-./run.sh --month 2026-07 --period 12mo
+python -m unittest discover -s tests -v
+bash -n run.sh
+python -m http.server --directory reports 8000
 ```
 
-### Full Options List
-```
-Usage: ./run.sh [options]
+Visit `http://localhost:8000/` for the catalogue. The tests use synthetic input and
+temporary output directories; they do not call Supabase or Gemini or overwrite
+published reports. They include a real PDF smoke test and require the native PDF
+libraries above. The regression workflow runs on PRs and pushes to `dev` and
+`master`.
 
-Options:
-  -m, --month YYYY-MM    Target reporting month (end month) (required)
-  -p, --period PERIOD    Period window (1mo, 3mo, 6mo, 12mo; default: 1mo)
-  -t, --type TYPE        Report type (all, sale, rent; default: all)
-  -e, --export           Pull fresh snapshots from Supabase first
-  --placeholder          Use placeholder narratives (bypasses Gemini API)
-  --no-pdf               Skip PDF generation via WeasyPrint
-  -i, --issue NUMBER     Set a custom issue number override
-  -h, --help             Show this help message
-```
+## Publishing and reproducibility
 
----
+`.github/workflows/monthly_report.yml` runs at 05:00 UTC (06:00 WAT) on the first
+of each month, or manually. It exports data, builds the preceding month's combined
+report, and commits `reports/` back to the checked-out branch. Required repository
+secrets are `SUPABASE_DB_URL` and `GEMINI_API_KEY`.
 
-## Local Testing & Hosting
+Generated metrics record the source CSV hash, narratives record their metrics
+hash, and report metadata records the metrics, narrative, and CSV hashes. Monthly
+workflow runs archive the CSV, metrics, narrative, metadata, and dependency pins
+as GitHub Actions artifacts for **90 days**. Download these before expiry when
+long-term reproducibility is required; the Git commit identifies the pipeline code.
+A fresh export can revise historical results as upstream records change.
 
-To review the generated dashboard and reports locally under matching static web server path conditions, run Python's built-in HTTP server directed at the `reports/` folder:
+`data/` and `.env` remain ignored by Git. There is no database export or API key
+in the public static assets. Published HTML/PDFs and their metadata are committed.
 
-```bash
-# Start local HTTP server on port 8000
-python3 -m http.server --directory reports/ 8000
-```
+`wrangler.jsonc` configures Cloudflare Workers static assets from `reports/`.
+The monthly workflow does **not** deploy to Cloudflare; any deployment integration
+must be configured separately.
 
-Now open your browser and navigate to:
-* Dashboard Index: **`http://localhost:8000/`**
-* June 3-Month Report: **`http://localhost:8000/2026-06_3mo/`**
+## Contribution conventions
 
----
+Use incremental Conventional Commits: `fix:`, `feat:`, `chore:`, `docs:`, `style:`,
+or `report:`. Keep pipeline changes separate from regenerated publications so
+reviewers can distinguish behaviour changes from historical report revisions.
 
-## Troubleshooting Common Build Errors
-
-### 1. WeasyPrint PDF Rendering Fails
-* **Error**: `OSError: cannot load library 'gobject-2.0-0'` or WeasyPrint is not found.
-* **Solution**: WeasyPrint requires system-level drawing libraries (`Pango`, `GObject`, and `Cairo`). Install them using your OS package manager:
-  * Ubuntu/Debian: `sudo apt-get install build-essential python3-dev python3-pip python3-setuptools python3-wheel python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info`
-  * MacOS: `brew install cairo pango gdk-pixbuf libffi`
-
-### 2. Gemini API Rate Limit / Authentication Errors
-* **Error**: `google.api_core.exceptions.InvalidArgument` or `API key not found`.
-* **Solution**: Check that `GEMINI_API_KEY` is exported correctly in your environment or set in your local `.env` file. If the model is not found, verify that python uses `google-generativeai>=0.8.0`.
-
----
-
-## Commit Message Conventions
-
-This project strictly follows the **Conventional Commits** standard:
-* `feat:` A new feature, report template modification, or dashboard element.
-* `fix:` A bug fix, layout calculation adjustments, or database queries correction.
-* `chore:` Modifying configurations, dependencies, gitignore, or build scripts.
-* `docs:` Updates to README, CODEBASE, or markdown documentation files.
-* `report:` Adding or publishing raw report outputs (e.g. `report: add June 2026 PDF report`).
-* `style:` Pure CSS or spacing overrides inside report templates.
-
----
-
-## License
-
-Report data & narratives © Isaac Akinmokun. Pipeline code is licensed under the MIT License.
+Report data and narratives © Isaac Akinmokun.

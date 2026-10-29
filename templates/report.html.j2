@@ -7,7 +7,7 @@
   <meta name="description" content="Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods." />
   <meta name="author" content="Isaac Akinmokun" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+  <link rel="canonical" href="https://reports.akinmokun.com/{{ report_key }}/" />
 
   <!-- Favicons / Icons -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16" />
@@ -17,16 +17,16 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
-  <meta property="og:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
+  <meta property="og:description" content="{{ social_description }}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+  <meta property="og:url" content="https://reports.akinmokun.com/{{ report_key }}/" />
   <meta property="og:site_name" content="Isaac Akinmokun" />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
-  <meta name="twitter:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
+  <meta name="twitter:description" content="{{ social_description }}" />
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -52,15 +52,15 @@
       },
       {
         "@type": "TechArticle",
-        "@id": "https://reports.akinmokun.com/{{ overall.report_month }}/#article",
+        "@id": "https://reports.akinmokun.com/{{ report_key }}/#article",
         "isPartOf": {
           "@type": "WebPage",
-          "@id": "https://reports.akinmokun.com/{{ overall.report_month }}/"
+          "@id": "https://reports.akinmokun.com/{{ report_key }}/"
         },
         "headline": "{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report",
         "description": "Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods.",
         "inLanguage": "en-US",
-        "mainEntityOfPage": "https://reports.akinmokun.com/{{ overall.report_month }}/",
+        "mainEntityOfPage": "https://reports.akinmokun.com/{{ report_key }}/",
         "datePublished": "{{ published_date_iso }}",
         "dateModified": "{{ published_date_iso }}",
         "author": {
@@ -89,7 +89,7 @@
   </script>
 
   <style>
-    {{ embedded_fonts_css }}
+    {{ embedded_fonts_css | safe }}
     /* ===================================================================
        DESIGN TOKENS
     =================================================================== */
@@ -775,10 +775,12 @@
         <span class="tag">{{ overall.num_weeks }} Weeks of Data</span>
         <span class="tag">Published {{ published_date }}</span>
       </div>
+      {% if has_pdf %}
       <a href="{{ pdf_filename }}" class="download-pdf-btn" download>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
         Download PDF
       </a>
+      {% endif %}
     </div>
   </header>
 
@@ -802,7 +804,7 @@
           <div class="kpi-card">
             <span class="kpi-label">Peak Active Listings</span>
             <span class="kpi-value">{{ "{:,}".format(mdata.overall.peak_active_listings) }}</span>
-            <span class="kpi-sub">Latest week total</span>
+            <span class="kpi-sub">Highest weekly total this period</span>
           </div>
           <div class="kpi-card">
             <span class="kpi-label">New Listings</span>
@@ -816,7 +818,7 @@
           </div>
           <div class="kpi-card">
             <span class="kpi-label">Inventory Growth</span>
-            <span class="kpi-value gold">{{ mdata.overall.active_listings_growth_pct }}%</span>
+            <span class="kpi-value gold">{{ (mdata.overall.active_listings_growth_pct ~ '%') if mdata.overall.active_listings_growth_pct is not none else 'N/A' }}</span>
             <span class="kpi-sub">First → last week</span>
           </div>
           <div class="kpi-card">
@@ -834,7 +836,9 @@
             <h2>Executive Summary</h2>
           </div>
           <div class="card">
-            {{ mnarr.executive_summary | replace('\n\n', '</p><p>') | replace('\n', ' ') }}
+            {% for paragraph in mnarr.executive_summary.split('\n\n') %}
+            <p>{{ paragraph | replace('\n', ' ') }}</p>
+            {% endfor %}
           </div>
 
           <!-- Key Takeaways -->
@@ -1038,8 +1042,8 @@
           <div class="card" style="margin-bottom: 1.5rem;">
             <p>
               {{ mnarr.lagos_narrative }}
-              {{ mnarr.abuja_narrative }}
-              {{ mnarr.other_cities_narrative }}
+              {{ mnarr.abuja_narrative or '' }}
+              {{ mnarr.other_cities_narrative or '' }}
             </p>
           </div>
           {% endif %}
@@ -1220,34 +1224,50 @@
       <h2>Methodology &amp; Data Notes</h2>
     </div>
     <div class="card" style="font-size:0.875rem">
-      <p><strong>Data source:</strong> PS-0 PropertyScraper autonomously collects listings from
-      PropertyPro.ng, PrivateProperty.com.ng, and NigeriaPropertyCentre.com on a weekly discovery
-      cadence with mid-week health checks.</p>
+      <p><strong>Data source:</strong> Weekly aggregates are reconstructed from the PS-0
+      PropertyScraper listing records and price-change history. Sales and rentals are analysed
+      separately; short lets are excluded. Property classes in the source include residential
+      buildings, land, and commercial property.</p>
 
-      <p><strong>Neighbourhood normalisation:</strong> Raw neighbourhood strings from all portals
-      are normalised to a canonical name via a manually-curated mapping table. Only neighbourhoods
-      with ≥90% normalisation coverage are included in analysis.</p>
+      <p><strong>Neighbourhoods:</strong> Areas use the neighbourhood names supplied by the source
+      data and are identified by city and neighbourhood together. This reporting pipeline does not
+      apply a separate normalisation-coverage threshold.</p>
 
       <p><strong>Price storage:</strong> All prices are stored internally as 64-bit integer kobo
-      values to eliminate floating-point arithmetic errors. NGN figures displayed in this report
-      are exact integer divisions by 100.</p>
+      values. Exported percentiles can be fractional kobo. Displayed NGN values divide kobo by
+      100 and are rounded for readability.</p>
 
-      <p><strong>Median vs. mean pricing:</strong> Median is used throughout to reduce skew from
-      outlier luxury listings. P25, P75, and P90 data are available in the source dataset
-      but excluded from this summary report for brevity.</p>
+      <p><strong>Pricing:</strong> Each source row contains a median for one city, neighbourhood,
+      week, market type, and property class. Weekly, city, and overall prices are unweighted
+      medians of these group medians, not medians of individual listings. Pricing tiers use the
+      arithmetic mean of the observed group medians. Expensive and affordable rankings require
+      average observed weekly inventory of at least 5 and 3 listings respectively. P25, P75, and
+      P90 are exported but not displayed.</p>
+
+      <p><strong>Inventory and periods:</strong> Peak active inventory is the maximum weekly total.
+      Cumulative active inventory sums listing-weeks and can count the same listing more than
+      once. Rankings average observed weekly totals after summing property classes. Reports
+      include weeks whose start date falls in the reporting window, so a final week may extend
+      beyond the calendar month. Class tables retain low-volume rows so their totals reconcile
+      with the market totals.</p>
 
       <p><strong>Price reductions:</strong> An event is recorded when a listing's price decreases
       between two consecutive observations. Multiple reductions on the same listing count as
       separate events.</p>
 
       <p><strong>Days on market (DOM):</strong> Computed as the number of days between a listing's
-      first observed date and the snapshot date. Listings present since before the pipeline's
-      inception show DOM from the first observation date, not the actual listing date.</p>
+      first observed timestamp and the earlier of its last observation and the end-of-week
+      boundary, with a minimum of one day. Area-level averages are unweighted means of source
+      group averages. First observation can be later than the actual listing date.</p>
 
-      <p><strong>Outage handling:</strong> On weeks where portal access was blocked or failed,
-      active inventory is carried forward from the prior week. New listing counts are recorded as
-      zero for that week. These weeks are noted in the weekly table.</p>
+      <p><strong>Coverage limitations:</strong> Historical inventory is reconstructed using first
+      observation, last observation, and current listing status. Current prices and classifications
+      are reused for historical weeks; these are not immutable historical observations. The pipeline
+      does not explicitly mark outages or carry forward weekly totals. It excludes the final week
+      when its active inventory is below 30% of the preceding weeks' median, a heuristic that may
+      also remove a real decline.</p>
     </div>
+  </section>
   <section class="section" id="disclaimer" style="page-break-inside: avoid;">
     <div class="section-header">
       <span class="section-number">09</span>
@@ -1292,7 +1312,5 @@
 </body>
 </html>
 <!--
-  FONT NOTE: This report uses a system font stack (no external CDN requests).
-  The document renders correctly offline and is self-contained.
-  If Inter is ever self-hosted, add it as a @font-face before the :root block.
+  FONT NOTE: Fonts are embedded as base64 WOFF2, with system fallbacks.
 -->

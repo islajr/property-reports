@@ -20,6 +20,7 @@ PERIOD="1mo"
 TYPE="all"
 EXPORT=false
 PLACEHOLDER=false
+FORCE=false
 NO_PDF=false
 ISSUE=""
 MONTH=""
@@ -33,24 +34,35 @@ show_help() {
   echo "  -t, --type TYPE        Report type (all, sale, rent; default: all)"
   echo "  -e, --export           Pull fresh snapshots from Supabase first"
   echo "  --placeholder          Use placeholder narratives (bypasses Gemini API)"
+  echo "  --force                Replace existing narrative using current metrics"
   echo "  --no-pdf               Skip PDF generation via WeasyPrint"
   echo "  -i, --issue NUMBER     Set a custom issue number override"
   echo "  -h, --help             Show this help message"
-  exit 0
+  exit "${1:-0}"
+}
+
+require_value() {
+  if [[ $# -lt 2 || -z "$2" || "$2" == -* ]]; then
+    echo "ERROR: $1 requires a value." >&2
+    exit 2
+  fi
 }
 
 # Parse options
 while [[ $# -gt 0 ]]; do
   case $1 in
     -m|--month)
+      require_value "$@"
       MONTH="$2"
       shift 2
       ;;
     -p|--period)
+      require_value "$@"
       PERIOD="$2"
       shift 2
       ;;
     -t|--type)
+      require_value "$@"
       TYPE="$2"
       shift 2
       ;;
@@ -62,11 +74,16 @@ while [[ $# -gt 0 ]]; do
       PLACEHOLDER=true
       shift
       ;;
+    --force)
+      FORCE=true
+      shift
+      ;;
     --no-pdf)
       NO_PDF=true
       shift
       ;;
     -i|--issue)
+      require_value "$@"
       ISSUE="$2"
       shift 2
       ;;
@@ -75,7 +92,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "ERROR: Unknown option: $1"
-      show_help
+      show_help 2
       ;;
   esac
 done
@@ -83,7 +100,7 @@ done
 if [ -z "$MONTH" ]; then
   echo "ERROR: --month YYYY-MM is required."
   echo ""
-  show_help
+  show_help 2
 fi
 
 # Locate project root directory
@@ -93,6 +110,13 @@ PYTHON="$DIR/.venv/bin/python"
 # Fallback if venv is not set up
 if [ ! -f "$PYTHON" ]; then
   PYTHON="python3"
+fi
+
+# Validate options before exporting data or replacing local metrics.
+"$PYTHON" -c 'import sys; sys.path.insert(0, sys.argv[1]); from report_identity import report_key; report_key(*sys.argv[2:])' "$DIR/scripts" "$MONTH" "$PERIOD" "$TYPE"
+if [[ -n "$ISSUE" && ! "$ISSUE" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ERROR: --issue must be a positive integer." >&2
+  exit 2
 fi
 
 # Step 1: Export data
@@ -107,15 +131,18 @@ echo "=== Step 2: Computing metrics for $MONTH ($PERIOD period, type: $TYPE) ===
 
 # Step 3: Generate narrative
 echo "=== Step 3: Generating report narrative ==="
-NARRATIVE_ARGS=("--month" "$MONTH" "--period" "$PERIOD")
+NARRATIVE_ARGS=("--month" "$MONTH" "--period" "$PERIOD" "--type" "$TYPE")
 if [ "$PLACEHOLDER" = true ]; then
   NARRATIVE_ARGS+=("--placeholder")
+fi
+if [ "$FORCE" = true ]; then
+  NARRATIVE_ARGS+=("--force")
 fi
 "$PYTHON" "$DIR/scripts/generate_narrative.py" "${NARRATIVE_ARGS[@]}"
 
 # Step 4: Render reports
 echo "=== Step 4: Rendering HTML & PDF reports ==="
-RENDER_ARGS=("--month" "$MONTH" "--period" "$PERIOD")
+RENDER_ARGS=("--month" "$MONTH" "--period" "$PERIOD" "--type" "$TYPE")
 if [ "$NO_PDF" = true ]; then
   RENDER_ARGS+=("--no-pdf")
 fi
