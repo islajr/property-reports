@@ -21,6 +21,7 @@ import base64
 import json
 import math
 import sys
+import tempfile
 from datetime import date
 from html import escape
 from pathlib import Path
@@ -106,10 +107,8 @@ def render_html(template_vars: dict) -> str:
 def render_pdf(html_path: Path, pdf_path: Path) -> None:
     try:
         from weasyprint import HTML
-    except ImportError:
-        print("WeasyPrint not installed — skipping PDF generation.", file=sys.stderr)
-        print("Install with: pip install weasyprint", file=sys.stderr)
-        return
+    except ImportError as exc:
+        raise RuntimeError("WeasyPrint is required for PDF generation. Install it or pass --no-pdf.") from exc
 
     print(f"Rendering PDF via WeasyPrint ...")
     HTML(filename=str(html_path)).write_pdf(str(pdf_path))
@@ -550,6 +549,10 @@ def regenerate_index(reports_dir: Path) -> None:
         if meta_file.exists():
             with open(meta_file) as f:
                 meta = json.load(f)
+        if "pdf_filename" in meta:
+            pdf_file = sub / meta["pdf_filename"] if meta["pdf_filename"] else None
+            if pdf_file is not None and not pdf_file.exists():
+                pdf_file = None
 
         month_str = sub.name
         parts = month_str.split("_")
@@ -984,6 +987,7 @@ def main() -> None:
         "published_date_iso": published_date_iso,
         "embedded_fonts_css": embedded_fonts_css,
         "pdf_filename": pdf_filename,
+        "has_pdf": not args.no_pdf,
         "sales_trajectory_chart": sales_trajectory_chart,
         "rentals_trajectory_chart": rentals_trajectory_chart,
         "sales_regional_chart": sales_regional_chart,
@@ -994,10 +998,6 @@ def main() -> None:
     print(f"Rendering HTML report for {args.month} ...")
     html_content = render_html(template_vars)
     html_path = out_dir / "index.html"
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html_content)
-    size_kb = html_path.stat().st_size / 1024
-    print(f"  ✓ HTML: {html_path}  ({size_kb:.0f} KB)")
 
     # Write meta.json for index generation
     meta = {
@@ -1010,14 +1010,24 @@ def main() -> None:
         "num_cities": overall["num_cities"],
         "unique_neighbourhoods": overall["unique_neighbourhoods"],
         "peak_active_listings": primary["overall"]["peak_active_listings"],
+        "pdf_filename": None if args.no_pdf else pdf_filename,
     }
-    with open(out_dir / "meta.json", "w") as f:
-        json.dump(meta, f, indent=2)
-
-    # Render PDF
-    if not args.no_pdf:
-        pdf_path = out_dir / pdf_filename
-        render_pdf(html_path, pdf_path)
+    # Compile every requested format before replacing an existing publication.
+    with tempfile.TemporaryDirectory(prefix="property-report-") as tmp:
+        staging = Path(tmp)
+        staged_html = staging / "index.html"
+        staged_html.write_text(html_content, encoding="utf-8")
+        if not args.no_pdf:
+            render_pdf(staged_html, staging / pdf_filename)
+        (staging / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
+        # Copy across filesystems before replacing each destination atomically.
+        import shutil
+        for artifact in staging.iterdir():
+            destination = out_dir / artifact.name
+            pending = out_dir / (artifact.name + ".tmp")
+            shutil.copyfile(artifact, pending)
+            pending.replace(destination)
+    print(f"  ✓ HTML: {html_path}  ({html_path.stat().st_size / 1024:.0f} KB)")
 
     # Regenerate reports index
     regenerate_index(REPORTS_DIR)

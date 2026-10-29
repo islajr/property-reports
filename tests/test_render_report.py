@@ -30,6 +30,27 @@ def section():
 
 
 class RenderTests(unittest.TestCase):
+    def test_missing_pdf_dependency_fails(self):
+        with patch.dict(sys.modules, {"weasyprint": None}), self.assertRaisesRegex(RuntimeError, "--no-pdf"):
+            rr.render_pdf(Path("unused.html"), Path("unused.pdf"))
+
+    def test_pdf_failure_preserves_published_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            report_dir = root / "reports/2026-09"
+            report_dir.mkdir(parents=True)
+            (report_dir / "index.html").write_text("Original publication")
+            original_meta = json.dumps({"issue_number": 2, "published_date": "October 1, 2026"})
+            (report_dir / "meta.json").write_text(original_meta)
+            metrics = {"type": "all", "sales": section(), "rentals": None}
+            (root / "metrics.json").write_text(json.dumps(metrics))
+            (root / "narrative.json").write_text(json.dumps({"sales": gn.PLACEHOLDER_NARRATIVE_SUB, "rentals": None}))
+            argv = ["render_report.py", "--month", "2026-09", "--metrics", str(root / "metrics.json"), "--narrative", str(root / "narrative.json")]
+            with patch.object(rr, "REPORTS_DIR", root / "reports"), patch.object(sys, "argv", argv), patch.object(rr, "render_pdf", side_effect=RuntimeError("PDF failed")), contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()), self.assertRaisesRegex(RuntimeError, "PDF failed"):
+                rr.main()
+            self.assertEqual((report_dir / "index.html").read_text(), "Original publication")
+            self.assertEqual((report_dir / "meta.json").read_text(), original_meta)
+
     def test_charts_handle_missing_prices_and_escape_city_names(self):
         weeks = [{"week": f"2026-09-{day}", "active_listing_count": 10, "median_price_ngn": price}
                  for day, price in (("07", None), ("14", 100), ("21", None), ("28", 200))]
@@ -71,6 +92,8 @@ class RenderTests(unittest.TestCase):
                 self.assertEqual("Sales Market Analysis" in html, market_type in ("all", "sale"))
                 self.assertEqual("Rentals Market Analysis" in html, market_type in ("all", "rent"))
                 self.assertTrue((root / "reports/reports.json").exists())
+                self.assertNotIn("Download PDF", html)
+                self.assertFalse(json.loads((root / "reports/reports.json").read_text())[0]["has_pdf"])
                 self.assertIn(f'href="https://reports.akinmokun.com/{folder}/"', html)
                 self.assertIn('content="[PLACEHOLDER] Set GEMINI_API_KEY', html)
                 meta = json.loads((report_dir / "meta.json").read_text())
