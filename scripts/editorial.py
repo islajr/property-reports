@@ -9,13 +9,7 @@ from matplotlib.ticker import FuncFormatter, MaxNLocator
 GREEN, AMBER, INK = '#18704d', '#8a5b25', '#222c25'
 
 
-def money(value):
-    if value is None:
-        return 'N/A'
-    for scale, suffix in ((1e9, 'B'), (1e6, 'M'), (1e3, 'k')):
-        if abs(value) >= scale:
-            return f'₦{value / scale:,.1f}{suffix}'
-    return f'₦{value:,.0f}'
+from report_evidence import money, selected_classes, pricing_benchmarks
 
 
 def graphic(fig, label):
@@ -61,7 +55,7 @@ def build_publication(metrics):
         if not data:
             continue
         weeks = data['weekly_aggregates']
-        classes = sorted(data.get('classes', {}).items(), key=lambda item: item[1]['overall']['cumulative_active_listings'], reverse=True)
+        classes = selected_classes(data)
         class_counts = [(name.replace('_', ' ').title(), stats['overall']['cumulative_active_listings'] / max(data['overall']['num_weeks'], 1)) for name, stats in classes]
         shown = class_counts[:6]
         if len(class_counts) > 6:
@@ -78,13 +72,7 @@ def build_publication(metrics):
         figures['inventory'] = graphic(fig, f'{market.title()} weekly observed active inventory')
         reductions = data['price_reduction_analysis']
         figures['reductions'] = bars([(r['city'].title(), r['total_reductions']) for r in reductions['by_city'][:6]], f'{market.title()} price reduction event counts by city', AMBER)
-        pricing = []
-        eligible = [(name, stats) for name, stats in classes if stats['pricing_tiers']['most_expensive'] or stats['pricing_tiers']['most_affordable']][:4]
-        for name, stats in eligible:
-            tiers = stats['pricing_tiers']
-            for kind, key in (('Affordable', 'most_affordable'), ('Expensive', 'most_expensive')):
-                for row in tiers[key][:1]:
-                    pricing.append(dict(row, property_class=name.replace('_', ' ').title(), tier=kind))
+        eligible, pricing = pricing_benchmarks(data)
         # Prices stay within class: independent axes avoid a misleading pooled distribution.
         fig, axs = plt.subplots(max(1, len(eligible)), 1, figsize=(7.4, max(2, len(eligible)*1.05)), squeeze=False)
         if not eligible:
