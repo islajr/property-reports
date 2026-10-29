@@ -3,10 +3,41 @@ import argparse
 from pathlib import Path
 import re
 import shutil
+import tinycss2
+import tempfile
 from jinja2 import Environment, FileSystemLoader
 from render_report import build_embedded_fonts_css, render_pdf
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def strip_legacy_print_styles(html):
+    """Discard only obsolete head print rules; retain screen CSS and report body."""
+    head, body = html.split('<body>', 1)
+    def clean(match):
+        rules = tinycss2.parse_stylesheet(match.group(1), skip_whitespace=False, skip_comments=False)
+        kept = [rule for rule in rules if not (
+            rule.type == 'at-rule' and rule.lower_at_keyword == 'media'
+            and tinycss2.serialize(rule.prelude).strip().lower() == 'print')]
+        return '<style>' + tinycss2.serialize(kept) + '</style>'
+    head = re.sub(r'<style>\s*(.*?)</style>', clean, head, flags=re.S)
+    return head + '<body>' + body
+
+
+def pdf_compatible_svg(html):
+    """Resolve SVG custom properties unsupported by the pinned PDF renderer."""
+    palette = {
+        'bg-card': '#fffefa', 'bg-card-alt': '#f4f2eb', 'border': '#dfdfd5',
+        'text-primary': '#222c25', 'text-secondary': '#5d685f',
+        'gold-light': '#222c25', 'gold': '#74491c',
+        'font-sans': "'New Computer Modern', Georgia, serif",
+    }
+    def resolve(match):
+        svg = match.group()
+        for name, value in palette.items():
+            svg = svg.replace(f'var(--{name})', value)
+        return svg
+    return re.sub(r'<svg\b.*?</svg>', resolve, html, flags=re.S)
 
 
 def restyle(source, destination, pdf=True):
@@ -23,7 +54,7 @@ def restyle(source, destination, pdf=True):
     css = (ROOT / 'templates/partials/site.css').read_text() + (ROOT / 'templates/partials/published-report.css').read_text()
     style = '<style id="publication-presentation">' + build_embedded_fonts_css() + css + '</style>'
     script = '<script>' + (ROOT / 'templates/partials/theme.js').read_text() + '</script>'
-    updated = original.replace('</head>', style + script + '</head>', 1).replace(original_header.group(), shared_header, 1)
+    updated = strip_legacy_print_styles(original).replace('</head>', style + script + '</head>', 1).replace(original_header.group(), shared_header, 1)
     # Verify all original report markup survives exactly, excluding navigation/head styling.
     before = original.split('<body>', 1)[1].replace(original_header.group(), '', 1)
     after = updated.split('<body>', 1)[1].replace(shared_header, '', 1)
@@ -35,8 +66,11 @@ def restyle(source, destination, pdf=True):
         if item.is_file() and item.name != 'index.html':
             shutil.copyfile(item, destination / item.name)
     if pdf:
-        for item in source.glob('*.pdf'):
-            render_pdf(target, destination / item.name)
+        with tempfile.TemporaryDirectory(prefix='published-pdf-') as tmp:
+            pdf_html = Path(tmp) / 'index.html'
+            pdf_html.write_text(pdf_compatible_svg(updated))
+            for item in source.glob('*.pdf'):
+                render_pdf(pdf_html, destination / item.name)
     return target
 
 
