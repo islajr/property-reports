@@ -1,4 +1,4 @@
-"""Preview typography/layout changes while preserving the published report body."""
+"""Restyle published reports without changing their content or metadata."""
 import argparse
 from pathlib import Path
 import re
@@ -46,15 +46,19 @@ def restyle(source, destination, pdf=True):
     destination.mkdir(parents=True, exist_ok=True)
     original = (source / 'index.html').read_text()
     # The old site header is the only removed body markup. Report prose is untouched.
-    original_header = re.search(r'<header class="global-header">.*?</header>', original, re.S)
+    original_header = re.search(r'<header class="global-header">.*?</header>|<header class="site-header">.*?</header>\s*<div id="main-content" tabindex="-1"></div>', original, re.S)
     if not original_header:
-        raise ValueError('Expected the original published report header.')
+        raise ValueError('Expected a recognised published report header.')
     env = Environment(loader=FileSystemLoader(str(ROOT / 'templates')), autoescape=True)
     shared_header = env.get_template('partials/header.html.j2').render() + '<div id="main-content" tabindex="-1"></div>'
     css = (ROOT / 'templates/partials/site.css').read_text() + (ROOT / 'templates/partials/published-report.css').read_text()
     style = '<style id="publication-presentation">' + build_embedded_fonts_css() + css + '</style>'
-    script = '<script>' + (ROOT / 'templates/partials/theme.js').read_text() + '</script>'
-    updated = strip_legacy_print_styles(original).replace('</head>', style + script + '</head>', 1).replace(original_header.group(), shared_header, 1)
+    script = '<script id="publication-theme">' + (ROOT / 'templates/partials/theme.js').read_text() + '</script>'
+    head, body = original.split('<body>', 1)
+    head = re.sub(r'<style id="publication-presentation">.*?</style>', '', head, flags=re.S)
+    head = re.sub(r'<script(?: id="publication-theme")?>(.*?)</script>', lambda match: '' if 'reports-theme' in match.group(1) and 'document.documentElement' in match.group(1) else match.group(), head, flags=re.S)
+    clean_original = head + '<body>' + body
+    updated = strip_legacy_print_styles(clean_original).replace('</head>', style + script + '</head>', 1).replace(original_header.group(), shared_header, 1)
     # Verify all original report markup survives exactly, excluding navigation/head styling.
     before = original.split('<body>', 1)[1].replace(original_header.group(), '', 1)
     after = updated.split('<body>', 1)[1].replace(shared_header, '', 1)
@@ -77,12 +81,32 @@ def restyle(source, destination, pdf=True):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--issue', default='2026-09')
+    parser.add_argument('--all', action='store_true', help='Restyle every existing published issue.')
+    parser.add_argument('--apply', action='store_true', help='Apply staged, verified presentation files to the publication archive.')
     parser.add_argument('--output-root', type=Path, default=ROOT / 'scratch/review')
     parser.add_argument('--no-pdf', action='store_true')
     args = parser.parse_args()
     if Path(args.issue).name != args.issue or not re.fullmatch(r'\d{4}-\d{2}(?:_(?:3mo|6mo|12mo))?(?:_(?:sale|rent))?', args.issue):
         parser.error('Invalid report issue.')
-    print(restyle(ROOT / 'reports' / args.issue, args.output_root / args.issue, pdf=not args.no_pdf))
+    sources = sorted(p for p in (ROOT / 'reports').iterdir() if p.is_dir() and (p / 'meta.json').exists()) if args.all else [ROOT / 'reports' / args.issue]
+    if args.apply and args.no_pdf:
+        parser.error('--apply requires regenerating the PDF too.')
+    if args.apply:
+        # Build every issue before replacing any archive files. Metadata stays untouched.
+        with tempfile.TemporaryDirectory(prefix='restyled-archive-') as tmp:
+            staged = Path(tmp)
+            for source in sources:
+                restyle(source, staged / source.name)
+            for source in sources:
+                for artifact in (staged / source.name).iterdir():
+                    if artifact.name == 'index.html' or artifact.suffix == '.pdf':
+                        pending = source / (artifact.name + '.tmp')
+                        shutil.copyfile(artifact, pending)
+                        pending.replace(source / artifact.name)
+                print('Applied presentation:', source.name)
+    else:
+        for source in sources:
+            print(restyle(source, args.output_root / source.name, pdf=not args.no_pdf))
 
 
 if __name__ == '__main__':

@@ -62,3 +62,15 @@ class PublishedPresentationTests(unittest.TestCase):
         self.assertAlmostEqual(colour.red, 1)
         self.assertGreater(colour.green, .99)
         self.assertGreater(colour.blue, .97)
+
+    def test_restyling_can_be_reapplied_without_duplicating_navigation_or_styles(self):
+        source = ROOT / 'reports/2026-09'
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            first = restyle(source, root / 'first', pdf=False)
+            second = restyle(first.parent, root / 'second', pdf=False)
+            html = second.read_text()
+            self.assertEqual(html.count('id="publication-presentation"'), 1)
+            self.assertEqual(html.count('id="publication-theme"'), 1)
+            self.assertEqual(html.count('<header class="site-header">'), 1)
+            self.assertEqual(first.read_text().split('<body>', 1)[1], html.split('<body>', 1)[1])
