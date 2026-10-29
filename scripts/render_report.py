@@ -936,14 +936,14 @@ def main() -> None:
     sales_regional_chart = ""
     rentals_regional_chart = ""
 
-    if "sales" in metrics and metrics["sales"].get("weekly_aggregates"):
+    if metrics.get("sales") and metrics["sales"].get("weekly_aggregates"):
         sales_trajectory_chart = generate_trajectory_line_chart(metrics["sales"]["weekly_aggregates"])
-    if "rentals" in metrics and metrics["rentals"].get("weekly_aggregates"):
+    if metrics.get("rentals") and metrics["rentals"].get("weekly_aggregates"):
         rentals_trajectory_chart = generate_trajectory_line_chart(metrics["rentals"]["weekly_aggregates"])
         
-    if "sales" in metrics and metrics["sales"].get("city_breakdown"):
+    if metrics.get("sales") and metrics["sales"].get("city_breakdown"):
         sales_regional_chart = generate_regional_bar_chart(metrics["sales"]["city_breakdown"])
-    if "rentals" in metrics and metrics["rentals"].get("city_breakdown"):
+    if metrics.get("rentals") and metrics["rentals"].get("city_breakdown"):
         rentals_regional_chart = generate_regional_bar_chart(metrics["rentals"]["city_breakdown"])
 
     # Prepare Jinja template context
