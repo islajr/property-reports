@@ -165,8 +165,8 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
         if values.isna().any() or not values.map(lambda value: math.isfinite(value) and value >= 0 and value == int(value)).all():
             raise ValueError(f'{column} must contain finite non-negative integer counts.')
     prices = df['median_price_kobo'].dropna()
-    if not prices.map(lambda value: math.isfinite(value) and value > 0).all():
-        raise ValueError('Observed median prices must be finite positive amounts or null.')
+    df['_invalid_price'] = df['median_price_kobo'].notna() & ~df['median_price_kobo'].map(lambda value: math.isfinite(value) and value > 0)
+    df.loc[df['_invalid_price'], 'median_price_kobo'] = float('nan')
     return df
 
 
@@ -184,6 +184,7 @@ def period_quality(df, selected, first, last):
             'missing_week_starts': sorted(set(expected) - set(observed)),
             'excluded_week_starts': sorted(set(observed) - set(included)),
             'missing_price_rows': int(selected.median_price_kobo.isna().sum()),
+            'invalid_price_rows': int(selected['_invalid_price'].sum()) if '_invalid_price' in selected else 0,
             'snapshot_rows': len(selected),
             'historical_prices_reconstructed': True}
 
@@ -344,6 +345,8 @@ def compute_pricing_tiers(
     ).reset_index()
     weekly_counts = neighbourhood_weekly_inventory(df).groupby(["city", "neighbourhood"])["active_listing_count"].mean().rename("avg_weekly_active")
     agg = agg.join(weekly_counts, on=["city", "neighbourhood"])
+    priced_weeks = df[df.median_price_kobo.notna()].groupby(["city", "neighbourhood"])["snapshot_week"].nunique().rename("priced_weeks")
+    agg = agg.join(priced_weeks, on=["city", "neighbourhood"])
     agg = agg[agg["avg_median_price_kobo"].notna()]
 
     expensive = (
@@ -370,6 +373,7 @@ def compute_pricing_tiers(
                 "avg_median_price_ngn": kobo_to_ngn(kobo),
                 "avg_days_on_market": round(float(dom), 1) if pd.notna(dom) else None,
                 "num_weeks_observed": int(row["num_weeks"]),
+                "num_price_weeks_observed": int(row["priced_weeks"]),
                 "avg_weekly_active_listings": round(float(row["avg_weekly_active"]), 1),
             })
         return out

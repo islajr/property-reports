@@ -97,10 +97,10 @@ SELECT
     COUNT(a.listing_id) AS active_listing_count,
     COALESCE(MAX(n.new_count), 0) AS new_listings_count,
     COALESCE(SUM(r.reduced_count), 0) AS price_reduced_count,
-    percentile_cont(0.50) WITHIN GROUP (ORDER BY a.price_kobo) AS median_price_kobo,
-    percentile_cont(0.25) WITHIN GROUP (ORDER BY a.price_kobo) AS p25,
-    percentile_cont(0.75) WITHIN GROUP (ORDER BY a.price_kobo) AS p75,
-    percentile_cont(0.90) WITHIN GROUP (ORDER BY a.price_kobo) AS p90
+    percentile_cont(0.50) WITHIN GROUP (ORDER BY a.price_kobo) FILTER (WHERE a.price_kobo > 0) AS median_price_kobo,
+    percentile_cont(0.25) WITHIN GROUP (ORDER BY a.price_kobo) FILTER (WHERE a.price_kobo > 0) AS p25,
+    percentile_cont(0.75) WITHIN GROUP (ORDER BY a.price_kobo) FILTER (WHERE a.price_kobo > 0) AS p75,
+    percentile_cont(0.90) WITHIN GROUP (ORDER BY a.price_kobo) FILTER (WHERE a.price_kobo > 0) AS p90
 FROM active_listings_per_week a
 LEFT JOIN new_listings_per_week n ON a.city = n.city AND a.neighbourhood = n.neighbourhood AND a.price_type = n.price_type AND a.property_class = n.property_class AND a.snapshot_week = n.snapshot_week
 LEFT JOIN weekly_reductions r ON a.listing_id = r.listing_id AND a.snapshot_week = r.snapshot_week
