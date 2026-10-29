@@ -86,14 +86,14 @@ def build_publication(metrics):
                 for row in tiers[key][:1]:
                     pricing.append(dict(row, property_class=name.replace('_', ' ').title(), tier=kind))
         # Prices stay within class: independent axes avoid a misleading pooled distribution.
-        eligible = [(name, stats) for name, stats in classes if stats['pricing_tiers']['most_expensive'] or stats['pricing_tiers']['most_affordable']][:4]
         fig, axs = plt.subplots(max(1, len(eligible)), 1, figsize=(7.4, max(2, len(eligible)*1.05)), squeeze=False)
         if not eligible:
             axs[0,0].text(.5,.5,'Insufficient inventory for pricing comparisons',ha='center', transform=axs[0,0].transAxes)
         for ax, (name, stats) in zip(axs[:,0], eligible):
-            rows = stats['pricing_tiers']['most_affordable'][:1] + stats['pricing_tiers']['most_expensive'][:1]
+            benchmarks = [(row, colour) for key, colour in (('most_affordable', GREEN), ('most_expensive', AMBER)) for row in stats['pricing_tiers'][key][:1]]
+            rows = [row for row, _ in benchmarks]
             rows = [row for row in rows if row['avg_median_price_ngn'] is not None]
-            ax.scatter([row['avg_median_price_ngn'] for row in rows], [0]*len(rows), color=[GREEN, AMBER][:len(rows)], s=45)
+            ax.scatter([row['avg_median_price_ngn'] for row in rows], [0]*len(rows), color=[colour for row, colour in benchmarks if row['avg_median_price_ngn'] is not None], s=45)
             ax.set_yticks([])
             ax.set_title(name.replace('_',' ').title(), loc='left', fontsize=9)
             ax.xaxis.set_major_formatter(FuncFormatter(lambda x,_: money(x)))
