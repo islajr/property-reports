@@ -51,3 +51,14 @@ class PublishedPresentationTests(unittest.TestCase):
         boxes = [box for box in doc.pages[0]._page_box.descendants() if getattr(box, 'element', None) is not None and box.element.get('id', '').startswith('metric-') and type(box).__name__ == 'TableCellBox']
         self.assertEqual(len(boxes), 5)
         self.assertEqual(len({round(box.position_y, 2) for box in boxes}), 1)
+
+    def test_print_stays_light_when_html_theme_is_dark(self):
+        from weasyprint import HTML
+        css = (ROOT / 'templates/partials/published-report.css').read_text()
+        html = '<html data-theme="dark"><head><style>' + css + '</style></head><body><div class="page-wrapper"><p>Published report</p></div></body></html>'
+        doc = HTML(string=html).render()
+        wrapper = next(box for box in doc.pages[0]._page_box.descendants() if getattr(box, 'element', None) is not None and box.element.get('class') == 'page-wrapper')
+        colour = wrapper.style['background_color']
+        self.assertAlmostEqual(colour.red, 1)
+        self.assertGreater(colour.green, .99)
+        self.assertGreater(colour.blue, .97)
