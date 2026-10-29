@@ -22,7 +22,7 @@ Flyway migrations are maintained here.
 | `.github/workflows/tests.yml` | PR and branch regression checks |
 | `wrangler.jsonc` | Cloudflare static asset configuration for `reports/` |
 
-The catalogue template is the `INDEX_TEMPLATE` string inside `render_report.py`.
+The catalogue template is `templates/index.html.j2`.
 Edit the source templates and scripts for future builds. Files under `reports/`
 are generated publications, not template sources.
 
@@ -180,3 +180,27 @@ can install successfully but fail at PDF generation.
 Cloudflare serving is configured in Wrangler. No Cloudflare deployment action is
 included here. No runtime API server, client build framework, or database
 migrations are part of this repository.
+
+## Editorial publication update
+
+`INDEX_TEMPLATE` has moved to `templates/index.html.j2`; the dashboard and report
+share partials under `templates/partials/`. `build_embedded_fonts_css` selects a
+smaller font set for the dashboard. New Computer Modern is bundled for the report
+body, headings and PDF; original font licenses and source notes accompany assets.
+
+`scripts/editorial.py` builds deterministic selections of area benchmarks and
+Matplotlib SVG figures for inventory, property composition, class-specific prices,
+and city reduction events. Each SVG has an accessible name and a caption. Pricing
+panels have independent scales and use the same area selections as the adjacent
+table. Charts do not present reconstructed asking prices as appreciation history.
+
+The main PDF uses a cover, brief, three pages per populated market and methodology.
+The full combined September sample is nine pages. The HTML appendix retains class
+weekly evidence; it is excluded from print to preserve the core reading sequence.
+
+`scripts/build_dashboard.py` regenerates the archive only. `scripts/preview_report.py`
+computes a historical sample into ignored scratch space and creates concise,
+evidence-derived sample commentary. `render_report.py --output-root` supports
+isolated builds; `--preview` requires such a root outside `reports/`, adds a visible
+preview banner and noindex metadata, and prevents a public sitemap. Existing
+published issues cannot be overwritten in the real publication directory.
