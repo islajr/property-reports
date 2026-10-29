@@ -127,6 +127,7 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
         "city", "neighbourhood", "snapshot_week",
         "active_listing_count", "new_listings_count",
         "price_reduced_count", "median_price_kobo", "property_class",
+        "price_type", "avg_days_on_market",
     }
     missing = required - set(df.columns)
     if missing:
@@ -136,6 +137,7 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
     df["city"] = df["city"].str.strip().str.upper()
     df["neighbourhood"] = df["neighbourhood"].str.strip()
     df["property_class"] = df["property_class"].str.strip().str.upper()
+    df["price_type"] = df["price_type"].str.strip().str.upper()
 
     # Numeric safety — coerce bad values to NaN
     for col in ["active_listing_count", "new_listings_count",
@@ -181,7 +183,7 @@ def compute_overall(df: pd.DataFrame, month_str: str, period_label_str: str, per
 
     total_snapshots = len(df)
     cities = sorted(df["city"].unique().tolist())
-    unique_neighbourhoods = df["neighbourhood"].nunique()
+    unique_neighbourhoods = len(df[["city", "neighbourhood"]].drop_duplicates())
 
     total_active_cumulative = int(df["active_listing_count"].sum())
     total_new_listings = int(df["new_listings_count"].sum())
@@ -212,8 +214,8 @@ def compute_overall(df: pd.DataFrame, month_str: str, period_label_str: str, per
         .median()
         .sort_index()
     )
-    first_weekly_median_kobo = float(weekly_medians.iloc[0]) if len(weekly_medians) > 0 else None
-    last_weekly_median_kobo = float(weekly_medians.iloc[-1]) if len(weekly_medians) > 0 else None
+    first_weekly_median_kobo = float(weekly_medians.iloc[0]) if len(weekly_medians) > 0 and pd.notna(weekly_medians.iloc[0]) else None
+    last_weekly_median_kobo = float(weekly_medians.iloc[-1]) if len(weekly_medians) > 0 and pd.notna(weekly_medians.iloc[-1]) else None
 
     report_month_val = month_str if period_str == "1mo" else f"{month_str}_{period_str}"
 
@@ -262,10 +264,15 @@ def compute_weekly_aggregates(df: pd.DataFrame) -> list[dict[str, Any]]:
     return sorted(rows, key=lambda r: r["week"])
 
 
+def neighbourhood_weekly_inventory(df: pd.DataFrame) -> pd.DataFrame:
+    """Sum property classes before averaging observed weeks for each area."""
+    return df.groupby(["city", "neighbourhood", "snapshot_week"], as_index=False)["active_listing_count"].sum()
+
+
 def compute_inventory_ranking(df: pd.DataFrame, top_n: int = 10) -> list[dict[str, Any]]:
     """Most active neighbourhoods by average weekly active listing count."""
     avg = (
-        df.groupby(["city", "neighbourhood"])["active_listing_count"]
+        neighbourhood_weekly_inventory(df).groupby(["city", "neighbourhood"])["active_listing_count"]
         .mean()
         .reset_index()
         .rename(columns={"active_listing_count": "avg_weekly_active"})
@@ -297,10 +304,12 @@ def compute_pricing_tiers(
     # Per-neighbourhood aggregates
     agg = df.groupby(["city", "neighbourhood"]).agg(
         avg_median_price_kobo=("median_price_kobo", "mean"),
-        avg_weekly_active=("active_listing_count", "mean"),
         avg_dom=("avg_days_on_market", "mean"),
         num_weeks=("snapshot_week", "nunique"),
     ).reset_index()
+    weekly_counts = neighbourhood_weekly_inventory(df).groupby(["city", "neighbourhood"])["active_listing_count"].mean().rename("avg_weekly_active")
+    agg = agg.join(weekly_counts, on=["city", "neighbourhood"])
+    agg = agg[agg["avg_median_price_kobo"].notna()]
 
     expensive = (
         agg[agg["avg_weekly_active"] >= MIN_LISTINGS_EXPENSIVE]
@@ -350,11 +359,7 @@ def compute_city_breakdown(df: pd.DataFrame) -> dict[str, dict[str, Any]]:
         median_kobo = grp["median_price_kobo"].median()
 
         # Top neighbourhood by avg active
-        top_hood = (
-            grp.groupby("neighbourhood")["active_listing_count"]
-            .mean()
-            .idxmax()
-        )
+        top_hood = compute_inventory_ranking(grp, top_n=1)[0]["neighbourhood"]
         breakdown[city] = {
             "city": city,
             "num_neighbourhoods": num_neighbourhoods,
@@ -487,9 +492,7 @@ def main() -> None:
             metrics["sales"] = compute_all_metrics(sales_df, args.month, period_label_str, args.period)
             metrics["sales"]["classes"] = {}
             for prop_class, grp in sales_df.groupby("property_class"):
-                filtered_grp = grp[grp["active_listing_count"] >= 3].copy()
-                if not filtered_grp.empty:
-                    metrics["sales"]["classes"][prop_class] = compute_all_metrics(filtered_grp, args.month, period_label_str, args.period)
+                metrics["sales"]["classes"][prop_class] = compute_all_metrics(grp, args.month, period_label_str, args.period)
         else:
             print("  WARNING: No Sales records found in period.")
 
@@ -499,14 +502,15 @@ def main() -> None:
             metrics["rentals"] = compute_all_metrics(rent_df, args.month, period_label_str, args.period)
             metrics["rentals"]["classes"] = {}
             for prop_class, grp in rent_df.groupby("property_class"):
-                filtered_grp = grp[grp["active_listing_count"] >= 3].copy()
-                if not filtered_grp.empty:
-                    metrics["rentals"]["classes"][prop_class] = compute_all_metrics(filtered_grp, args.month, period_label_str, args.period)
+                metrics["rentals"]["classes"][prop_class] = compute_all_metrics(grp, args.month, period_label_str, args.period)
         else:
             print("  WARNING: No Rentals records found in period.")
 
+    if not metrics["sales"] and not metrics["rentals"]:
+        parser.error("No records found for the selected market type.")
+
     with open(out_path, "w") as f:
-        json.dump(metrics, f, indent=2, default=str)
+        json.dump(metrics, f, indent=2, default=str, allow_nan=False)
 
     print(f"\n✓ Metrics written to {out_path}")
 
