@@ -29,7 +29,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from report_identity import report_key, validate_metrics_identity
+from report_identity import report_key, validate_metrics_identity, require_closed_month
 from editorial import build_publication, money
 from narrative_validation import metrics_digest, validate_narrative
 
@@ -524,6 +524,11 @@ def main() -> None:
     archive_root = Path(__file__).resolve().parents[1] / "reports"
     if args.preview and (output_root == archive_root or archive_root in output_root.parents):
         parser.error("Preview output must be outside reports/.")
+    if not args.preview:
+        try:
+            require_closed_month(args.month)
+        except ValueError as exc:
+            parser.error(str(exc))
     key = report_key(args.month, args.period, args.type)
     if output_root == archive_root and (output_root / key / "index.html").exists():
         parser.error("This issue is already published. Use --output-root for an isolated rebuild.")

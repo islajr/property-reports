@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import math
 import json
 import os
 import sys
@@ -150,7 +151,41 @@ def load_snapshots(csv_path: Path) -> pd.DataFrame:
     if "price_type" in df.columns:
         df = df[df["price_type"] != "FOR_SHORT_LET"].copy()
 
+    if df['snapshot_week'].isna().any() or not df['snapshot_week'].map(lambda day: day.weekday() == 0).all():
+        raise ValueError('Snapshot dates must be non-null Monday week starts.')
+    dimensions = ['city', 'neighbourhood', 'price_type', 'property_class']
+    if df[dimensions].isna().any().any() or any(df[col].eq('').any() for col in dimensions):
+        raise ValueError('Snapshot dimensions must be non-empty.')
+    if not df['price_type'].isin(['FOR_SALE', 'FOR_RENT']).all():
+        raise ValueError('Unknown price_type in snapshot rows.')
+    if df.duplicated(dimensions + ['snapshot_week']).any():
+        raise ValueError('Duplicate snapshot dimension/week rows would double-count inventory.')
+    for column in ('active_listing_count', 'new_listings_count', 'price_reduced_count'):
+        values = df[column]
+        if values.isna().any() or not values.map(lambda value: math.isfinite(value) and value >= 0 and value == int(value)).all():
+            raise ValueError(f'{column} must contain finite non-negative integer counts.')
+    prices = df['median_price_kobo'].dropna()
+    if not prices.map(lambda value: math.isfinite(value) and value > 0).all():
+        raise ValueError('Observed median prices must be finite positive amounts or null.')
     return df
+
+
+def period_quality(df, selected, first, last):
+    """Report coverage gaps explicitly, without imputing missing observations."""
+    expected = []
+    day = first
+    while day <= last:
+        if day.weekday() == 0:
+            expected.append(str(day))
+        day += timedelta(days=1)
+    observed = sorted(str(week) for week in df.loc[(df.snapshot_week >= first) & (df.snapshot_week <= last), 'snapshot_week'].unique())
+    included = sorted(str(week) for week in selected.snapshot_week.unique())
+    return {'expected_week_starts': expected, 'included_week_starts': included,
+            'missing_week_starts': sorted(set(expected) - set(observed)),
+            'excluded_week_starts': sorted(set(observed) - set(included)),
+            'missing_price_rows': int(selected.median_price_kobo.isna().sum()),
+            'snapshot_rows': len(selected),
+            'historical_prices_reconstructed': True}
 
 
 def filter_to_period(df: pd.DataFrame, first: date, last: date, label_str: str) -> pd.DataFrame:
@@ -516,6 +551,7 @@ def main() -> None:
     metrics["coverage"] = {field: coverage[field] for field in (
         "report_period_label", "weeks", "num_weeks", "date_range", "cities", "num_cities", "unique_neighbourhoods", "peak_active_listings",
     )}
+    metrics["quality"] = period_quality(df[df.price_type.isin(selected_types)], selected, first_date, last_date)
     metrics["_source"] = {
         "report_key": key,
         "csv_sha256": hashlib.sha256(csv_path.read_bytes()).hexdigest(),

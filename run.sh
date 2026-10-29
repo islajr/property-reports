@@ -113,7 +113,7 @@ if [ ! -f "$PYTHON" ]; then
 fi
 
 # Validate options before exporting data or replacing local metrics.
-"$PYTHON" -c 'import sys; sys.path.insert(0, sys.argv[1]); from report_identity import report_key; report_key(*sys.argv[2:])' "$DIR/scripts" "$MONTH" "$PERIOD" "$TYPE"
+"$PYTHON" -c 'import sys; sys.path.insert(0, sys.argv[1]); from report_identity import report_key, require_closed_month; report_key(*sys.argv[2:]); require_closed_month(sys.argv[2])' "$DIR/scripts" "$MONTH" "$PERIOD" "$TYPE"
 if [[ -n "$ISSUE" && ! "$ISSUE" =~ ^[1-9][0-9]*$ ]]; then
   echo "ERROR: --issue must be a positive integer." >&2
   exit 2
