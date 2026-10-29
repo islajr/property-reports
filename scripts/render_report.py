@@ -514,10 +514,14 @@ def main() -> None:
     parser.add_argument("--narrative", default=None, help="Override narrative JSON path.")
     parser.add_argument("--issue", type=int, default=None, help="Issue number (e.g. 1 for first report).")
     parser.add_argument("--output-root", type=Path, help="Render into an isolated directory instead of the publication archive.")
+    parser.add_argument("--source-last-seen", type=date.fromisoformat, help="Latest source observation date for an isolated preview.")
+    parser.add_argument("--as-of", type=date.fromisoformat, help="Observation cutoff for an isolated live preview.")
     parser.add_argument("--preview", action="store_true", help="Mark the isolated output as an unpublished, noindex design preview.")
     parser.add_argument("--no-pdf", action="store_true", help="Skip PDF generation.")
     args = parser.parse_args()
 
+    if (args.as_of or args.source_last_seen) and not args.preview:
+        parser.error("--as-of requires an isolated --preview.")
     if args.preview and not args.output_root:
         parser.error("--preview requires --output-root outside reports/.")
     output_root = args.output_root.resolve() if args.output_root else REPORTS_DIR
@@ -606,6 +610,8 @@ def main() -> None:
     template_vars = {
         "overall": overall,
         "preview": args.preview,
+        "draft_as_of": args.as_of.isoformat() if args.as_of else None,
+        "draft_source_last_seen": args.source_last_seen.isoformat() if args.source_last_seen else None,
         "publication": build_publication(metrics),
         "article_schema": {"@context": "https://schema.org", "@type": "Report", "headline": f"{overall['report_period_label']} — PS-0 Market Report", "datePublished": published_date_iso, "author": {"@type": "Person", "name": "Isaac Akinmokun", "url": "https://akinmokun.com/"}, "url": f"https://reports.akinmokun.com/{key}/", "inLanguage": "en-GB", "description": primary_narrative["key_takeaways"][0]},
         "report_key": key,
@@ -625,6 +631,10 @@ def main() -> None:
         "sales_regional_chart": sales_regional_chart,
         "rentals_regional_chart": rentals_regional_chart,
     }
+
+    if args.preview:
+        template_vars["article_schema"].pop("datePublished", None)
+        template_vars["article_schema"]["dateCreated"] = date.today().isoformat()
 
     # Render HTML
     print(f"Rendering HTML report for {args.month} ...")
