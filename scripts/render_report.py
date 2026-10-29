@@ -910,21 +910,25 @@ def main() -> None:
     out_dir = REPORTS_DIR / folder_name
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Determine issue number
+    meta_file = out_dir / "meta.json"
+    existing_meta = load_json(meta_file, "meta.json") if meta_file.exists() else {}
+
+    # Preserve the assigned issue even when older reports are added later.
     issue_number = args.issue
     if issue_number is None:
-        existing = sorted([d.name for d in REPORTS_DIR.iterdir() if d.is_dir() and (d / "meta.json").exists()])
-        try:
-            issue_number = existing.index(folder_name) + 1
-        except ValueError:
-            issue_number = len(existing) + 1
+        issue_number = existing_meta.get("issue_number")
+    if issue_number is None:
+        existing_issues = [load_json(d / "meta.json", "meta.json").get("issue_number", 0)
+                           for d in REPORTS_DIR.iterdir() if d.is_dir() and (d / "meta.json").exists()]
+        issue_number = max(existing_issues, default=0) + 1
 
     # Determine published date (preserve existing date from meta.json if present)
-    meta_file = out_dir / "meta.json"
     if meta_file.exists():
-        existing_meta = load_json(meta_file, "meta.json")
         published_date = existing_meta.get("published_date", date.today().strftime("%B %d, %Y").replace(" 0", " "))
-        published_date_iso = existing_meta.get("published_date_iso", date.today().isoformat())
+        published_date_iso = existing_meta.get("published_date_iso")
+        if not published_date_iso:
+            from datetime import datetime
+            published_date_iso = datetime.strptime(published_date, "%B %d, %Y").date().isoformat()
     else:
         published_date = date.today().strftime("%B %d, %Y").replace(" 0", " ")
         published_date_iso = date.today().isoformat()
@@ -936,6 +940,8 @@ def main() -> None:
     if not primary:
         print("ERROR: No metrics data found (neither sales nor rentals)", file=sys.stderr)
         sys.exit(1)
+    overall = metrics.get("coverage", primary["overall"])
+    primary_narrative = narrative["sales"] if metrics.get("sales") else narrative["rentals"]
 
     # Determine descriptive PDF filename
     pdf_filename = get_descriptive_pdf_filename(args.month, args.period, metrics.get("type", "all"))
@@ -958,8 +964,9 @@ def main() -> None:
 
     # Prepare Jinja template context
     template_vars = {
-        "overall": primary["overall"],
+        "overall": overall,
         "report_key": key,
+        "social_description": primary_narrative["key_takeaways"][0],
         "metrics": metrics,
         "narrative": narrative,
         "period": args.period,
@@ -991,8 +998,9 @@ def main() -> None:
         "type": metrics.get("type", "all"),
         "issue_number": issue_number,
         "published_date": published_date,
-        "num_cities": primary["overall"]["num_cities"],
-        "unique_neighbourhoods": primary["overall"]["unique_neighbourhoods"],
+        "published_date_iso": published_date_iso,
+        "num_cities": overall["num_cities"],
+        "unique_neighbourhoods": overall["unique_neighbourhoods"],
         "peak_active_listings": primary["overall"]["peak_active_listings"],
     }
     with open(out_dir / "meta.json", "w") as f:
@@ -1009,7 +1017,7 @@ def main() -> None:
     # Regenerate sitemap.xml and robots.txt
     generate_sitemap_and_robots(REPORTS_DIR)
 
-    print(f"\n✓ Report complete: reports/{args.month}/")
+    print(f"\n✓ Report complete: reports/{folder_name}/")
     print(f"  Open: file://{html_path.resolve()}")
 
 

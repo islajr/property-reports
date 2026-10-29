@@ -509,6 +509,13 @@ def main() -> None:
     if not metrics["sales"] and not metrics["rentals"]:
         parser.error("No records found for the selected market type.")
 
+    selected_types = {"all": ["FOR_SALE", "FOR_RENT"], "sale": ["FOR_SALE"], "rent": ["FOR_RENT"]}[args.type]
+    selected = period_df[period_df["price_type"].isin(selected_types)]
+    coverage = compute_overall(selected, args.month, period_label_str, args.period)
+    metrics["coverage"] = {field: coverage[field] for field in (
+        "report_period_label", "weeks", "num_weeks", "date_range", "cities", "num_cities", "unique_neighbourhoods",
+    )}
+
     with open(out_path, "w") as f:
         json.dump(metrics, f, indent=2, default=str, allow_nan=False)
 

@@ -7,7 +7,7 @@
   <meta name="description" content="Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods." />
   <meta name="author" content="Isaac Akinmokun" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+  <link rel="canonical" href="https://reports.akinmokun.com/{{ report_key }}/" />
 
   <!-- Favicons / Icons -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16" />
@@ -17,16 +17,16 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
-  <meta property="og:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
+  <meta property="og:description" content="{{ social_description }}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://reports.akinmokun.com/{{ overall.report_month }}/" />
+  <meta property="og:url" content="https://reports.akinmokun.com/{{ report_key }}/" />
   <meta property="og:site_name" content="Isaac Akinmokun" />
   <meta property="og:locale" content="en_US" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report" />
-  <meta name="twitter:description" content="{{ narrative.key_takeaways[0] if narrative.key_takeaways else 'Monthly property market intelligence for Nigeria.' }}" />
+  <meta name="twitter:description" content="{{ social_description }}" />
 
   <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
@@ -52,15 +52,15 @@
       },
       {
         "@type": "TechArticle",
-        "@id": "https://reports.akinmokun.com/{{ overall.report_month }}/#article",
+        "@id": "https://reports.akinmokun.com/{{ report_key }}/#article",
         "isPartOf": {
           "@type": "WebPage",
-          "@id": "https://reports.akinmokun.com/{{ overall.report_month }}/"
+          "@id": "https://reports.akinmokun.com/{{ report_key }}/"
         },
         "headline": "{{ overall.report_period_label }} — Nigerian Residential Real Estate Market Report",
         "description": "Monthly intelligence report on the Nigerian residential real estate market for {{ overall.report_period_label }}, powered by PS-0 PropertyScraper. Data covers {{ overall.num_cities }} cities and {{ overall.unique_neighbourhoods }} neighbourhoods.",
         "inLanguage": "en-US",
-        "mainEntityOfPage": "https://reports.akinmokun.com/{{ overall.report_month }}/",
+        "mainEntityOfPage": "https://reports.akinmokun.com/{{ report_key }}/",
         "datePublished": "{{ published_date_iso }}",
         "dateModified": "{{ published_date_iso }}",
         "author": {

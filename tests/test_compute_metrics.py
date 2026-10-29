@@ -49,7 +49,9 @@ class MetricsTests(unittest.TestCase):
             argv = ["compute_metrics.py", "--month", "2026-09", "--csv", str(csv_path), "--out", str(out_path)]
             with patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
                 cm.main()
-            metrics = json.loads(out_path.read_text())["sales"]
+            report = json.loads(out_path.read_text())
+            self.assertEqual(report["coverage"]["unique_neighbourhoods"], 3)
+            metrics = report["sales"]
             for field in ("cumulative_active_listings", "total_new_listings", "total_price_reductions"):
                 self.assertEqual(metrics["overall"][field], sum(c["overall"][field] for c in metrics["classes"].values()))
             self.assertEqual(metrics["classes"]["DETACHED_HOUSE"]["overall"]["num_cities"], 2)

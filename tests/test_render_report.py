@@ -34,6 +34,7 @@ class RenderTests(unittest.TestCase):
             with self.subTest(market_type=market_type), tempfile.TemporaryDirectory() as tmp:
                 root = Path(tmp)
                 metrics = {"type": market_type, "sales": None, "rentals": None}
+                metrics["coverage"] = dict(section()["overall"], num_cities=2, unique_neighbourhoods=3)
                 narrative = {"sales": None, "rentals": None}
                 for key, selected in (("sales", "sale"), ("rentals", "rent")):
                     if market_type in ("all", selected):
@@ -43,15 +44,25 @@ class RenderTests(unittest.TestCase):
                 narrative_path = root / "narrative.json"
                 metrics_path.write_text(json.dumps(metrics))
                 narrative_path.write_text(json.dumps(narrative))
+                folder = "2026-09" + ("" if market_type == "all" else "_" + market_type)
+                report_dir = root / "reports" / folder
+                report_dir.mkdir(parents=True)
+                (report_dir / "meta.json").write_text(json.dumps({"issue_number": 17, "published_date": "October 1, 2026"}))
                 argv = ["render_report.py", "--month", "2026-09", "--type", market_type, "--no-pdf",
                         "--metrics", str(metrics_path), "--narrative", str(narrative_path)]
                 with patch.object(rr, "REPORTS_DIR", root / "reports"), patch.object(sys, "argv", argv), contextlib.redirect_stdout(io.StringIO()):
                     rr.main()
-                folder = "2026-09" + ("" if market_type == "all" else "_" + market_type)
                 html = (root / "reports" / folder / "index.html").read_text()
                 self.assertEqual("Sales Market Analysis" in html, market_type in ("all", "sale"))
                 self.assertEqual("Rentals Market Analysis" in html, market_type in ("all", "rent"))
                 self.assertTrue((root / "reports/reports.json").exists())
+                self.assertIn(f'href="https://reports.akinmokun.com/{folder}/"', html)
+                self.assertIn('content="[PLACEHOLDER] Set GEMINI_API_KEY', html)
+                meta = json.loads((report_dir / "meta.json").read_text())
+                self.assertEqual(meta["issue_number"], 17)
+                self.assertEqual(meta["published_date_iso"], "2026-10-01")
+                self.assertEqual(meta["num_cities"], 2)
+                self.assertEqual(meta["unique_neighbourhoods"], 3)
 
 
 if __name__ == "__main__":
