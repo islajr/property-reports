@@ -62,7 +62,7 @@ You must:
 - Return only valid JSON matching the schema requested. No markdown fences."""
 
 def build_prompt(metrics: dict) -> str:
-    evidence = {market: evidence_for_market(data, market) for market in ('sales', 'rentals') if (data := metrics.get(market))}
+    evidence = {market: {key: value for key, value in evidence_for_market(data, market).items() if key not in ('inventory.peak', 'inventory.new', 'reductions.total')} for market in ('sales', 'rentals') if (data := metrics.get(market))}
     return """Write concise analysis of observed advertised property listings using ONLY these named facts.
 Return a JSON object with one block per populated market. Each block has exactly:
 inventory_narrative (at most 80 words), pricing_narrative (at most 80 words),

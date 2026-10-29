@@ -43,7 +43,7 @@ def evidence_for_market(data, market):
     for i, row in enumerate(rows):
         sample = ''
         if 'avg_weekly_active_listings' in row:
-            sample = f" Coverage: {row['num_weeks_observed']} observed weeks; {row['avg_weekly_active_listings']:,.1f} average weekly active listings."
+            sample = f" Coverage: {row.get('num_price_weeks_observed', row['num_weeks_observed'])} priced weeks of {row['num_weeks_observed']} observed weeks; {row['avg_weekly_active_listings']:,.1f} average weekly active listings."
         add(f'pricing.area.{i}', f"{row['property_class']}: {row['tier'].lower()} benchmark {row['neighbourhood']} ({row['city']}) has a mean observed group median of {money(row['avg_median_price_ngn'])}{'/yr' if market == 'rentals' else ''}.{sample}")
     add('pricing.limit', 'Benchmarks compare areas within property classes. They are advertised asking prices, not transaction prices or an appreciation history. Independent chart scales must not be compared as one pooled distribution.')
     reductions = data['price_reduction_analysis']
@@ -69,9 +69,9 @@ def evidence_narrative(metrics):
             result[market] = None
             continue
         facts = evidence_for_market(data, market)
-        refs = {'inventory_narrative': ['inventory.peak', 'inventory.coverage'],
+        refs = {'inventory_narrative': ['inventory.coverage'] + (['inventory.area.0'] if 'inventory.area.0' in facts else []),
                 'pricing_narrative': ['pricing.limit'],
-                'price_reduction_narrative': ['reductions.total', 'reductions.limit']}
+                'price_reduction_narrative': (['reductions.city.0'] if 'reductions.city.0' in facts else []) + ['reductions.limit']}
         result[market] = {field: ' '.join(facts[key] for key in keys) for field, keys in refs.items()}
         result[market]['evidence_refs'] = refs
         result[market]['key_takeaways'] = takeaways(data, market)

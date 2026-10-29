@@ -69,6 +69,8 @@ def validate_editorial_quality(narrative, metrics):
             ids = refs.get(field)
             if not isinstance(ids, list) or not ids or any(not isinstance(key, str) or key not in facts or not key.startswith(prefix) for key in ids):
                 raise ValueError(f'{market}.{field}: invalid or unrelated evidence reference.')
+            if any(key in ('inventory.peak', 'inventory.new', 'reductions.total') for key in ids):
+                raise ValueError(f'{market}.{field}: these facts are reserved for the brief; add a distinct finding.')
             allowed = numeric_tokens(' '.join(facts[key] for key in ids))
             if numeric_tokens(text) - allowed:
                 raise ValueError(f'{market}.{field}: numeric claim is absent from the referenced evidence.')

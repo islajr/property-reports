@@ -29,3 +29,20 @@ class ReadinessTests(unittest.TestCase):
             for frame in cases:
                 frame.to_csv(path,index=False)
                 with self.assertRaises(ValueError): cm.load_snapshots(path)
+
+    def test_zero_prices_are_flagged_and_excluded_without_losing_inventory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'input.csv'
+            snapshots().assign(median_price_kobo=0).to_csv(path,index=False)
+            df=cm.load_snapshots(path)
+            self.assertTrue(df.median_price_kobo.isna().all())
+            self.assertEqual(len(df),len(snapshots()))
+            self.assertEqual(df.active_listing_count.sum(),snapshots().active_listing_count.sum())
+            self.assertEqual(int(df['_invalid_price'].sum()),len(df))
+
+    def test_pricing_coverage_distinguishes_missing_price_weeks(self):
+        frame=snapshots()
+        frame.loc[frame.snapshot_week==date(2026,9,14),'median_price_kobo']=float('nan')
+        rows=cm.compute_pricing_tiers(frame)['most_expensive']
+        self.assertTrue(rows)
+        self.assertTrue(all(row['num_weeks_observed']==2 and row['num_price_weeks_observed']==1 for row in rows))

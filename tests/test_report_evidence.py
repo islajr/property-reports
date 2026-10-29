@@ -18,4 +18,4 @@ class EvidenceTests(unittest.TestCase):
         result = evidence_narrative({'sales': section(), 'rentals': None})
         self.assertIsNone(result['rentals'])
         self.assertEqual(len(result['sales']['key_takeaways']), 3)
-        self.assertIn('inventory.peak', result['sales']['evidence_refs']['inventory_narrative'])
+        self.assertIn('inventory.coverage', result['sales']['evidence_refs']['inventory_narrative'])
