@@ -42,6 +42,7 @@ REPORTS_DIR = Path(__file__).parent.parent / "reports"
 EMBEDDED_FONTS = [
     ("New Computer Modern", "400", "NewCM-Book.woff2"),
     ("New Computer Modern", "700", "NewCM-Bold.woff2"),
+    ("New Computer Modern", "400", "NewCM-Italic.woff2"),
     ("Merriweather", "400", "Merriweather-Regular.woff2"),
     ("Merriweather", "700", "Merriweather-Bold.woff2"),
     ("Playfair Display", "400", "PlayfairDisplay.woff2"),
@@ -74,7 +75,7 @@ def build_embedded_fonts_css() -> str:
         blocks.append(
             f"@font-face {{\n"
             f"  font-family: '{family}';\n"
-            f"  font-style: normal;\n"
+            f"  font-style: {'italic' if filename == 'NewCM-Italic.woff2' else 'normal'};\n"
             f"  font-weight: {weight};\n"
             f"  font-display: swap;\n"
             f"  src: url('data:font/woff2;base64,{b64}') format('woff2');\n"

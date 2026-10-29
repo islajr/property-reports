@@ -55,18 +55,21 @@ You must:
 - Use NGN amounts as formatted (e.g. ₦254.1M, not ₦254,166,666.67).
 - Be direct. No filler phrases like "It is worth noting that...".
 - Use British English spelling (e.g. "analysed", "centre", "recognised").
+- Do not discuss DOM in the main findings. Its observation limits are covered in methodology.
+- Give each section a distinct purpose. Avoid repeating takeaway statistics in prose.
+- Do not attribute changes to interest rates, policy, demand, or buyer sentiment without supplied evidence.
 - Return only valid JSON matching the schema requested. No markdown fences."""
 
 NARRATIVE_SCHEMA = {
     "executive_summary": "string (2-3 paragraphs synthesising the period's key developments)",
-    "inventory_narrative": "string (1-2 paragraphs on listing volume distribution and what it signals)",
-    "pricing_narrative": "string (1-2 paragraphs on price tiers, luxury ceiling, and affordable end)",
+    "inventory_narrative": "string (one paragraph, at most 80 words, explaining the main inventory finding without repeating the takeaway figures)",
+    "pricing_narrative": "string (one paragraph, at most 80 words, comparing areas within property classes; no pooled luxury-ceiling claim)",
     "lagos_narrative": "string (1 paragraph Lagos market commentary)",
     "abuja_narrative": "string (1 paragraph Abuja market commentary, if Abuja data present, else null)",
     "other_cities_narrative": "string (1 paragraph on remaining cities, if data present, else null)",
-    "price_reduction_narrative": "string (1 paragraph interpreting price reduction events as a market signal)",
+    "price_reduction_narrative": "string (one paragraph, at most 70 words, interpreting observed event counts without inventing discount rates or causes)",
     "outlook": "string (1 paragraph forward-looking commentary based on observed trends)",
-    "key_takeaways": "array of 3-5 short bullet strings (each under 25 words)",
+    "key_takeaways": "array of exactly 3 distinct evidence-led takeaway strings, each under 25 words",
 }
 
 
@@ -77,6 +80,13 @@ def build_prompt_section(section_metrics: dict, market_type: str) -> str:
     pricing = section_metrics["pricing_tiers"]
     city_bkd = section_metrics["city_breakdown"]
     reductions = section_metrics["price_reduction_analysis"]
+
+    class_evidence = []
+    classes = sorted(section_metrics.get("classes", {}).items(), key=lambda pair: pair[1]["overall"]["cumulative_active_listings"], reverse=True)
+    for name, data in classes[:4]:
+        for tier in ("most_affordable", "most_expensive"):
+            for row in data["pricing_tiers"][tier][:1]:
+                class_evidence.append(f"{name}: {tier}: {row['neighbourhood']} ({row['city']}), mean group median NGN {row['avg_median_price_ngn']}")
 
     # Format weekly table for the prompt
     weekly_lines = []
@@ -153,6 +163,9 @@ def build_prompt_section(section_metrics: dict, market_type: str) -> str:
 =========================================
 MARKET DATA FOR {market_type.upper()}
 =========================================
+Class-specific area evidence (use this for the pricing commentary):
+{chr(10).join(class_evidence)}
+
 Overview:
 - Period: {ov['report_period_label']}
 - Unique neighbourhoods: {ov['unique_neighbourhoods']}
