@@ -38,21 +38,31 @@ show_help() {
   echo "  --no-pdf               Skip PDF generation via WeasyPrint"
   echo "  -i, --issue NUMBER     Set a custom issue number override"
   echo "  -h, --help             Show this help message"
-  exit 0
+  exit "${1:-0}"
+}
+
+require_value() {
+  if [[ $# -lt 2 || -z "$2" || "$2" == -* ]]; then
+    echo "ERROR: $1 requires a value." >&2
+    exit 2
+  fi
 }
 
 # Parse options
 while [[ $# -gt 0 ]]; do
   case $1 in
     -m|--month)
+      require_value "$@"
       MONTH="$2"
       shift 2
       ;;
     -p|--period)
+      require_value "$@"
       PERIOD="$2"
       shift 2
       ;;
     -t|--type)
+      require_value "$@"
       TYPE="$2"
       shift 2
       ;;
@@ -73,6 +83,7 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     -i|--issue)
+      require_value "$@"
       ISSUE="$2"
       shift 2
       ;;
@@ -81,7 +92,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     *)
       echo "ERROR: Unknown option: $1"
-      show_help
+      show_help 2
       ;;
   esac
 done
@@ -89,7 +100,7 @@ done
 if [ -z "$MONTH" ]; then
   echo "ERROR: --month YYYY-MM is required."
   echo ""
-  show_help
+  show_help 2
 fi
 
 # Locate project root directory
@@ -99,6 +110,13 @@ PYTHON="$DIR/.venv/bin/python"
 # Fallback if venv is not set up
 if [ ! -f "$PYTHON" ]; then
   PYTHON="python3"
+fi
+
+# Validate options before exporting data or replacing local metrics.
+"$PYTHON" -c 'import sys; sys.path.insert(0, sys.argv[1]); from report_identity import report_key; report_key(*sys.argv[2:])' "$DIR/scripts" "$MONTH" "$PERIOD" "$TYPE"
+if [[ -n "$ISSUE" && ! "$ISSUE" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ERROR: --issue must be a positive integer." >&2
+  exit 2
 fi
 
 # Step 1: Export data
