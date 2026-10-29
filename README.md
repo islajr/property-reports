@@ -281,3 +281,25 @@ python -m http.server --directory scratch/october-quality-study 8001
 The CSV must be present locally. This sample is a noindex, unpublished study, not a
 replacement September issue. Its `_inputs/narrative.json` records the evidence IDs
 and metrics fingerprint, and `_inputs/metrics.json` records the coverage flags.
+
+### Isolated live-data drafts
+
+For an explicitly requested private preview before month-end:
+
+```bash
+python scripts/live_preview.py --month 2026-10
+```
+
+This creates a unique directory under `scratch/`. It uses a read-only database
+session, exports into that directory's `_inputs/`, and sends only computed market
+facts to Gemini. External transfer requires the user's authorization. Add
+`--evidence-only` to keep commentary local without calling Gemini. Serve only the
+resulting `site/2026-10/` directory, not `_inputs/`.
+
+Inputs and narrative caches never use the regular `data/` paths. Report assets
+never use `reports/`. The manifest records the draft cutoff, database export time,
+latest source observation and hashes of protected files, with a check that those
+files remain unchanged. Draft HTML/PDF labels distinguish export time from source
+freshness and identify an incomplete current week. No production issue number is
+reserved; the normal month-end export and narrative generation still run from
+fresh, independent inputs.
