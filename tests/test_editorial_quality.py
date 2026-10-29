@@ -91,3 +91,10 @@ class QualityTests(unittest.TestCase):
                 self.assertEqual(out.read_bytes(),saved)
             validate_narrative(json.loads(saved),metrics)
             self.assertEqual(json.loads(saved)['_quality_version'],2)
+
+
+    def test_brand_name_is_not_treated_as_a_statistical_zero(self):
+        draft = copy.deepcopy(self.narrative)
+        draft['sales']['inventory_narrative'] = 'PS-0 observes the advertised properties in this coverage. '
+        draft['sales']['inventory_narrative'] += self.narrative['sales']['inventory_narrative']
+        validate_narrative(draft, self.metrics)
