@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import csv
 import json
 import math
 import sys
@@ -31,6 +32,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from report_identity import report_key, validate_metrics_identity, require_closed_month
 from editorial import build_publication, money
+from research_content import build_research, comparison_download, research_provenance
 from narrative_validation import metrics_digest, validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -113,6 +115,8 @@ def render_html(template_vars: dict) -> str:
         autoescape=True,
     )
     env.filters["money"] = money
+    env.filters['location'] = lambda value: str(value).upper() if len(str(value)) <= 3 else str(value).title()
+    env.filters['share'] = lambda value: '<0.1%' if 0 < value < .1 else f'{value:.1f}%'
     template = env.get_template("report.html.j2")
     return template.render(**template_vars)
 
@@ -510,6 +514,7 @@ def main() -> None:
         choices=["1mo", "3mo", "6mo", "12mo"],
         help="Reporting period window length (default: 1mo)",
     )
+    parser.add_argument("--research-csv", type=Path, help="Exact source CSV for detailed research comparisons.")
     parser.add_argument("--metrics", default=None, help="Override metrics JSON path.")
     parser.add_argument("--narrative", default=None, help="Override narrative JSON path.")
     parser.add_argument("--issue", type=int, default=None, help="Issue number (e.g. 1 for first report).")
@@ -606,6 +611,17 @@ def main() -> None:
     if metrics.get("rentals") and metrics["rentals"].get("city_breakdown"):
         rentals_regional_chart = generate_regional_bar_chart(metrics["rentals"]["city_breakdown"])
 
+    # SEO describes the evidence and geography rather than a single headline count.
+    city_counts = {}
+    for market in ('sales', 'rentals'):
+        if metrics.get(market):
+            for city, stats in metrics[market].get('city_breakdown', {}).items():
+                city_counts[city] = city_counts.get(city, 0) + stats['cumulative_active_listings']
+    cities = sorted(city_counts, key=lambda city: (-city_counts[city], city))
+    description = (f"{overall['report_period_label']} Nigeria property market research: "
+                   + ("sales and annual rental" if metrics.get('sales') and metrics.get('rentals') else "advertised property")
+                   + " asking-price benchmarks, inventory, city comparisons and methodology"
+                   + (" for " + ", ".join(city.title() for city in cities[:4]) if cities else "") + ".")
     # Prepare Jinja template context
     template_vars = {
         "overall": overall,
@@ -613,9 +629,10 @@ def main() -> None:
         "draft_as_of": args.as_of.isoformat() if args.as_of else None,
         "draft_source_last_seen": args.source_last_seen.isoformat() if args.source_last_seen else None,
         "publication": build_publication(metrics),
-        "article_schema": {"@context": "https://schema.org", "@type": "Report", "headline": f"{overall['report_period_label']} — PS-0 Market Report", "datePublished": published_date_iso, "author": {"@type": "Person", "name": "Isaac Akinmokun", "url": "https://akinmokun.com/"}, "url": f"https://reports.akinmokun.com/{key}/", "inLanguage": "en-GB", "description": primary_narrative["key_takeaways"][0]},
+        "research": build_research(metrics, args.research_csv or DATA_DIR / "neighbourhood_snapshots.csv"),
+        "article_schema": {"@context": "https://schema.org", "@type": "Article", "genre": "Property market research report", "headline": f"{overall['report_period_label']} — PS-0 Market Report", "datePublished": published_date_iso, "author": {"@type": "Person", "name": "Isaac Akinmokun", "url": "https://akinmokun.com/"}, "url": f"https://reports.akinmokun.com/{key}/", "inLanguage": "en-GB", "description": description, "publisher": {"@type": "Organization", "name": "PS-0", "url": "https://ps0.akinmokun.com/"}, "mainEntityOfPage": f"https://reports.akinmokun.com/{key}/"},
         "report_key": key,
-        "social_description": primary_narrative["key_takeaways"][0],
+        "social_description": description,
         "metrics": metrics,
         "narrative": narrative,
         "period": args.period,
@@ -635,6 +652,25 @@ def main() -> None:
     if args.preview:
         template_vars["article_schema"].pop("datePublished", None)
         template_vars["article_schema"]["dateCreated"] = date.today().isoformat()
+
+    # Aggregate download comes from the same verified cohort as the displayed research.
+    comparison_rows = comparison_download(template_vars['research'])
+    template_vars['dataset_schema'] = None
+    if comparison_rows:
+        template_vars['dataset_schema'] = {
+            '@context': 'https://schema.org', '@type': 'Dataset',
+            'name': f"PS-0 {overall['report_period_label']} Nigeria area/class asking-price comparisons",
+            'description': 'Eligible advertised area/class group-median asking prices and observed inventory. '
+                           'Reconstructed from listing records; not transaction prices or a representative national sample.',
+            'creator': template_vars['article_schema']['author'],
+            'url': f'https://reports.akinmokun.com/{key}/#methodology',
+            'spatialCoverage': {'@type': 'Place', 'name': 'Nigeria — observed portal coverage'},
+            'temporalCoverage': f"{overall['date_range']['start']}/{overall['date_range']['end']}",
+            'isAccessibleForFree': True,
+            'measurementTechnique': 'Mean of usable weekly area/class group medians; average active listings per observed week.',
+            'distribution': {'@type': 'DataDownload', 'encodingFormat': 'text/csv',
+                             'contentUrl': f'https://reports.akinmokun.com/{key}/comparisons.csv'},
+        }
 
     # Render HTML
     print(f"Rendering HTML report for {args.month} ...")
@@ -664,6 +700,17 @@ def main() -> None:
         staged_html.write_text(html_content, encoding="utf-8")
         if not args.no_pdf:
             render_pdf(staged_html, staging / pdf_filename)
+        if comparison_rows:
+            with (staging / 'comparisons.csv').open('w', newline='', encoding='utf-8') as stream:
+                writer = csv.DictWriter(stream, fieldnames=list(comparison_rows[0]))
+                writer.writeheader()
+                writer.writerows(comparison_rows)
+            provenance = research_provenance(metrics, template_vars['research'])
+            if args.preview:
+                provenance['unpublished_preview'] = True
+                provenance['draft_as_of'] = template_vars['draft_as_of']
+                provenance['latest_source_observation'] = template_vars['draft_source_last_seen']
+            (staging / 'research-data.json').write_text(json.dumps(provenance, indent=2), encoding='utf-8')
         (staging / "meta.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
         # Copy across filesystems before replacing each destination atomically.
         import shutil

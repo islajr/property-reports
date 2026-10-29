@@ -35,7 +35,7 @@ def build_research(metrics, csv_path):
             count = int(group.active_listing_count.sum())
             classes = group.groupby('property_class').active_listing_count.sum().sort_values(ascending=False)
             city_rows = sorted([row for row in comparisons if row['city'] == city], key=lambda row: (-row['active'], row['neighbourhood']))
-            cities.append({'city': city, 'listing_weeks': count, 'share': round(count/total*100, 1) if total else 0,
+            cities.append({'city': city, 'listing_weeks': count, 'share': count/total*100 if total else 0,
                 'average_active': round(count/max(len(weeks), 1), 1), 'new': int(group.new_listings_count.sum()),
                 'reductions': int(group.price_reduced_count.sum()), 'areas': int(group.neighbourhood.nunique()),
                 'leading_class': str(classes.index[0]).replace('_', ' ').title() if not classes.empty else 'N/A',

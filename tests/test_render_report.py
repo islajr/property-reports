@@ -104,7 +104,7 @@ class RenderTests(unittest.TestCase):
                 self.assertNotIn("Download PDF", html)
                 self.assertFalse(json.loads((root / "reports/reports.json").read_text())[0]["has_pdf"])
                 self.assertIn(f'href="https://reports.akinmokun.com/{folder}/"', html)
-                self.assertIn('content="[PLACEHOLDER] Set GEMINI_API_KEY', html)
+                self.assertTrue('name="description" content="September 2026 Nigeria property market research:' in html)
                 meta = json.loads((report_dir / "meta.json").read_text())
                 self.assertEqual(meta["issue_number"], 17)
                 self.assertEqual(meta["published_date_iso"], "2026-10-01")

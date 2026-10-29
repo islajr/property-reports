@@ -1,4 +1,5 @@
 import json
+import csv
 import os
 import shutil
 import subprocess
@@ -42,6 +43,15 @@ class PipelineTests(unittest.TestCase):
                         key = report_key("2026-09", period, market)
                         report_dir = root / "reports" / key
                         self.assertTrue((report_dir / "index.html").exists())
+                        # Downloaded evidence and metadata must travel with every report variant.
+                        with (report_dir / 'comparisons.csv').open() as stream:
+                            rows = list(csv.DictReader(stream))
+                        self.assertTrue(rows)
+                        self.assertEqual({row['market'] for row in rows},
+                                         {'sales', 'rentals'} if market == 'all' else {'sales' if market == 'sale' else 'rentals'})
+                        provenance = json.loads((report_dir / 'research-data.json').read_text())
+                        self.assertEqual(len(provenance['source_csv_sha256']), 64)
+                        self.assertTrue('"@type": "Dataset"' in (report_dir / 'index.html').read_text())
                         meta = json.loads((report_dir / "meta.json").read_text())
                         self.assertEqual((meta["period"], meta["type"]), (period, market))
                         for prefix in ("metrics", "narrative"):

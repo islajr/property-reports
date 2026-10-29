@@ -1,6 +1,6 @@
 # PS-0 report: proposed decision-focused editorial brief
 
-Status: proposal for the next unpublished edition. Published editions remain intact.
+Status: implemented first pass in the private October draft; the additional evidence listed below remains future work. Published editions remain intact.
 
 ## Purpose
 
@@ -105,3 +105,24 @@ presentation change only and does not alter data or commentary.
 - Google content guidance: https://developers.google.com/search/docs/fundamentals/creating-helpful-content
 - Article metadata: https://developers.google.com/search/docs/appearance/structured-data/article
 - Dataset metadata: https://developers.google.com/search/docs/appearance/structured-data/dataset
+
+## Implemented draft review
+
+The private October preview now includes a reader guide, geography/concentration
+and city tables, two detailed city briefs per market, and activity-selected price
+books for the four largest classes (up to ten eligible areas per class). Existing
+inventory, composition, class-price and repricing figures remain, with Menlo glyphs.
+An aggregate CSV includes all eligible area/class observations; its accompanying
+JSON records definitions, coverage, source fingerprint and preview freshness.
+Printed selection is explicit and does not claim statistical representativeness.
+
+The report template now supplies descriptive Nigeria/month metadata, Article and
+Dataset JSON-LD, author attribution and a citation. Preview output remains noindex
+and outside the publication archive. These measures make published content easier
+to understand and discover; they do not guarantee search ranking. Search Console
+configuration and cross-site linking remain deployment/editorial follow-up.
+
+The new research computation requires the exact CSV fingerprint used by metrics.
+Custom/live rendering must pass `--research-csv` with that source. Legacy metrics
+without source provenance retain the existing core presentation without claiming
+broader downloadable research coverage. No historical reports are regenerated.
