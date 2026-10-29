@@ -20,6 +20,7 @@ Output:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -515,6 +516,10 @@ def main() -> None:
     metrics["coverage"] = {field: coverage[field] for field in (
         "report_period_label", "weeks", "num_weeks", "date_range", "cities", "num_cities", "unique_neighbourhoods",
     )}
+    metrics["_source"] = {
+        "report_key": key,
+        "csv_sha256": hashlib.sha256(csv_path.read_bytes()).hexdigest(),
+    }
 
     with open(out_path, "w") as f:
         json.dump(metrics, f, indent=2, default=str, allow_nan=False)

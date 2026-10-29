@@ -29,7 +29,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from report_identity import report_key
-from narrative_validation import validate_narrative
+from narrative_validation import metrics_digest, validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
@@ -1011,6 +1011,9 @@ def main() -> None:
         "unique_neighbourhoods": overall["unique_neighbourhoods"],
         "peak_active_listings": primary["overall"]["peak_active_listings"],
         "pdf_filename": None if args.no_pdf else pdf_filename,
+        "metrics_sha256": metrics_digest(metrics),
+        "narrative_sha256": metrics_digest(narrative),
+        "source_csv_sha256": metrics.get("_source", {}).get("csv_sha256"),
     }
     # Compile every requested format before replacing an existing publication.
     with tempfile.TemporaryDirectory(prefix="property-report-") as tmp:

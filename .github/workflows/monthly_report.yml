@@ -98,3 +98,16 @@ jobs:
           git diff --cached --quiet || \
             git commit -m "report: add $(date -d "${MONTH}-01" +'%B %Y') market report"
           git push
+
+      - name: Archive report inputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-inputs-${{ steps.month.outputs.month }}-${{ github.run_id }}
+          path: |
+            data/neighbourhood_snapshots.csv
+            data/metrics_${{ steps.month.outputs.month }}.json
+            data/narrative_${{ steps.month.outputs.month }}.json
+            reports/${{ steps.month.outputs.month }}/meta.json
+            requirements-pipeline.txt
+          if-no-files-found: error
+          retention-days: 90
