@@ -1,6 +1,14 @@
 """Publication figures and evidence selected deterministically from report metrics."""
 from io import StringIO
 from html import escape
+from pathlib import Path
+from functools import lru_cache
+import atexit
+import shutil
+import tempfile
+from fontTools.ttLib import TTFont
+from matplotlib.font_manager import FontProperties
+from matplotlib.text import Text
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -12,9 +20,32 @@ GREEN, AMBER, INK = '#18704d', '#8a5b25', '#222c25'
 from report_evidence import money, selected_classes, pricing_benchmarks
 
 
+@lru_cache(maxsize=1)
+def chart_font_path():
+    """Load the bundled Menlo face explicitly; never fall back to host fonts."""
+    source = Path(__file__).resolve().parents[1] / 'templates/fonts/Menlo_400.woff2'
+    directory = Path(tempfile.mkdtemp(prefix='ps0-chart-menlo-'))
+    atexit.register(shutil.rmtree, directory, ignore_errors=True)
+    target = directory / 'Menlo-Regular.ttf'
+    font = TTFont(source)
+    font.flavor = None
+    font.save(target)
+    font.close()
+    return target
+
+
+def enforce_chart_font(fig):
+    # Drawing creates locator-generated tick labels before their fonts are set.
+    fig.canvas.draw()
+    for text in fig.findobj(match=Text):
+        text.set_fontproperties(FontProperties(fname=str(chart_font_path()), size=text.get_fontsize(),
+                                               style=text.get_fontstyle(), weight=text.get_fontweight()))
+
+
 def graphic(fig, label):
     output = StringIO()
-    with plt.rc_context({'svg.fonttype': 'path', 'font.family': 'DejaVu Sans', 'font.size': 9}):
+    enforce_chart_font(fig)
+    with plt.rc_context({'svg.fonttype': 'path'}):
         fig.savefig(output, format='svg', bbox_inches='tight', transparent=True, metadata={'Date': None})
     plt.close(fig)
     svg = output.getvalue()
