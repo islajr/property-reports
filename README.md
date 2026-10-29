@@ -221,3 +221,10 @@ the original report body is byte-for-byte unchanged after excluding the site nav
 only font/layout CSS, theme behaviour and shared navigation are added. Publication
 metadata is copied exactly. September remains the issue published October 1, 2026.
 The more substantial editorial structure is reserved for October's future issue.
+
+The published-report presentation preview replaces obsolete print-only rules with
+print-safe layouts matching the web edition: a five-column KPI strip, inline
+publication details, the same reading hierarchy and table styling, repeating table
+headers, and controlled page breaks. The PDF omits site navigation/download controls
+and adds page numbers. SVG colours/font variables are resolved for WeasyPrint without
+changing chart labels or values. A4 line wrapping will differ from a wide browser.
