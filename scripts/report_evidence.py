@@ -43,7 +43,7 @@ def evidence_for_market(data, market):
     for i, row in enumerate(rows):
         sample = ''
         if 'avg_weekly_active_listings' in row:
-            sample = f" Coverage: {row.get('num_price_weeks_observed', row['num_weeks_observed'])} priced weeks of {row['num_weeks_observed']} observed weeks; {row['avg_weekly_active_listings']:,.1f} average weekly active listings."
+            sample = f" Coverage: {row.get('num_price_weeks_observed', row['num_weeks_observed'])} priced weeks of {row['num_weeks_observed']} observed weeks ({ov['num_weeks']} weeks in the report); {row['avg_weekly_active_listings']:,.1f} average weekly active listings."
         add(f'pricing.area.{i}', f"{row['property_class']}: {row['tier'].lower()} benchmark {row['neighbourhood']} ({row['city']}) has a mean observed group median of {money(row['avg_median_price_ngn'])}{'/yr' if market == 'rentals' else ''}.{sample}")
     add('pricing.limit', 'Benchmarks compare areas within property classes. They are advertised asking prices, not transaction prices or an appreciation history. Independent chart scales must not be compared as one pooled distribution.')
     reductions = data['price_reduction_analysis']

@@ -240,3 +240,44 @@ and PDF presentation files are applied; `meta.json`, dates, issue numbers, URLs,
 report wording, table data and methodology remain intact. The command can be rerun
 without duplicating the shared navbar or injected styles. It does not compute new
 metrics, call narrative APIs or generate a new reporting month.
+
+## Reporting quality for future issues
+
+New Gemini commentary uses the version-2 evidence contract. Chart benchmarks,
+pricing tables and narrative prompts share `scripts/report_evidence.py` selections.
+Each generated paragraph cites fact IDs for its own section. Validation rejects
+unrelated/unknown references, unsupported numeric tokens, excessive length,
+repeated sentences and selected unsupported topics. The three brief takeaways
+are computed from metrics, and those headline facts are reserved for the brief.
+Only the three commentary fields used by the report are requested from the model.
+
+These are consistency checks, not a proof of every factual interpretation: a valid
+number can still be attached to the wrong interpretation, and qualitative claims
+still need editorial review. Failed responses do not overwrite cached commentary.
+Old publications remain unchanged; generation of new commentary requires replacing
+pre-contract caches explicitly with `--force`. Legacy inputs remain renderable.
+
+Source validation rejects duplicate dimension/week rows, malformed inventory
+counts, unknown market types, blank dimensions and invalid week starts. Non-positive
+or non-finite group median prices are flagged and excluded from pricing while their
+inventory remains counted. New exports calculate percentiles from positive prices.
+Coverage notes distinguish absent source weeks from weeks removed by the existing
+volume heuristic, show missing-price groups, and identify priced/observed weeks
+and average active inventory for each displayed area benchmark. Missing weeks are
+not imputed, and reconstructed prices are not presented as appreciation history.
+
+Normal builds and direct publication rendering require a completed calendar month.
+An open month can be inspected only through an isolated preview. October 2026 is
+therefore publishable from November 1, 2026; this work does not generate an October
+issue or change any archived report.
+
+Review the updated quality contract using historical data without API calls:
+
+```bash
+python scripts/preview_report.py --month 2026-09 --output-root scratch/october-quality-study
+python -m http.server --directory scratch/october-quality-study 8001
+```
+
+The CSV must be present locally. This sample is a noindex, unpublished study, not a
+replacement September issue. Its `_inputs/narrative.json` records the evidence IDs
+and metrics fingerprint, and `_inputs/metrics.json` records the coverage flags.
