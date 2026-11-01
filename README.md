@@ -313,3 +313,20 @@ files remain unchanged. Draft HTML/PDF labels distinguish export time from sourc
 freshness and identify an incomplete current week. No production issue number is
 reserved; the normal month-end export and narrative generation still run from
 fresh, independent inputs.
+
+
+### Explicit publication revisions
+
+Rebuild a published issue into an isolated output directory using fresh exported
+inputs and newly generated commentary. Seed that directory's issue `meta.json`
+from the actual published version to preserve its issue number and publication
+date. Pass `--research-csv` with the exact export and `--revision-note` with the
+reason for the update. The renderer records the previous input fingerprints,
+adds a visible revision note and Article `dateModified`, and produces new evidence
+fingerprints. Review the isolated outputs before replacing the publication assets
+in a PR. The renderer continues to reject rebuilding an existing issue directly
+inside `reports/`.
+
+The cover, Dataset metadata and research definitions identify the included weekly
+window. Period selection uses week starts; the final week can extend beyond the
+calendar month's last day. First-discovery and event totals follow that window.

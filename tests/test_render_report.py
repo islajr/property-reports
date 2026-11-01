@@ -116,6 +116,44 @@ class RenderTests(unittest.TestCase):
                 self.assertTrue("font-family: 'New Computer Modern'" in html)
                 self.assertNotIn("None", html)
 
+    def test_revision_rebuild_preserves_dates_and_records_changed_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            metrics = {"type": "all", "sales": section(), "rentals": None}
+            narrative = {"sales": gn.PLACEHOLDER_NARRATIVE_SUB, "rentals": None}
+            metrics_path, narrative_path = root / "metrics.json", root / "narrative.json"
+            metrics_path.write_text(json.dumps(metrics))
+            narrative_path.write_text(json.dumps(narrative))
+            site = root / 'site'
+            issue = site / '2026-09'
+            issue.mkdir(parents=True)
+            old = {'issue_number': 6, 'published_date': 'October 1, 2026',
+                   'published_date_iso': '2026-10-01', 'metrics_sha256': 'old-metrics',
+                   'source_csv_sha256': 'old-source', 'narrative_sha256': 'old-narrative'}
+            (issue / 'meta.json').write_text(json.dumps(old))
+            argv = ['render_report.py', '--month', '2026-09', '--metrics', str(metrics_path),
+                    '--narrative', str(narrative_path), '--output-root', str(site), '--no-pdf',
+                    '--revision-note', 'Recomputed after the completed collection.']
+            with patch.object(sys, 'argv', argv), contextlib.redirect_stdout(io.StringIO()):
+                rr.main()
+            meta = json.loads((issue / 'meta.json').read_text())
+            self.assertEqual(meta['published_date_iso'], old['published_date_iso'])
+            self.assertEqual(meta['issue_number'], 6)
+            self.assertEqual(meta['weekly_window'], {'start': '2026-09-07', 'end': '2026-09-20'})
+            self.assertNotEqual(meta['metrics_sha256'], old['metrics_sha256'])
+            self.assertEqual(meta['revisions'][0]['previous_metrics_sha256'], 'old-metrics')
+            self.assertEqual(meta['revisions'][0]['previous_source_csv_sha256'], 'old-source')
+            html = (issue / 'index.html').read_text()
+            self.assertTrue('Recomputed after the completed collection.' in html)
+            self.assertTrue('"dateModified":' in html)
+            self.assertTrue('"datePublished": "2026-10-01"' in html)
+
+    def test_revision_requires_isolated_nonpreview_rebuild(self):
+        for extra in ([], ['--preview', '--output-root', '/tmp/revision-preview']):
+            argv = ['render_report.py', '--month', '2026-09', '--revision-note', 'Updated evidence.', *extra]
+            with self.subTest(extra=extra), patch.object(sys, 'argv', argv), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                rr.main()
+
 
 if __name__ == "__main__":
     unittest.main()
