@@ -6,18 +6,26 @@
   "published_date": "November 1, 2026",
   "published_date_iso": "2026-11-01",
   "num_cities": 10,
-  "unique_neighbourhoods": 310,
-  "peak_active_listings": 16619,
+  "unique_neighbourhoods": 315,
+  "peak_active_listings": 17213,
   "pdf_filename": "nigerian-residential-real-estate-market-report-2026-10.pdf",
-  "metrics_sha256": "95c23d6ba00acbbc08e8a035f743c2e156c0dd28d0e26a27ea0f32e989c768ee",
-  "narrative_sha256": "4d954ac04eecca44a97449c834eb4d4e7cc1e1e33fe1cbcbbae909bbba3099b2",
-  "source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57",
-  "latest_source_observation": "2026-10-25T14:16:21.909710+00:00",
-  "source_freshness_checked_at": "2026-11-01T20:55:13.334089+00:00",
+  "metrics_sha256": "3e075ad3c42a1f201ad00e5a81b5443130581afaa51db33ad1b9aadcd8005b10",
+  "narrative_sha256": "5b1478395a097a231f32b567425e7f86116b3bb1add454f8d6875fc7fdcc537a",
+  "source_csv_sha256": "a7cf758a1bcfc5b51c51a659098ffc2045091b45af2f348a2e9c08c0a6eb867e",
+  "weekly_window": {
+    "start": "2026-10-05",
+    "end": "2026-11-01"
+  },
+  "source_exported_at": "2026-11-01T21:49:16.471858+00:00",
+  "latest_source_observation": "2026-11-01T21:42:45.873929+00:00",
   "revisions": [
     {
       "date": "2026-11-01",
-      "reason": "Restore missing aggregate comparison download, disclose source freshness, and adjust PDF pagination. Published figures and commentary unchanged."
+      "reason": "Rebuilt from a fresh database export after the November 1 collection. Figures and commentary supersede the earlier release.",
+      "previous_metrics_sha256": "95c23d6ba00acbbc08e8a035f743c2e156c0dd28d0e26a27ea0f32e989c768ee",
+      "previous_narrative_sha256": "4d954ac04eecca44a97449c834eb4d4e7cc1e1e33fe1cbcbbae909bbba3099b2",
+      "previous_source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57"
     }
-  ]
+  ],
+  "modified_date_iso": "2026-11-01"
 }

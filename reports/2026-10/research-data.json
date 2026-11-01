@@ -1,5 +1,5 @@
 {
-  "source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57",
+  "source_csv_sha256": "a7cf758a1bcfc5b51c51a659098ffc2045091b45af2f348a2e9c08c0a6eb867e",
   "coverage_quality": {
     "expected_week_starts": [
       "2026-10-05",
@@ -17,9 +17,11 @@
     "excluded_week_starts": [],
     "missing_price_rows": 4,
     "invalid_price_rows": 0,
-    "snapshot_rows": 8598,
+    "snapshot_rows": 8658,
     "historical_prices_reconstructed": true
   },
+  "source_exported_at": "2026-11-01T21:49:16.471858+00:00",
+  "latest_source_observation": "2026-11-01T21:42:45.873929+00:00",
   "included_week_starts": {
     "sales": [
       "2026-10-05",
@@ -51,6 +53,8 @@
     "Portal coverage is not representative of national stock or completed transactions."
   ],
   "spreadsheet_text": "Potential formula text is prefixed with an apostrophe in CSV downloads.",
-  "latest_source_observation": "2026-10-25T14:16:21.909710+00:00",
-  "source_freshness_checked_at": "2026-11-01T20:55:13.334089+00:00"
+  "weekly_window": {
+    "start": "2026-10-05",
+    "end": "2026-11-01"
+  }
 }
