@@ -24,7 +24,7 @@ import json
 import math
 import sys
 import tempfile
-from datetime import date
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 
@@ -516,6 +516,7 @@ def main() -> None:
         choices=["1mo", "3mo", "6mo", "12mo"],
         help="Reporting period window length (default: 1mo)",
     )
+    parser.add_argument("--revision-note", help="Describe an explicit publication revision rendered into an isolated output root.")
     parser.add_argument("--research-csv", type=Path, help="Exact source CSV for detailed research comparisons.")
     parser.add_argument("--metrics", default=None, help="Override metrics JSON path.")
     parser.add_argument("--narrative", default=None, help="Override narrative JSON path.")
@@ -527,6 +528,8 @@ def main() -> None:
     parser.add_argument("--no-pdf", action="store_true", help="Skip PDF generation.")
     args = parser.parse_args()
 
+    if args.revision_note is not None and (not args.revision_note.strip() or args.preview or not args.output_root):
+        parser.error("--revision-note requires a non-empty note and an isolated publication rebuild, without --preview.")
     if (args.as_of or args.source_last_seen) and not args.preview:
         parser.error("--as-of requires an isolated --preview.")
     if args.preview and not args.output_root:
@@ -561,8 +564,11 @@ def main() -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     meta_file = out_dir / "meta.json"
-    reference_meta = archive_root / folder_name / "meta.json" if args.preview and not meta_file.exists() else meta_file
+    reference_meta = archive_root / folder_name / "meta.json" if (args.preview or args.revision_note) and not meta_file.exists() else meta_file
     existing_meta = load_json(reference_meta, "meta.json") if reference_meta.exists() else {}
+
+    if args.revision_note and not existing_meta:
+        parser.error("A revision requires the original publication metadata.")
 
     # Preserve the assigned issue even when older reports are added later.
     issue_number = args.issue
@@ -597,6 +603,9 @@ def main() -> None:
     # Determine descriptive PDF filename
     pdf_filename = get_descriptive_pdf_filename(args.month, args.period, metrics.get("type", "all"))
 
+    weekly_window = {"start": overall["date_range"]["start"],
+                     "end": (date.fromisoformat(overall["date_range"]["end"]) + timedelta(days=6)).isoformat()}
+
     # Generate SVG charts
     sales_trajectory_chart = ""
     rentals_trajectory_chart = ""
@@ -627,8 +636,11 @@ def main() -> None:
     # Prepare Jinja template context
     template_vars = {
         "overall": overall,
+        "weekly_window": weekly_window,
         "preview": args.preview,
         "draft_as_of": args.as_of.isoformat() if args.as_of else None,
+        "revision_note": args.revision_note,
+        "revision_date": date.today().strftime("%d %B %Y").lstrip("0") if args.revision_note else None,
         "source_freshness": metrics.get("_source", {}).get("latest_source_observation"),
         "source_exported_at": metrics.get("_source", {}).get("source_exported_at"),
         "draft_source_last_seen": args.source_last_seen.isoformat() if args.source_last_seen else None,
@@ -653,6 +665,8 @@ def main() -> None:
         "rentals_regional_chart": rentals_regional_chart,
     }
 
+    if args.revision_note:
+        template_vars["article_schema"]["dateModified"] = date.today().isoformat()
     if args.preview:
         template_vars["article_schema"].pop("datePublished", None)
         template_vars["article_schema"]["dateCreated"] = date.today().isoformat()
@@ -669,7 +683,7 @@ def main() -> None:
             'creator': template_vars['article_schema']['author'],
             'url': f'https://reports.akinmokun.com/{key}/#methodology',
             'spatialCoverage': {'@type': 'Place', 'name': 'Nigeria — observed portal coverage'},
-            'temporalCoverage': f"{overall['date_range']['start']}/{overall['date_range']['end']}",
+            'temporalCoverage': f"{weekly_window['start']}/{weekly_window['end']}",
             'isAccessibleForFree': True,
             'measurementTechnique': 'Mean of usable weekly area/class group medians; average active listings per observed week.',
             'distribution': {'@type': 'DataDownload', 'encodingFormat': 'text/csv',
@@ -696,9 +710,18 @@ def main() -> None:
         "metrics_sha256": metrics_digest(metrics),
         "narrative_sha256": metrics_digest(narrative),
         "source_csv_sha256": metrics.get("_source", {}).get("csv_sha256"),
+        "weekly_window": weekly_window,
         "source_exported_at": template_vars["source_exported_at"],
         "latest_source_observation": template_vars["source_freshness"],
     }
+    if existing_meta.get("revisions"):
+        meta["revisions"] = existing_meta["revisions"]
+    if args.revision_note:
+        revision = {"date": date.today().isoformat(), "reason": args.revision_note,
+                    **{f"previous_{field}": existing_meta[field] for field in
+                       ("metrics_sha256", "narrative_sha256", "source_csv_sha256") if field in existing_meta}}
+        meta["revisions"] = [*meta.get("revisions", []), revision]
+        meta["modified_date_iso"] = date.today().isoformat()
     # Compile every requested format before replacing an existing publication.
     with tempfile.TemporaryDirectory(prefix="property-report-") as tmp:
         staging = Path(tmp)
@@ -712,6 +735,7 @@ def main() -> None:
                 writer.writeheader()
                 writer.writerows(comparison_rows)
             provenance = research_provenance(metrics, template_vars['research'])
+            provenance['weekly_window'] = weekly_window
             if args.preview:
                 provenance['unpublished_preview'] = True
                 provenance['draft_as_of'] = template_vars['draft_as_of']
