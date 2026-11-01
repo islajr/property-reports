@@ -145,13 +145,23 @@ secrets are `SUPABASE_DB_URL` and `GEMINI_API_KEY`.
 
 Generated metrics record the source CSV hash, narratives record their metrics
 hash, and report metadata records the metrics, narrative, and CSV hashes. Monthly
-workflow runs archive the CSV, metrics, narrative, metadata, and dependency pins
+workflow runs archive the source CSV and freshness sidecar, metrics, narrative,
+report metadata, public comparison CSV, research definitions, and dependency pins
 as GitHub Actions artifacts for **90 days**. Download these before expiry when
 long-term reproducibility is required; the Git commit identifies the pipeline code.
 A fresh export can revise historical results as upstream records change.
 
+Fresh exports capture the latest source `last_seen_at` in the same read-only,
+repeatable-read transaction as the aggregate query. A `.csv.meta.json` sidecar
+binds that observation timestamp and export timestamp to the CSV hash. Metrics
+reject mismatched sidecars and carry these dates into report disclosure and
+metadata. Legacy inputs without a sidecar explicitly lack verified freshness;
+reconstructed week starts do not prove collection continued through month-end.
+
 `data/` and `.env` remain ignored by Git. There is no database export or API key
-in the public static assets. Published HTML/PDFs and their metadata are committed.
+in the public static assets. Published HTML/PDFs, their metadata and `reports/*/comparisons.csv` are committed.
+The Git ignore exception covers only that aggregate comparison download; other
+CSVs remain ignored.
 
 `wrangler.jsonc` configures Cloudflare Workers static assets from `reports/`.
 The monthly workflow does **not** deploy to Cloudflare; any deployment integration

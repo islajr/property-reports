@@ -1,5 +1,6 @@
 import json
 import csv
+from datetime import datetime, timezone
 import os
 import shutil
 import subprocess
@@ -11,6 +12,7 @@ from pathlib import Path
 import pandas as pd
 
 from test_compute_metrics import snapshots
+from source_provenance import write_source_metadata
 from report_identity import report_key
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +31,9 @@ class PipelineTests(unittest.TestCase):
             sales = snapshots()
             rentals = sales.assign(price_type="FOR_RENT", median_price_kobo=10_000)
             pd.concat([sales, rentals]).to_csv(root / "data/neighbourhood_snapshots.csv", index=False)
+            write_source_metadata(root / 'data/neighbourhood_snapshots.csv',
+                                  datetime(2026, 10, 1, tzinfo=timezone.utc),
+                                  datetime(2026, 9, 28, tzinfo=timezone.utc))
             env = dict(os.environ, GEMINI_API_KEY="", PYTHONDONTWRITEBYTECODE="1")
             saved_inputs = {}
             for period in ("1mo", "3mo", "6mo", "12mo"):
@@ -54,6 +59,8 @@ class PipelineTests(unittest.TestCase):
                         self.assertTrue('"@type": "Dataset"' in (report_dir / 'index.html').read_text())
                         meta = json.loads((report_dir / "meta.json").read_text())
                         self.assertEqual((meta["period"], meta["type"]), (period, market))
+                        self.assertEqual(meta['latest_source_observation'], '2026-09-28T00:00:00+00:00')
+                        self.assertTrue('Latest source observation: 28 September 2026' in (report_dir / 'index.html').read_text())
                         for prefix in ("metrics", "narrative"):
                             path = root / "data" / f"{prefix}_{key}.json"
                             self.assertTrue(path.exists())

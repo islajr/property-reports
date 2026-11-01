@@ -15,11 +15,13 @@ Manually supplied CSVs must match the query output, including property_class.
 from __future__ import annotations
 
 import argparse
+from contextlib import closing
 import os
 import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+from source_provenance import write_source_metadata
 
 load_dotenv()
 
@@ -119,24 +121,24 @@ def export_to_csv(db_url: str, out_path: Path) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     print(f"Connecting to Supabase ...")
-    conn = psycopg2.connect(db_url)
-    cursor = conn.cursor()
-
-    print("Executing export query ...")
-    cursor.execute(EXPORT_QUERY)
-    rows = cursor.fetchall()
-    col_names = [desc[0] for desc in cursor.description]
-
+    # Capture freshness and aggregates from the same read-only database snapshot.
+    with closing(psycopg2.connect(db_url, connect_timeout=20)) as conn, conn:
+        conn.set_session(readonly=True, isolation_level='REPEATABLE READ')
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT NOW(), MAX(last_seen_at) FROM raw_data.scraped_listings')
+            exported_at, latest_observation = cursor.fetchone()
+            print("Executing export query ...")
+            cursor.execute(EXPORT_QUERY)
+            rows = cursor.fetchall()
+            col_names = [desc[0] for desc in cursor.description]
     print(f"Fetched {len(rows):,} rows. Writing to {out_path} ...")
-
     import csv
     with open(out_path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(col_names)
         writer.writerows(rows)
-
-    cursor.close()
-    conn.close()
+    write_source_metadata(out_path, exported_at, latest_observation)
+    print(f"Latest source observation: {latest_observation}")
     print(f"✓ Export complete: {out_path}")
 
 

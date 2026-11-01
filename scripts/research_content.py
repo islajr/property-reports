@@ -81,6 +81,8 @@ def research_provenance(metrics, research):
     return {
         'source_csv_sha256': metrics['_source']['csv_sha256'],
         'coverage_quality': metrics.get('quality', {}),
+        'source_exported_at': metrics['_source'].get('source_exported_at'),
+        'latest_source_observation': metrics['_source'].get('latest_source_observation'),
         'included_week_starts': {market: metrics[market]['overall']['weeks'] for market in research},
         'eligibility': 'At least 3 average active listings per observed week and at least one usable group median.',
         'print_selection': 'Four largest classes by listing-weeks; up to ten eligible areas per class selected by average observed inventory, ordered by city and price.',
