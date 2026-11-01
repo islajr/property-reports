@@ -84,9 +84,12 @@ jobs:
           name: report-inputs-${{ steps.month.outputs.month }}-${{ github.run_id }}
           path: |
             data/neighbourhood_snapshots.csv
+            data/neighbourhood_snapshots.csv.meta.json
             data/metrics_${{ steps.month.outputs.month }}.json
             data/narrative_${{ steps.month.outputs.month }}.json
             reports/${{ steps.month.outputs.month }}/meta.json
+            reports/${{ steps.month.outputs.month }}/comparisons.csv
+            reports/${{ steps.month.outputs.month }}/research-data.json
             requirements-pipeline.txt
           if-no-files-found: error
           retention-days: 90
