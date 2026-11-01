@@ -35,3 +35,6 @@ Thumbs.db
 
 # Unpublished design previews and matplotlib caches
 scratch/
+
+# Publish only the aggregate comparison download; raw/source CSVs stay private.
+!/reports/*/comparisons.csv
