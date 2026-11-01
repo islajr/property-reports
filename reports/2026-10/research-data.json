@@ -50,5 +50,7 @@
     "Broad classes do not control for size, bedrooms, condition or tenure.",
     "Portal coverage is not representative of national stock or completed transactions."
   ],
-  "spreadsheet_text": "Potential formula text is prefixed with an apostrophe in CSV downloads."
+  "spreadsheet_text": "Potential formula text is prefixed with an apostrophe in CSV downloads.",
+  "latest_source_observation": "2026-10-25T14:16:21.909710+00:00",
+  "source_freshness_checked_at": "2026-11-01T20:55:13.334089+00:00"
 }

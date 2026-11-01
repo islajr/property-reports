@@ -1,0 +1,924 @@
+market,city,neighbourhood,property_class,mean_group_median_ngn,rental_period,average_active_per_observed_week,observed_weeks,priced_weeks,report_weeks
+sales,ABUJA,Guzape,2_BED_FLAT,237500000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Jahi,2_BED_FLAT,170000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Life Camp,2_BED_FLAT,65000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Guzape,3_BED_FLAT,300000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Jabi,3_BED_FLAT,160000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Jahi,3_BED_FLAT,196250000.0,not_applicable,9.5,4,4,4
+sales,ABUJA,Katampe,3_BED_FLAT,152112000.0,not_applicable,14.0,4,4,4
+sales,ABUJA,Life Camp,3_BED_FLAT,160000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Mabushi,3_BED_FLAT,250000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Wuye,3_BED_FLAT,153750000.0,not_applicable,10.5,4,4,4
+sales,ABUJA,Apo,4_PLUS_BED_FLAT,379000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Asokoro,4_PLUS_BED_FLAT,1625000000.0,not_applicable,3.5,4,4,4
+sales,ABUJA,Guzape,4_PLUS_BED_FLAT,650000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Gwarinpa,4_PLUS_BED_FLAT,242500000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Jahi,4_PLUS_BED_FLAT,440000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Life Camp,4_PLUS_BED_FLAT,325000000.0,not_applicable,3.5,4,4,4
+sales,ABUJA,Lugbe,4_PLUS_BED_FLAT,191250000.0,not_applicable,6.2,4,4,4
+sales,ABUJA,Maitama,4_PLUS_BED_FLAT,1500000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Katampe,BLOCK_OF_FLATS,170000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Apo,BUNGALOW,120000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Kurudu,BUNGALOW,6500000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Lokogoma,BUNGALOW,100000000.0,not_applicable,8.0,4,4,4
+sales,ABUJA,Lugbe,BUNGALOW,64375000.0,not_applicable,26.8,4,4,4
+sales,ABUJA,Apo,DETACHED_HOUSE,475000000.0,not_applicable,18.0,4,4,4
+sales,ABUJA,Asokoro,DETACHED_HOUSE,1800000000.0,not_applicable,25.0,4,4,4
+sales,ABUJA,Central Business District,DETACHED_HOUSE,5700000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Gaduwa,DETACHED_HOUSE,305000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Galadimawa,DETACHED_HOUSE,465000000.0,not_applicable,8.0,4,4,4
+sales,ABUJA,Guzape,DETACHED_HOUSE,868750000.0,not_applicable,37.2,4,4,4
+sales,ABUJA,Gwarimpa,DETACHED_HOUSE,610000000.0,not_applicable,7.0,4,4,4
+sales,ABUJA,Gwarinpa,DETACHED_HOUSE,550000000.0,not_applicable,16.5,4,4,4
+sales,ABUJA,Jahi,DETACHED_HOUSE,500000000.0,not_applicable,7.5,4,4,4
+sales,ABUJA,Kado,DETACHED_HOUSE,550000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Karsana,DETACHED_HOUSE,500000000.0,not_applicable,7.0,4,4,4
+sales,ABUJA,Katampe,DETACHED_HOUSE,800000000.0,not_applicable,30.5,4,4,4
+sales,ABUJA,Kubwa,DETACHED_HOUSE,275000000.0,not_applicable,5.8,4,4,4
+sales,ABUJA,Life Camp,DETACHED_HOUSE,380000000.0,not_applicable,8.0,4,4,4
+sales,ABUJA,Lokogoma,DETACHED_HOUSE,295000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Lugbe,DETACHED_HOUSE,201250000.0,not_applicable,26.5,4,4,4
+sales,ABUJA,Mabushi,DETACHED_HOUSE,468750000.0,not_applicable,5.8,4,4,4
+sales,ABUJA,Maitama,DETACHED_HOUSE,2656250000.0,not_applicable,21.2,4,4,4
+sales,ABUJA,Wuse,DETACHED_HOUSE,1012500000.0,not_applicable,3.5,4,4,4
+sales,ABUJA,Wuye,DETACHED_HOUSE,1500000000.0,not_applicable,5.8,4,4,4
+sales,ABUJA,Gwarinpa,LAND_COMMERCIAL,1400000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Idu,LAND_COMMERCIAL,14000000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Kado,LAND_COMMERCIAL,8800000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Wuye,LAND_COMMERCIAL,266171875.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Apo,LAND_RESIDENTIAL,130000000.0,not_applicable,13.0,4,4,4
+sales,ABUJA,Asokoro,LAND_RESIDENTIAL,392968750.0,not_applicable,20.2,4,4,4
+sales,ABUJA,Gaduwa,LAND_RESIDENTIAL,225000000.0,not_applicable,4.8,4,4,4
+sales,ABUJA,Galadimawa,LAND_RESIDENTIAL,53125000.0,not_applicable,5.8,4,4,4
+sales,ABUJA,Games Village,LAND_RESIDENTIAL,2250000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Guzape,LAND_RESIDENTIAL,850000000.0,not_applicable,13.5,4,4,4
+sales,ABUJA,Gwagwalada,LAND_RESIDENTIAL,70000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Gwarinpa,LAND_RESIDENTIAL,95000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Idu,LAND_RESIDENTIAL,30000000.0,not_applicable,22.0,4,4,4
+sales,ABUJA,Jabi,LAND_RESIDENTIAL,1550000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Jahi,LAND_RESIDENTIAL,800000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Kabusa,LAND_RESIDENTIAL,16250000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Kado,LAND_RESIDENTIAL,700000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Karsana,LAND_RESIDENTIAL,61875000.0,not_applicable,9.8,4,4,4
+sales,ABUJA,Katampe,LAND_RESIDENTIAL,775000000.0,not_applicable,16.0,4,4,4
+sales,ABUJA,Kubwa,LAND_RESIDENTIAL,37000000.0,not_applicable,23.8,4,4,4
+sales,ABUJA,Kuje,LAND_RESIDENTIAL,6375000.0,not_applicable,7.5,4,4,4
+sales,ABUJA,Kurudu,LAND_RESIDENTIAL,26000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Lokogoma,LAND_RESIDENTIAL,110000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Lugbe,LAND_RESIDENTIAL,16535625.0,not_applicable,9.8,4,4,4
+sales,ABUJA,Maitama,LAND_RESIDENTIAL,3187500000.0,not_applicable,7.8,4,4,4
+sales,ABUJA,Mpape,LAND_RESIDENTIAL,12500000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Wuse,LAND_RESIDENTIAL,2600000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Wuse 2,LAND_RESIDENTIAL,2000000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Wuye,LAND_RESIDENTIAL,1800000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Apo,SEMI_DETACHED_HOUSE,230000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Guzape,SEMI_DETACHED_HOUSE,600000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Idu,SEMI_DETACHED_HOUSE,95000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Kubwa,SEMI_DETACHED_HOUSE,131000000.0,not_applicable,3.8,4,4,4
+sales,ABUJA,Life Camp,SEMI_DETACHED_HOUSE,200000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Lokogoma,SEMI_DETACHED_HOUSE,150000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Lugbe,SEMI_DETACHED_HOUSE,155000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Apo,TERRACED_HOUSE,165000000.0,not_applicable,4.5,4,4,4
+sales,ABUJA,Asokoro,TERRACED_HOUSE,893750000.0,not_applicable,3.8,4,4,4
+sales,ABUJA,Durumi,TERRACED_HOUSE,250000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Gaduwa,TERRACED_HOUSE,210000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Games Village,TERRACED_HOUSE,300000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Guzape,TERRACED_HOUSE,400000000.0,not_applicable,14.0,4,4,4
+sales,ABUJA,Gwarinpa,TERRACED_HOUSE,195000000.0,not_applicable,3.0,4,4,4
+sales,ABUJA,Idu,TERRACED_HOUSE,150000000.0,not_applicable,6.0,4,4,4
+sales,ABUJA,Jabi,TERRACED_HOUSE,440000000.0,not_applicable,3.5,4,4,4
+sales,ABUJA,Jahi,TERRACED_HOUSE,400000000.0,not_applicable,12.2,4,4,4
+sales,ABUJA,Kado,TERRACED_HOUSE,450000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Karsana,TERRACED_HOUSE,85000000.0,not_applicable,4.0,4,4,4
+sales,ABUJA,Katampe,TERRACED_HOUSE,350000000.0,not_applicable,11.0,4,4,4
+sales,ABUJA,Life Camp,TERRACED_HOUSE,227500000.0,not_applicable,15.5,4,4,4
+sales,ABUJA,Lugbe,TERRACED_HOUSE,90625000.0,not_applicable,15.5,4,4,4
+sales,ABUJA,Mabushi,TERRACED_HOUSE,399999999.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Maitama,TERRACED_HOUSE,780000000.0,not_applicable,5.0,4,4,4
+sales,ABUJA,Wuye,TERRACED_HOUSE,550000000.0,not_applicable,3.0,4,4,4
+sales,EDO,Benin,2_BED_FLAT,82500000.0,not_applicable,4.0,4,4,4
+sales,EDO,Sapele Road,2_BED_FLAT,63000000.0,not_applicable,3.0,4,4,4
+sales,EDO,Benin,BUNGALOW,80000000.0,not_applicable,3.0,4,4,4
+sales,EDO,Benin City,BUNGALOW,70000000.0,not_applicable,4.0,4,4,4
+sales,EDO,Asaba,LAND_RESIDENTIAL,14500000.0,not_applicable,18.0,4,4,4
+sales,EDO,Benin,LAND_RESIDENTIAL,26000000.0,not_applicable,3.0,4,4,4
+sales,ENUGU,Enugu,3_BED_FLAT,55000000.0,not_applicable,3.0,4,4,4
+sales,ENUGU,Enugu,BUNGALOW,112500000.0,not_applicable,8.0,4,4,4
+sales,ENUGU,Enugu,DETACHED_HOUSE,220000000.0,not_applicable,17.0,4,4,4
+sales,ENUGU,Enugu,LAND_RESIDENTIAL,15000000.0,not_applicable,7.0,4,4,4
+sales,ENUGU,Enugu,OTHER,10000000.0,not_applicable,5.0,4,4,4
+sales,ENUGU,Enugu,TERRACED_HOUSE,203750000.0,not_applicable,4.5,4,4,4
+sales,IBADAN,Ibadan,2_BED_FLAT,135000000.0,not_applicable,25.8,4,4,4
+sales,IBADAN,Ibadan,3_BED_FLAT,92500000.0,not_applicable,12.0,4,4,4
+sales,IBADAN,Ibadan,4_PLUS_BED_FLAT,264375000.0,not_applicable,17.2,4,4,4
+sales,IBADAN,Oluyole,4_PLUS_BED_FLAT,107500000.0,not_applicable,4.0,4,4,4
+sales,IBADAN,Ibadan,BLOCK_OF_FLATS,64375000.0,not_applicable,8.2,4,4,4
+sales,IBADAN,Ibadan,BUNGALOW,42750000.0,not_applicable,41.8,4,4,4
+sales,IBADAN,Ibadan,COMMERCIAL_HOSPITALITY,260000000.0,not_applicable,4.0,4,4,4
+sales,IBADAN,Ibadan,COMMERCIAL_OFFICE_RETAIL,200000000.0,not_applicable,14.0,4,4,4
+sales,IBADAN,Ibadan,DETACHED_HOUSE,248750000.0,not_applicable,78.2,4,4,4
+sales,IBADAN,Jericho,DETACHED_HOUSE,250000000.0,not_applicable,5.5,4,4,4
+sales,IBADAN,Oluyole,DETACHED_HOUSE,278125000.0,not_applicable,16.2,4,4,4
+sales,IBADAN,Ibadan,LAND_COMMERCIAL,185000000.0,not_applicable,10.8,4,4,4
+sales,IBADAN,Ibadan,LAND_RESIDENTIAL,71062500.0,not_applicable,100.2,4,4,4
+sales,IBADAN,Jericho,LAND_RESIDENTIAL,85000000.0,not_applicable,7.0,4,4,4
+sales,IBADAN,Oluyole,LAND_RESIDENTIAL,35000000.0,not_applicable,7.0,4,4,4
+sales,IBADAN,Ring Road,LAND_RESIDENTIAL,50000000.0,not_applicable,4.0,4,4,4
+sales,IBADAN,Ibadan,OTHER,96250000.0,not_applicable,17.5,4,4,4
+sales,IBADAN,Oluyole,OTHER,95000000.0,not_applicable,7.0,4,4,4
+sales,IBADAN,Ibadan,SEMI_DETACHED_HOUSE,223750000.0,not_applicable,4.2,4,4,4
+sales,IBADAN,Ibadan,TERRACED_HOUSE,205000000.0,not_applicable,12.0,4,4,4
+sales,IMO,Owerri,4_PLUS_BED_FLAT,195000000.0,not_applicable,3.0,4,4,4
+sales,IMO,Owerri,DETACHED_HOUSE,190000000.0,not_applicable,4.0,4,4,4
+sales,IMO,Ngor Okpala,LAND_RESIDENTIAL,3500000.0,not_applicable,4.0,4,4,4
+sales,IMO,Ohaji,LAND_RESIDENTIAL,4500000.0,not_applicable,3.0,4,4,4
+sales,IMO,Owerri,LAND_RESIDENTIAL,37500000.0,not_applicable,16.8,4,4,4
+sales,LAGOS,Ajah,1_BED_FLAT,60000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Akoka,1_BED_FLAT,75000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Alimosho,1_BED_FLAT,65000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ikate,1_BED_FLAT,165000000.0,not_applicable,10.0,4,4,4
+sales,LAGOS,Ikorodu,1_BED_FLAT,55000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ikoyi,1_BED_FLAT,300000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,1_BED_FLAT,85000000.0,not_applicable,8.8,4,4,4
+sales,LAGOS,Lekki Phase 1,1_BED_FLAT,174375000.0,not_applicable,24.8,4,4,4
+sales,LAGOS,Ologolo,1_BED_FLAT,80625000.0,not_applicable,5.8,4,4,4
+sales,LAGOS,Shomolu,1_BED_FLAT,16250000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Surulere,1_BED_FLAT,60000000.0,not_applicable,14.5,4,4,4
+sales,LAGOS,Victoria Island,1_BED_FLAT,198125000.0,not_applicable,16.8,4,4,4
+sales,LAGOS,Yaba,1_BED_FLAT,21500000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Abijo,2_BED_FLAT,80000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Abraham Adesanya,2_BED_FLAT,93125000.0,not_applicable,7.8,4,4,4
+sales,LAGOS,Ago Palace,2_BED_FLAT,67500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Agungi,2_BED_FLAT,130000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ajah,2_BED_FLAT,95000000.0,not_applicable,14.0,4,4,4
+sales,LAGOS,Alimosho,2_BED_FLAT,80000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Allen Avenue,2_BED_FLAT,260000000.0,not_applicable,4.8,4,4,4
+sales,LAGOS,Amuwo Odofin,2_BED_FLAT,565000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Badore,2_BED_FLAT,200000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Banana Island,2_BED_FLAT,270000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Elegushi,2_BED_FLAT,182500000.0,not_applicable,29.0,4,4,4
+sales,LAGOS,Freedom Way,2_BED_FLAT,250000000.0,not_applicable,8.5,4,4,4
+sales,LAGOS,Gbagada,2_BED_FLAT,87500000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,2_BED_FLAT,87000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ikate,2_BED_FLAT,197500000.0,not_applicable,83.5,4,4,4
+sales,LAGOS,Ikeja,2_BED_FLAT,156250000.0,not_applicable,12.5,4,4,4
+sales,LAGOS,Ikeja GRA,2_BED_FLAT,320000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ikorodu,2_BED_FLAT,45000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ikota,2_BED_FLAT,95000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Ikotun,2_BED_FLAT,120000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ikoyi,2_BED_FLAT,386250000.0,not_applicable,21.8,4,4,4
+sales,LAGOS,Ilasan,2_BED_FLAT,167500000.0,not_applicable,9.5,4,4,4
+sales,LAGOS,Ipaja,2_BED_FLAT,65000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Jakande,2_BED_FLAT,24000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Lagos Business School,2_BED_FLAT,80000000.0,not_applicable,3.5,4,4,4
+sales,LAGOS,Lekki,2_BED_FLAT,150000000.0,not_applicable,33.8,4,4,4
+sales,LAGOS,Lekki Phase 1,2_BED_FLAT,300000000.0,not_applicable,187.5,4,4,4
+sales,LAGOS,Lekki Phase 2,2_BED_FLAT,87500000.0,not_applicable,4.5,4,4,4
+sales,LAGOS,Magodo,2_BED_FLAT,140000000.0,not_applicable,5.5,4,4,4
+sales,LAGOS,Maryland,2_BED_FLAT,280000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ogba,2_BED_FLAT,97500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ologolo,2_BED_FLAT,135000000.0,not_applicable,20.0,4,4,4
+sales,LAGOS,Orchid,2_BED_FLAT,110000000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Oregun,2_BED_FLAT,140000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Osapa,2_BED_FLAT,180000000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Osapa London,2_BED_FLAT,172500000.0,not_applicable,8.5,4,4,4
+sales,LAGOS,Sangotedo,2_BED_FLAT,78500000.0,not_applicable,10.0,4,4,4
+sales,LAGOS,Shomolu,2_BED_FLAT,30000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Surulere,2_BED_FLAT,110000000.0,not_applicable,18.5,4,4,4
+sales,LAGOS,Victoria Island,2_BED_FLAT,452500000.0,not_applicable,62.5,4,4,4
+sales,LAGOS,Yaba,2_BED_FLAT,185000000.0,not_applicable,22.0,4,4,4
+sales,LAGOS,Abijo,3_BED_FLAT,87500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Abraham Adesanya,3_BED_FLAT,117500000.0,not_applicable,10.0,4,4,4
+sales,LAGOS,Ajah,3_BED_FLAT,101250000.0,not_applicable,5.5,4,4,4
+sales,LAGOS,Akoka,3_BED_FLAT,150000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Alapere,3_BED_FLAT,140000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Allen Avenue,3_BED_FLAT,300000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Banana Island,3_BED_FLAT,860000000.0,not_applicable,30.0,4,4,4
+sales,LAGOS,Elegushi,3_BED_FLAT,266250000.0,not_applicable,11.2,4,4,4
+sales,LAGOS,Freedom Way,3_BED_FLAT,300000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Gbagada,3_BED_FLAT,160000000.0,not_applicable,30.5,4,4,4
+sales,LAGOS,Ibeju-Lekki,3_BED_FLAT,102000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ikate,3_BED_FLAT,246250000.0,not_applicable,45.0,4,4,4
+sales,LAGOS,Ikeja,3_BED_FLAT,227500000.0,not_applicable,20.5,4,4,4
+sales,LAGOS,Ikeja GRA,3_BED_FLAT,448750000.0,not_applicable,30.8,4,4,4
+sales,LAGOS,Ikorodu,3_BED_FLAT,35000000.0,not_applicable,10.0,4,4,4
+sales,LAGOS,Ikota,3_BED_FLAT,122500000.0,not_applicable,18.0,4,4,4
+sales,LAGOS,Ikoyi,3_BED_FLAT,675000000.0,not_applicable,68.0,4,4,4
+sales,LAGOS,Ilasan,3_BED_FLAT,230000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ipaja,3_BED_FLAT,81000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Isheri North,3_BED_FLAT,100000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,3_BED_FLAT,160000000.0,not_applicable,23.8,4,4,4
+sales,LAGOS,Lekki Phase 1,3_BED_FLAT,380000000.0,not_applicable,115.2,4,4,4
+sales,LAGOS,Maryland,3_BED_FLAT,253750000.0,not_applicable,12.5,4,4,4
+sales,LAGOS,Ogba,3_BED_FLAT,293750000.0,not_applicable,5.8,4,4,4
+sales,LAGOS,Orchid,3_BED_FLAT,155000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Oregun,3_BED_FLAT,170000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Osapa,3_BED_FLAT,190000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Osapa London,3_BED_FLAT,242500000.0,not_applicable,4.5,4,4,4
+sales,LAGOS,Sangotedo,3_BED_FLAT,120000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Surulere,3_BED_FLAT,170000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Victoria Island,3_BED_FLAT,573750000.0,not_applicable,60.0,4,4,4
+sales,LAGOS,Yaba,3_BED_FLAT,170000000.0,not_applicable,15.0,4,4,4
+sales,LAGOS,Abraham Adesanya,4_PLUS_BED_FLAT,175000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Agege,4_PLUS_BED_FLAT,222500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ajah,4_PLUS_BED_FLAT,625000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Alimosho,4_PLUS_BED_FLAT,280000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Banana Island,4_PLUS_BED_FLAT,1725000000.0,not_applicable,21.5,4,4,4
+sales,LAGOS,Elegushi,4_PLUS_BED_FLAT,350000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,4_PLUS_BED_FLAT,298000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ikate,4_PLUS_BED_FLAT,400000000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Ikeja,4_PLUS_BED_FLAT,365000000.0,not_applicable,17.0,4,4,4
+sales,LAGOS,Ikeja GRA,4_PLUS_BED_FLAT,750000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Ikorodu,4_PLUS_BED_FLAT,55000000.0,not_applicable,8.5,4,4,4
+sales,LAGOS,Ikota,4_PLUS_BED_FLAT,315000000.0,not_applicable,20.0,4,4,4
+sales,LAGOS,Ikoyi,4_PLUS_BED_FLAT,1525000000.0,not_applicable,60.0,4,4,4
+sales,LAGOS,Ipaja,4_PLUS_BED_FLAT,100000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,4_PLUS_BED_FLAT,450000000.0,not_applicable,23.0,4,4,4
+sales,LAGOS,Lekki Phase 1,4_PLUS_BED_FLAT,500000000.0,not_applicable,30.2,4,4,4
+sales,LAGOS,Lekki Phase 2,4_PLUS_BED_FLAT,560000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Magodo,4_PLUS_BED_FLAT,525000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Maryland,4_PLUS_BED_FLAT,812500000.0,not_applicable,7.2,4,4,4
+sales,LAGOS,Ogba,4_PLUS_BED_FLAT,280000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ogudu,4_PLUS_BED_FLAT,427500000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Omole Phase 1,4_PLUS_BED_FLAT,700000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Orchid,4_PLUS_BED_FLAT,200000000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Osapa London,4_PLUS_BED_FLAT,1625000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Sangotedo,4_PLUS_BED_FLAT,200000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Surulere,4_PLUS_BED_FLAT,305000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Victoria Garden City,4_PLUS_BED_FLAT,450000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Victoria Island,4_PLUS_BED_FLAT,731250000.0,not_applicable,25.8,4,4,4
+sales,LAGOS,Yaba,4_PLUS_BED_FLAT,250000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Abule Egba,BLOCK_OF_FLATS,70000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Akoka,BLOCK_OF_FLATS,250000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Alapere,BLOCK_OF_FLATS,182500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Elegushi,BLOCK_OF_FLATS,250000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Gbagada,BLOCK_OF_FLATS,300000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ifako-Ijaiye,BLOCK_OF_FLATS,140000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ikeja,BLOCK_OF_FLATS,350000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ikeja GRA,BLOCK_OF_FLATS,410000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ikorodu,BLOCK_OF_FLATS,70000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ikoyi,BLOCK_OF_FLATS,2325000000.0,not_applicable,5.5,4,4,4
+sales,LAGOS,Ipaja,BLOCK_OF_FLATS,150000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Isolo,BLOCK_OF_FLATS,192500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Lekki Phase 1,BLOCK_OF_FLATS,167000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ogba,BLOCK_OF_FLATS,300000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Shomolu,BLOCK_OF_FLATS,320000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Surulere,BLOCK_OF_FLATS,280000000.0,not_applicable,12.8,4,4,4
+sales,LAGOS,Yaba,BLOCK_OF_FLATS,293750000.0,not_applicable,4.8,4,4,4
+sales,LAGOS,Abraham Adesanya,BUNGALOW,107500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Awoyaya,BUNGALOW,130000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,BUNGALOW,85000000.0,not_applicable,32.0,4,4,4
+sales,LAGOS,Idera Scheme,BUNGALOW,85000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ipaja,BUNGALOW,40000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Surulere,BUNGALOW,275000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ikeja,COMMERCIAL_HOSPITALITY,1265000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Lekki,COMMERCIAL_HOSPITALITY,2500000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki Phase 1,COMMERCIAL_HOSPITALITY,850000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ikeja,COMMERCIAL_INDUSTRIAL,4500000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Oregun,COMMERCIAL_INDUSTRIAL,6000000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Oshodi,COMMERCIAL_INDUSTRIAL,23500000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ikeja,COMMERCIAL_OFFICE_RETAIL,975000000.0,not_applicable,5.5,4,4,4
+sales,LAGOS,Ikorodu,COMMERCIAL_OFFICE_RETAIL,56250000.0,not_applicable,5.5,4,4,4
+sales,LAGOS,Lekki,COMMERCIAL_OFFICE_RETAIL,650000000.0,not_applicable,8.5,4,4,4
+sales,LAGOS,Lekki Phase 1,COMMERCIAL_OFFICE_RETAIL,900000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Orchid,COMMERCIAL_OFFICE_RETAIL,65525000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Sangotedo,COMMERCIAL_OFFICE_RETAIL,171000000.0,not_applicable,32.0,4,4,4
+sales,LAGOS,Victoria Island,COMMERCIAL_OFFICE_RETAIL,9687500000.0,not_applicable,10.8,4,4,4
+sales,LAGOS,Abraham Adesanya,DETACHED_HOUSE,300000000.0,not_applicable,16.5,4,4,4
+sales,LAGOS,Abule Egba,DETACHED_HOUSE,280000000.0,not_applicable,6.5,4,4,4
+sales,LAGOS,Ado Road,DETACHED_HOUSE,240000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Agege,DETACHED_HOUSE,270000000.0,not_applicable,12.0,4,4,4
+sales,LAGOS,Ago Palace,DETACHED_HOUSE,250000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Agungi,DETACHED_HOUSE,350000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ajah,DETACHED_HOUSE,250000000.0,not_applicable,89.0,4,4,4
+sales,LAGOS,Alimosho,DETACHED_HOUSE,250000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Allen Avenue,DETACHED_HOUSE,590000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Amuwo Odofin,DETACHED_HOUSE,380000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Badore,DETACHED_HOUSE,80000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Banana Island,DETACHED_HOUSE,4537500000.0,not_applicable,64.8,4,4,4
+sales,LAGOS,Berger,DETACHED_HOUSE,242500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Elegushi,DETACHED_HOUSE,892500000.0,not_applicable,20.5,4,4,4
+sales,LAGOS,Epe,DETACHED_HOUSE,20000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Freedom Way,DETACHED_HOUSE,1075000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Gbagada,DETACHED_HOUSE,400000000.0,not_applicable,21.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,DETACHED_HOUSE,250000000.0,not_applicable,16.5,4,4,4
+sales,LAGOS,Idado,DETACHED_HOUSE,290000000.0,not_applicable,8.8,4,4,4
+sales,LAGOS,Igbo Efon,DETACHED_HOUSE,350000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ikate,DETACHED_HOUSE,950000000.0,not_applicable,38.0,4,4,4
+sales,LAGOS,Ikeja,DETACHED_HOUSE,500000000.0,not_applicable,71.0,4,4,4
+sales,LAGOS,Ikeja GRA,DETACHED_HOUSE,2000000000.0,not_applicable,22.5,4,4,4
+sales,LAGOS,Ikorodu,DETACHED_HOUSE,130000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ikota,DETACHED_HOUSE,420000000.0,not_applicable,179.0,4,4,4
+sales,LAGOS,Ikotun,DETACHED_HOUSE,143750000.0,not_applicable,3.5,4,4,4
+sales,LAGOS,Ikoyi,DETACHED_HOUSE,2600000000.0,not_applicable,140.5,4,4,4
+sales,LAGOS,Isheri North,DETACHED_HOUSE,247500000.0,not_applicable,14.5,4,4,4
+sales,LAGOS,Lafiaji,DETACHED_HOUSE,440000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Lagos Business School,DETACHED_HOUSE,230000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,DETACHED_HOUSE,461250000.0,not_applicable,369.5,4,4,4
+sales,LAGOS,Lekki Conservation,DETACHED_HOUSE,450000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Lekki Phase 1,DETACHED_HOUSE,1075000000.0,not_applicable,170.0,4,4,4
+sales,LAGOS,Lekki Phase 2,DETACHED_HOUSE,432500000.0,not_applicable,19.5,4,4,4
+sales,LAGOS,Magodo,DETACHED_HOUSE,500000000.0,not_applicable,73.0,4,4,4
+sales,LAGOS,Maryland,DETACHED_HOUSE,650000000.0,not_applicable,22.2,4,4,4
+sales,LAGOS,Monastery Road,DETACHED_HOUSE,415000000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Nicon Town,DETACHED_HOUSE,1500000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ogba,DETACHED_HOUSE,260000000.0,not_applicable,19.0,4,4,4
+sales,LAGOS,Ogombo,DETACHED_HOUSE,320000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ogudu,DETACHED_HOUSE,637500000.0,not_applicable,10.5,4,4,4
+sales,LAGOS,Ojo,DETACHED_HOUSE,350000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ojodu Berger,DETACHED_HOUSE,325000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ologolo,DETACHED_HOUSE,400000000.0,not_applicable,25.0,4,4,4
+sales,LAGOS,Omole Phase 1,DETACHED_HOUSE,700000000.0,not_applicable,34.0,4,4,4
+sales,LAGOS,Omole Phase 2,DETACHED_HOUSE,700000000.0,not_applicable,11.2,4,4,4
+sales,LAGOS,Oral Estate,DETACHED_HOUSE,450000000.0,not_applicable,3.8,4,4,4
+sales,LAGOS,Orchid,DETACHED_HOUSE,380000000.0,not_applicable,150.5,4,4,4
+sales,LAGOS,Osapa,DETACHED_HOUSE,896250000.0,not_applicable,52.8,4,4,4
+sales,LAGOS,Osapa London,DETACHED_HOUSE,990000000.0,not_applicable,49.8,4,4,4
+sales,LAGOS,Pinnock Beach Estate,DETACHED_HOUSE,1650000000.0,not_applicable,19.5,4,4,4
+sales,LAGOS,Royal Garden Estate,DETACHED_HOUSE,625000000.0,not_applicable,27.0,4,4,4
+sales,LAGOS,Sangotedo,DETACHED_HOUSE,230000000.0,not_applicable,61.5,4,4,4
+sales,LAGOS,Surulere,DETACHED_HOUSE,450000000.0,not_applicable,15.5,4,4,4
+sales,LAGOS,Thomas Estate,DETACHED_HOUSE,260000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Victoria Garden City,DETACHED_HOUSE,490000000.0,not_applicable,10.0,4,4,4
+sales,LAGOS,Victoria Island,DETACHED_HOUSE,1643750000.0,not_applicable,26.8,4,4,4
+sales,LAGOS,Ibadan,LAND_COMMERCIAL,31500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,LAND_COMMERCIAL,75000000.0,not_applicable,16.0,4,4,4
+sales,LAGOS,Ikeja,LAND_COMMERCIAL,1800000000.0,not_applicable,5.8,4,4,4
+sales,LAGOS,Lekki,LAND_COMMERCIAL,600000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Lekki Phase 1,LAND_COMMERCIAL,50850000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Omole Phase 2,LAND_COMMERCIAL,700000000.0,not_applicable,4.5,4,4,4
+sales,LAGOS,Victoria Island,LAND_COMMERCIAL,752250000.0,not_applicable,7.5,4,4,4
+sales,LAGOS,Abijo,LAND_RESIDENTIAL,70000000.0,not_applicable,15.0,4,4,4
+sales,LAGOS,Abule Egba,LAND_RESIDENTIAL,60000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ado Road,LAND_RESIDENTIAL,80000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Agbara,LAND_RESIDENTIAL,35000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Agidingbi,LAND_RESIDENTIAL,1250000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ago Palace,LAND_RESIDENTIAL,317500000.0,not_applicable,3.8,4,4,4
+sales,LAGOS,Ajah,LAND_RESIDENTIAL,195000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Akoka,LAND_RESIDENTIAL,240000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Alapere,LAND_RESIDENTIAL,60000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Alimosho,LAND_RESIDENTIAL,75000000.0,not_applicable,8.5,4,4,4
+sales,LAGOS,Amuwo Odofin,LAND_RESIDENTIAL,1075000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Apapa,LAND_RESIDENTIAL,1350000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Awoyaya,LAND_RESIDENTIAL,365000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Badagry,LAND_RESIDENTIAL,7250000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Badore,LAND_RESIDENTIAL,63000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Banana Island,LAND_RESIDENTIAL,5375000.0,not_applicable,32.2,4,4,4
+sales,LAGOS,Epe,LAND_RESIDENTIAL,12000000.0,not_applicable,35.8,4,4,4
+sales,LAGOS,Freedom Way,LAND_RESIDENTIAL,750000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Gbagada,LAND_RESIDENTIAL,80000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Ibadan,LAND_RESIDENTIAL,15500000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,LAND_RESIDENTIAL,30000000.0,not_applicable,101.5,4,4,4
+sales,LAGOS,Idera Scheme,LAND_RESIDENTIAL,61000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ikate,LAND_RESIDENTIAL,870000000.0,not_applicable,10.8,4,4,4
+sales,LAGOS,Ikeja,LAND_RESIDENTIAL,600000000.0,not_applicable,25.5,4,4,4
+sales,LAGOS,Ikeja GRA,LAND_RESIDENTIAL,2950000000.0,not_applicable,18.0,4,4,4
+sales,LAGOS,Ikorodu,LAND_RESIDENTIAL,12000000.0,not_applicable,53.2,4,4,4
+sales,LAGOS,Ikota,LAND_RESIDENTIAL,15750000.0,not_applicable,16.0,4,4,4
+sales,LAGOS,Ikotun,LAND_RESIDENTIAL,30000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ikoyi,LAND_RESIDENTIAL,4825000.0,not_applicable,55.0,4,4,4
+sales,LAGOS,Ilupeju,LAND_RESIDENTIAL,1450000.0,not_applicable,6.2,4,4,4
+sales,LAGOS,Ipaja,LAND_RESIDENTIAL,33000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Isolo,LAND_RESIDENTIAL,650000000.0,not_applicable,4.8,4,4,4
+sales,LAGOS,Jakande,LAND_RESIDENTIAL,613500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ketu,LAND_RESIDENTIAL,10800000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Lagos Island,LAND_RESIDENTIAL,2500000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,LAND_RESIDENTIAL,305000000.0,not_applicable,72.0,4,4,4
+sales,LAGOS,Lekki Phase 1,LAND_RESIDENTIAL,650000000.0,not_applicable,50.2,4,4,4
+sales,LAGOS,Lekki Phase 2,LAND_RESIDENTIAL,300000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Magodo,LAND_RESIDENTIAL,270000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Maryland,LAND_RESIDENTIAL,279000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Monastery Road,LAND_RESIDENTIAL,400000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Nicon Town,LAND_RESIDENTIAL,1500000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ogba,LAND_RESIDENTIAL,173125000.0,not_applicable,3.8,4,4,4
+sales,LAGOS,Ogombo,LAND_RESIDENTIAL,52000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ogudu,LAND_RESIDENTIAL,135000000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ojo,LAND_RESIDENTIAL,67500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ojodu Berger,LAND_RESIDENTIAL,75000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Okun Ajah,LAND_RESIDENTIAL,47500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Orchid,LAND_RESIDENTIAL,185000000.0,not_applicable,11.5,4,4,4
+sales,LAGOS,Osapa,LAND_RESIDENTIAL,457500000.0,not_applicable,5.2,4,4,4
+sales,LAGOS,Osapa London,LAND_RESIDENTIAL,360000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Pinnock Beach Estate,LAND_RESIDENTIAL,617500000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Royal Garden Estate,LAND_RESIDENTIAL,350000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Sangotedo,LAND_RESIDENTIAL,80000000.0,not_applicable,33.0,4,4,4
+sales,LAGOS,Shangisha,LAND_RESIDENTIAL,596250000.0,not_applicable,3.8,4,4,4
+sales,LAGOS,Shomolu,LAND_RESIDENTIAL,143125000.0,not_applicable,7.8,4,4,4
+sales,LAGOS,Surulere,LAND_RESIDENTIAL,300000000.0,not_applicable,23.0,4,4,4
+sales,LAGOS,Victoria Garden City,LAND_RESIDENTIAL,390000000.0,not_applicable,9.0,4,4,4
+sales,LAGOS,Victoria Island,LAND_RESIDENTIAL,750000000.0,not_applicable,75.2,4,4,4
+sales,LAGOS,Victory Park Estate,LAND_RESIDENTIAL,450000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Yaba,LAND_RESIDENTIAL,400000000.0,not_applicable,12.0,4,4,4
+sales,LAGOS,Alimosho,OTHER,200000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Apapa,OTHER,35000000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Epe,OTHER,5500000.0,not_applicable,7.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,OTHER,35000000.0,not_applicable,15.0,4,4,4
+sales,LAGOS,Ikotun,OTHER,160000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ikoyi,OTHER,1800000000.0,not_applicable,11.0,4,4,4
+sales,LAGOS,Lagos Island,OTHER,8500000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,OTHER,402500000.0,not_applicable,5.5,4,4,4
+sales,LAGOS,Lekki Phase 1,OTHER,690000000.0,not_applicable,8.0,4,4,4
+sales,LAGOS,Shangisha,OTHER,420000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Abraham Adesanya,SEMI_DETACHED_HOUSE,170000000.0,not_applicable,15.0,4,4,4
+sales,LAGOS,Ado Road,SEMI_DETACHED_HOUSE,157500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Agege,SEMI_DETACHED_HOUSE,240000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ajah,SEMI_DETACHED_HOUSE,160000000.0,not_applicable,33.0,4,4,4
+sales,LAGOS,Banana Island,SEMI_DETACHED_HOUSE,752187500.0,not_applicable,7.8,4,4,4
+sales,LAGOS,Elegushi,SEMI_DETACHED_HOUSE,325000000.0,not_applicable,10.0,4,4,4
+sales,LAGOS,Gbagada,SEMI_DETACHED_HOUSE,325000000.0,not_applicable,31.0,4,4,4
+sales,LAGOS,Ibeju-Lekki,SEMI_DETACHED_HOUSE,109420000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Idera Scheme,SEMI_DETACHED_HOUSE,109440000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ikate,SEMI_DETACHED_HOUSE,965000000.0,not_applicable,28.0,4,4,4
+sales,LAGOS,Ikeja,SEMI_DETACHED_HOUSE,402500000.0,not_applicable,37.8,4,4,4
+sales,LAGOS,Ikeja GRA,SEMI_DETACHED_HOUSE,980000000.0,not_applicable,17.0,4,4,4
+sales,LAGOS,Ikota,SEMI_DETACHED_HOUSE,200000000.0,not_applicable,80.0,4,4,4
+sales,LAGOS,Ikoyi,SEMI_DETACHED_HOUSE,1300000000.0,not_applicable,27.5,4,4,4
+sales,LAGOS,Isheri North,SEMI_DETACHED_HOUSE,250000000.0,not_applicable,7.5,4,4,4
+sales,LAGOS,Lagos Business School,SEMI_DETACHED_HOUSE,160000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Lekki,SEMI_DETACHED_HOUSE,211250000.0,not_applicable,66.0,4,4,4
+sales,LAGOS,Lekki Phase 1,SEMI_DETACHED_HOUSE,700000000.0,not_applicable,47.8,4,4,4
+sales,LAGOS,Lekki Phase 2,SEMI_DETACHED_HOUSE,166250000.0,not_applicable,3.8,4,4,4
+sales,LAGOS,Magodo,SEMI_DETACHED_HOUSE,350000000.0,not_applicable,33.0,4,4,4
+sales,LAGOS,Maryland,SEMI_DETACHED_HOUSE,332500000.0,not_applicable,16.0,4,4,4
+sales,LAGOS,Ogba,SEMI_DETACHED_HOUSE,302500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ogudu,SEMI_DETACHED_HOUSE,397500000.0,not_applicable,16.2,4,4,4
+sales,LAGOS,Ologolo,SEMI_DETACHED_HOUSE,297500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Omole Phase 1,SEMI_DETACHED_HOUSE,450000000.0,not_applicable,12.0,4,4,4
+sales,LAGOS,Omole Phase 2,SEMI_DETACHED_HOUSE,450000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Orchid,SEMI_DETACHED_HOUSE,208125000.0,not_applicable,42.5,4,4,4
+sales,LAGOS,Osapa,SEMI_DETACHED_HOUSE,258750000.0,not_applicable,4.8,4,4,4
+sales,LAGOS,Osapa London,SEMI_DETACHED_HOUSE,276250000.0,not_applicable,12.8,4,4,4
+sales,LAGOS,Sangotedo,SEMI_DETACHED_HOUSE,161875000.0,not_applicable,25.8,4,4,4
+sales,LAGOS,Surulere,SEMI_DETACHED_HOUSE,290000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Thomas Estate,SEMI_DETACHED_HOUSE,126250000.0,not_applicable,4.8,4,4,4
+sales,LAGOS,Victoria Garden City,SEMI_DETACHED_HOUSE,350000000.0,not_applicable,4.8,4,4,4
+sales,LAGOS,Victoria Island,SEMI_DETACHED_HOUSE,825000000.0,not_applicable,14.0,4,4,4
+sales,LAGOS,Yaba,SEMI_DETACHED_HOUSE,300000000.0,not_applicable,14.0,4,4,4
+sales,LAGOS,Abijo,TERRACED_HOUSE,80000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Abraham Adesanya,TERRACED_HOUSE,121250000.0,not_applicable,25.5,4,4,4
+sales,LAGOS,Agege,TERRACED_HOUSE,240000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ago Palace,TERRACED_HOUSE,170000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Ajah,TERRACED_HOUSE,110000000.0,not_applicable,48.2,4,4,4
+sales,LAGOS,Allen Avenue,TERRACED_HOUSE,425000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Banana Island,TERRACED_HOUSE,1600000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Elegushi,TERRACED_HOUSE,300000000.0,not_applicable,15.5,4,4,4
+sales,LAGOS,Freedom Way,TERRACED_HOUSE,650000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Gbagada,TERRACED_HOUSE,250000000.0,not_applicable,15.8,4,4,4
+sales,LAGOS,Idera Scheme,TERRACED_HOUSE,91800000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ikate,TERRACED_HOUSE,320000000.0,not_applicable,31.0,4,4,4
+sales,LAGOS,Ikeja,TERRACED_HOUSE,350000000.0,not_applicable,29.0,4,4,4
+sales,LAGOS,Ikeja GRA,TERRACED_HOUSE,550000000.0,not_applicable,9.8,4,4,4
+sales,LAGOS,Ikota,TERRACED_HOUSE,165000000.0,not_applicable,39.0,4,4,4
+sales,LAGOS,Ikoyi,TERRACED_HOUSE,1000000000.0,not_applicable,38.5,4,4,4
+sales,LAGOS,Lafiaji,TERRACED_HOUSE,152500000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Lagos Business School,TERRACED_HOUSE,137500000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Lekki,TERRACED_HOUSE,201250000.0,not_applicable,77.8,4,4,4
+sales,LAGOS,Lekki Phase 1,TERRACED_HOUSE,581250000.0,not_applicable,72.0,4,4,4
+sales,LAGOS,Lekki Phase 2,TERRACED_HOUSE,156250000.0,not_applicable,7.8,4,4,4
+sales,LAGOS,Magodo,TERRACED_HOUSE,185000000.0,not_applicable,15.5,4,4,4
+sales,LAGOS,Maryland,TERRACED_HOUSE,330000000.0,not_applicable,15.0,4,4,4
+sales,LAGOS,Ogba,TERRACED_HOUSE,290000000.0,not_applicable,6.0,4,4,4
+sales,LAGOS,Ogombo,TERRACED_HOUSE,235000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Ogudu,TERRACED_HOUSE,345000000.0,not_applicable,15.0,4,4,4
+sales,LAGOS,Ojodu Berger,TERRACED_HOUSE,250000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Ologolo,TERRACED_HOUSE,202500000.0,not_applicable,19.5,4,4,4
+sales,LAGOS,Olokonla,TERRACED_HOUSE,150000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Omole Phase 1,TERRACED_HOUSE,350000000.0,not_applicable,7.8,4,4,4
+sales,LAGOS,Orchid,TERRACED_HOUSE,140000000.0,not_applicable,48.2,4,4,4
+sales,LAGOS,Oregun,TERRACED_HOUSE,300000000.0,not_applicable,5.0,4,4,4
+sales,LAGOS,Osapa,TERRACED_HOUSE,305000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Osapa London,TERRACED_HOUSE,282500000.0,not_applicable,8.8,4,4,4
+sales,LAGOS,Sangotedo,TERRACED_HOUSE,123750000.0,not_applicable,27.5,4,4,4
+sales,LAGOS,Surulere,TERRACED_HOUSE,350000000.0,not_applicable,13.0,4,4,4
+sales,LAGOS,Thomas Estate,TERRACED_HOUSE,128000000.0,not_applicable,3.0,4,4,4
+sales,LAGOS,Victoria Garden City,TERRACED_HOUSE,290000000.0,not_applicable,4.0,4,4,4
+sales,LAGOS,Victoria Island,TERRACED_HOUSE,850000000.0,not_applicable,32.0,4,4,4
+sales,OGUN,Abeokuta,1_BED_FLAT,12000000.0,not_applicable,3.0,4,4,4
+sales,OGUN,Obafemi Owode,2_BED_FLAT,200000000.0,not_applicable,3.0,4,4,4
+sales,OGUN,Abeokuta,BUNGALOW,50000000.0,not_applicable,4.0,4,4,4
+sales,OGUN,Obafemi Owode,BUNGALOW,41500000.0,not_applicable,4.0,4,4,4
+sales,OGUN,Abeokuta,LAND_RESIDENTIAL,11750000.0,not_applicable,10.0,4,4,4
+sales,OGUN,Ado,LAND_RESIDENTIAL,4000000.0,not_applicable,5.0,4,4,4
+sales,OGUN,Ijebu Ode,LAND_RESIDENTIAL,9500000.0,not_applicable,19.8,4,4,4
+sales,OGUN,Mowe,LAND_RESIDENTIAL,8500000.0,not_applicable,7.0,4,4,4
+sales,OGUN,Obafemi Owode,LAND_RESIDENTIAL,7000000.0,not_applicable,9.0,4,4,4
+sales,OGUN,Ofada,LAND_RESIDENTIAL,7375000.0,not_applicable,13.8,4,4,4
+sales,OGUN,Sagamu,LAND_RESIDENTIAL,34250000.0,not_applicable,5.5,4,4,4
+sales,OGUN,Odogbolu,OTHER,1500000.0,not_applicable,3.0,4,4,4
+sales,OGUN,Obafemi Owode,SEMI_DETACHED_HOUSE,200000000.0,not_applicable,5.0,4,4,4
+sales,PH,Port Harcourt,2_BED_FLAT,90000000.0,not_applicable,7.0,4,4,4
+sales,PH,Port Harcourt,3_BED_FLAT,120000000.0,not_applicable,5.0,4,4,4
+sales,PH,Port Harcourt,4_PLUS_BED_FLAT,222500000.0,not_applicable,6.0,4,4,4
+sales,PH,Port Harcourt,BUNGALOW,95000000.0,not_applicable,3.0,4,4,4
+sales,PH,Port Harcourt,DETACHED_HOUSE,258750000.0,not_applicable,16.8,4,4,4
+sales,PH,Port Harcourt,LAND_RESIDENTIAL,18125000.0,not_applicable,14.2,4,4,4
+sales,PH,Port Harcourt,OTHER,30000000.0,not_applicable,6.0,4,4,4
+sales,PH,Port Harcourt,TERRACED_HOUSE,200000000.0,not_applicable,8.0,4,4,4
+rentals,ABUJA,Apo,1_BED_FLAT,1850000.0,year_assumed,6.0,4,4,4
+rentals,ABUJA,Bwari,1_BED_FLAT,500000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Guzape,1_BED_FLAT,6000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Gwarinpa,1_BED_FLAT,2750000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Kubwa,1_BED_FLAT,900000.0,year_assumed,14.0,4,4,4
+rentals,ABUJA,Life Camp,1_BED_FLAT,2000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Lokogoma,1_BED_FLAT,1500000.0,year_assumed,7.0,4,4,4
+rentals,ABUJA,Lugbe,1_BED_FLAT,2000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Maitama,1_BED_FLAT,7000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Utako,1_BED_FLAT,4000000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Apo,2_BED_FLAT,5000000.0,year_assumed,6.8,4,4,4
+rentals,ABUJA,Durumi,2_BED_FLAT,5000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Gaduwa,2_BED_FLAT,4000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Garki,2_BED_FLAT,3900000.0,year_assumed,3.5,4,4,4
+rentals,ABUJA,Gwagwalada,2_BED_FLAT,1300000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Gwarinpa,2_BED_FLAT,6000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Jabi,2_BED_FLAT,6000000.0,year_assumed,11.2,4,4,4
+rentals,ABUJA,Jahi,2_BED_FLAT,10000000.0,year_assumed,14.0,4,4,4
+rentals,ABUJA,Katampe,2_BED_FLAT,10000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Kubwa,2_BED_FLAT,3000000.0,year_assumed,9.0,4,4,4
+rentals,ABUJA,Life Camp,2_BED_FLAT,3900000.0,year_assumed,6.0,4,4,4
+rentals,ABUJA,Lokogoma,2_BED_FLAT,5000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Lugbe,2_BED_FLAT,3000000.0,year_assumed,7.0,4,4,4
+rentals,ABUJA,Mabushi,2_BED_FLAT,13000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Wuse 2,2_BED_FLAT,4500000.0,year_assumed,6.0,4,4,4
+rentals,ABUJA,Wuye,2_BED_FLAT,17500000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Apo,3_BED_FLAT,7500000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Asokoro,3_BED_FLAT,23000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Garki,3_BED_FLAT,9000000.0,year_assumed,9.0,4,4,4
+rentals,ABUJA,Guzape,3_BED_FLAT,11000000.0,year_assumed,6.0,4,4,4
+rentals,ABUJA,Gwarinpa,3_BED_FLAT,8000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Idu,3_BED_FLAT,6000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Jabi,3_BED_FLAT,8750000.0,year_assumed,9.0,4,4,4
+rentals,ABUJA,Jahi,3_BED_FLAT,12125000.0,year_assumed,14.5,4,4,4
+rentals,ABUJA,Katampe,3_BED_FLAT,11000000.0,year_assumed,9.8,4,4,4
+rentals,ABUJA,Life Camp,3_BED_FLAT,6187500.0,year_assumed,5.8,4,4,4
+rentals,ABUJA,Maitama,3_BED_FLAT,28500000.0,year_assumed,12.0,4,4,4
+rentals,ABUJA,Wuse,3_BED_FLAT,8000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Wuse 2,3_BED_FLAT,15000000.0,year_assumed,8.0,4,4,4
+rentals,ABUJA,Wuye,3_BED_FLAT,14500000.0,year_assumed,6.0,4,4,4
+rentals,ABUJA,Guzape,4_PLUS_BED_FLAT,20000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Lugbe,BLOCK_OF_FLATS,2500000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Galadimawa,BUNGALOW,7000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Gwarinpa,BUNGALOW,11000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Lugbe,BUNGALOW,3500000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Garki,COMMERCIAL_OFFICE_RETAIL,5700000.0,year_assumed,3.5,4,4,4
+rentals,ABUJA,Gwarinpa,COMMERCIAL_OFFICE_RETAIL,6000000.0,year_assumed,7.5,4,4,4
+rentals,ABUJA,Maitama,COMMERCIAL_OFFICE_RETAIL,40000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Wuse 2,COMMERCIAL_OFFICE_RETAIL,21250000.0,year_assumed,9.2,4,4,4
+rentals,ABUJA,Asokoro,DETACHED_HOUSE,45000000.0,year_assumed,12.0,4,4,4
+rentals,ABUJA,Guzape,DETACHED_HOUSE,35000000.0,year_assumed,9.0,4,4,4
+rentals,ABUJA,Gwarinpa,DETACHED_HOUSE,15000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Jabi,DETACHED_HOUSE,50000000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Katampe,DETACHED_HOUSE,25000000.0,year_assumed,6.0,4,4,4
+rentals,ABUJA,Lokogoma,DETACHED_HOUSE,6000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Lugbe,DETACHED_HOUSE,12000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Maitama,DETACHED_HOUSE,95000000.0,year_assumed,12.0,4,4,4
+rentals,ABUJA,Wuse,DETACHED_HOUSE,26000000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Wuse 2,DETACHED_HOUSE,60000000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Apo,SEMI_DETACHED_HOUSE,13000000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Asokoro,SEMI_DETACHED_HOUSE,36875000.0,year_assumed,5.8,4,4,4
+rentals,ABUJA,Guzape,SEMI_DETACHED_HOUSE,40000000.0,year_assumed,4.0,4,4,4
+rentals,ABUJA,Kado,SEMI_DETACHED_HOUSE,15000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Katampe,SEMI_DETACHED_HOUSE,29375000.0,year_assumed,6.8,4,4,4
+rentals,ABUJA,Apo,TERRACED_HOUSE,10000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Asokoro,TERRACED_HOUSE,10000000.0,year_assumed,7.0,4,4,4
+rentals,ABUJA,Durumi,TERRACED_HOUSE,15000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Gaduwa,TERRACED_HOUSE,9250000.0,year_assumed,3.5,4,4,4
+rentals,ABUJA,Guzape,TERRACED_HOUSE,16000000.0,year_assumed,32.0,4,4,4
+rentals,ABUJA,Gwarinpa,TERRACED_HOUSE,6000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Jabi,TERRACED_HOUSE,15000000.0,year_assumed,5.0,4,4,4
+rentals,ABUJA,Jahi,TERRACED_HOUSE,18000000.0,year_assumed,14.2,4,4,4
+rentals,ABUJA,Kado,TERRACED_HOUSE,15000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Katampe,TERRACED_HOUSE,20000000.0,year_assumed,18.0,4,4,4
+rentals,ABUJA,Life Camp,TERRACED_HOUSE,13000000.0,year_assumed,8.0,4,4,4
+rentals,ABUJA,Lugbe,TERRACED_HOUSE,6125000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Mabushi,TERRACED_HOUSE,15000000.0,year_assumed,3.0,4,4,4
+rentals,ABUJA,Maitama,TERRACED_HOUSE,40000000.0,year_assumed,13.0,4,4,4
+rentals,ABUJA,Wuye,TERRACED_HOUSE,20000000.0,year_assumed,6.0,4,4,4
+rentals,ENUGU,Enugu,1_BED_FLAT,737500.0,year_assumed,3.2,4,4,4
+rentals,ENUGU,Enugu,2_BED_FLAT,2100000.0,year_assumed,4.0,4,4,4
+rentals,IBADAN,Ibadan,1_BED_FLAT,787500.0,year_assumed,23.5,4,4,4
+rentals,IBADAN,Ibadan,2_BED_FLAT,2000000.0,year_assumed,52.5,4,4,4
+rentals,IBADAN,Tipper Garage,2_BED_FLAT,1050000.0,year_assumed,4.0,4,4,4
+rentals,IBADAN,Ibadan,3_BED_FLAT,2225000.0,year_assumed,39.0,4,4,4
+rentals,IBADAN,Jericho,3_BED_FLAT,8000000.0,year_assumed,3.0,4,4,4
+rentals,IBADAN,Oluyole,3_BED_FLAT,2710000.0,year_assumed,7.0,4,4,4
+rentals,IBADAN,Ibadan,4_PLUS_BED_FLAT,5000000.0,year_assumed,9.0,4,4,4
+rentals,IBADAN,Ibadan,COMMERCIAL_INDUSTRIAL,5000000.0,year_assumed,7.0,4,4,4
+rentals,IBADAN,Ibadan,COMMERCIAL_OFFICE_RETAIL,3750000.0,year_assumed,14.0,4,4,4
+rentals,IBADAN,Ibadan,DETACHED_HOUSE,8000000.0,year_assumed,23.0,4,4,4
+rentals,IBADAN,Oluyole,DETACHED_HOUSE,10000000.0,year_assumed,3.0,4,4,4
+rentals,IBADAN,Ibadan,OTHER,8500000.0,year_assumed,8.5,4,4,4
+rentals,IBADAN,Ibadan,SEMI_DETACHED_HOUSE,7750000.0,year_assumed,4.0,4,4,4
+rentals,IBADAN,Ibadan,TERRACED_HOUSE,8000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Abijo,1_BED_FLAT,1700000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Abraham Adesanya,1_BED_FLAT,2750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Abule Egba,1_BED_FLAT,775000.0,year_assumed,6.8,4,4,4
+rentals,LAGOS,Ado Road,1_BED_FLAT,1312500.0,year_assumed,9.8,4,4,4
+rentals,LAGOS,Ago Palace,1_BED_FLAT,2500000.0,year_assumed,7.0,4,4,4
+rentals,LAGOS,Agungi,1_BED_FLAT,3075000.0,year_assumed,15.8,4,4,4
+rentals,LAGOS,Ajah,1_BED_FLAT,1425000.0,year_assumed,17.0,4,4,4
+rentals,LAGOS,Akoka,1_BED_FLAT,2475000.0,year_assumed,17.5,4,4,4
+rentals,LAGOS,Alapere,1_BED_FLAT,1925000.0,year_assumed,13.8,4,4,4
+rentals,LAGOS,Alpha Beach,1_BED_FLAT,4050000.0,year_assumed,8.5,4,4,4
+rentals,LAGOS,Awoyaya,1_BED_FLAT,1000000.0,year_assumed,7.5,4,4,4
+rentals,LAGOS,Badore,1_BED_FLAT,1500000.0,year_assumed,63.5,4,4,4
+rentals,LAGOS,Banana Island,1_BED_FLAT,15000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Bariga,1_BED_FLAT,1325000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Berger,1_BED_FLAT,1500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Chevy View,1_BED_FLAT,3900000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Chevy View Estate,1_BED_FLAT,2025000.0,year_assumed,12.8,4,4,4
+rentals,LAGOS,Elegushi,1_BED_FLAT,2500000.0,year_assumed,25.8,4,4,4
+rentals,LAGOS,Freedom Way,1_BED_FLAT,8000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Gbagada,1_BED_FLAT,2500000.0,year_assumed,23.5,4,4,4
+rentals,LAGOS,Greenville Estate,1_BED_FLAT,1800000.0,year_assumed,7.0,4,4,4
+rentals,LAGOS,Ibeju-Lekki,1_BED_FLAT,1000000.0,year_assumed,9.8,4,4,4
+rentals,LAGOS,Idado,1_BED_FLAT,3000000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Igbo Efon,1_BED_FLAT,2800000.0,year_assumed,13.0,4,4,4
+rentals,LAGOS,Ikate,1_BED_FLAT,4937500.0,year_assumed,37.8,4,4,4
+rentals,LAGOS,Ikeja,1_BED_FLAT,2000000.0,year_assumed,15.0,4,4,4
+rentals,LAGOS,Ikorodu,1_BED_FLAT,368750.0,year_assumed,45.8,4,4,4
+rentals,LAGOS,Ikota,1_BED_FLAT,3000000.0,year_assumed,69.8,4,4,4
+rentals,LAGOS,Ikotun,1_BED_FLAT,750000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Ikoyi,1_BED_FLAT,12000000.0,year_assumed,21.0,4,4,4
+rentals,LAGOS,Ilaje,1_BED_FLAT,1500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ilasan,1_BED_FLAT,4500000.0,year_assumed,15.0,4,4,4
+rentals,LAGOS,Ipaja,1_BED_FLAT,500000.0,year_assumed,7.0,4,4,4
+rentals,LAGOS,Isheri,1_BED_FLAT,1000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Isolo,1_BED_FLAT,2500000.0,year_assumed,7.0,4,4,4
+rentals,LAGOS,Jakande,1_BED_FLAT,2587500.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Kosofe,1_BED_FLAT,1800000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Lekki,1_BED_FLAT,3500000.0,year_assumed,115.2,4,4,4
+rentals,LAGOS,Lekki Conservation,1_BED_FLAT,2500000.0,year_assumed,7.0,4,4,4
+rentals,LAGOS,Lekki Phase 1,1_BED_FLAT,6375000.0,year_assumed,124.2,4,4,4
+rentals,LAGOS,Lekki Phase 2,1_BED_FLAT,2600000.0,year_assumed,18.0,4,4,4
+rentals,LAGOS,Magodo,1_BED_FLAT,2750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Maryland,1_BED_FLAT,4000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Mobil Road,1_BED_FLAT,2400000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Mushin,1_BED_FLAT,1075000.0,year_assumed,5.5,4,4,4
+rentals,LAGOS,Ogba,1_BED_FLAT,1500000.0,year_assumed,15.0,4,4,4
+rentals,LAGOS,Ogombo,1_BED_FLAT,1525000.0,year_assumed,12.8,4,4,4
+rentals,LAGOS,Ogudu,1_BED_FLAT,2350000.0,year_assumed,21.2,4,4,4
+rentals,LAGOS,Ojo,1_BED_FLAT,1950000.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Ologolo,1_BED_FLAT,3800000.0,year_assumed,37.8,4,4,4
+rentals,LAGOS,Olokonla,1_BED_FLAT,1300000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Onipanu,1_BED_FLAT,1812500.0,year_assumed,5.8,4,4,4
+rentals,LAGOS,Oral Estate,1_BED_FLAT,3000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Orchid,1_BED_FLAT,2500000.0,year_assumed,98.2,4,4,4
+rentals,LAGOS,Oregun,1_BED_FLAT,2075000.0,year_assumed,5.2,4,4,4
+rentals,LAGOS,Osapa,1_BED_FLAT,3200000.0,year_assumed,12.0,4,4,4
+rentals,LAGOS,Osapa London,1_BED_FLAT,3500000.0,year_assumed,35.5,4,4,4
+rentals,LAGOS,Palmgrove,1_BED_FLAT,1500000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Sangotedo,1_BED_FLAT,2000000.0,year_assumed,47.5,4,4,4
+rentals,LAGOS,Shomolu,1_BED_FLAT,1650000.0,year_assumed,44.8,4,4,4
+rentals,LAGOS,Surulere,1_BED_FLAT,2512500.0,year_assumed,23.0,4,4,4
+rentals,LAGOS,Thomas Estate,1_BED_FLAT,1500000.0,year_assumed,11.5,4,4,4
+rentals,LAGOS,Unity Estate,1_BED_FLAT,1800000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Victoria Island,1_BED_FLAT,8000000.0,year_assumed,47.8,4,4,4
+rentals,LAGOS,Yaba,1_BED_FLAT,2000000.0,year_assumed,51.2,4,4,4
+rentals,LAGOS,Abijo,2_BED_FLAT,2812500.0,year_assumed,3.8,4,4,4
+rentals,LAGOS,Abraham Adesanya,2_BED_FLAT,6000000.0,year_assumed,19.0,4,4,4
+rentals,LAGOS,Agege,2_BED_FLAT,2450000.0,year_assumed,4.5,4,4,4
+rentals,LAGOS,Ago Palace,2_BED_FLAT,3437500.0,year_assumed,10.2,4,4,4
+rentals,LAGOS,Agungi,2_BED_FLAT,6062500.0,year_assumed,13.8,4,4,4
+rentals,LAGOS,Ajah,2_BED_FLAT,4000000.0,year_assumed,17.2,4,4,4
+rentals,LAGOS,Alapere,2_BED_FLAT,3500000.0,year_assumed,4.5,4,4,4
+rentals,LAGOS,Alimosho,2_BED_FLAT,2500000.0,year_assumed,4.5,4,4,4
+rentals,LAGOS,Alpha Beach,2_BED_FLAT,5500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Badore,2_BED_FLAT,2500000.0,year_assumed,36.5,4,4,4
+rentals,LAGOS,Banana Island,2_BED_FLAT,30000000.0,year_assumed,25.8,4,4,4
+rentals,LAGOS,Berger,2_BED_FLAT,3000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Elegushi,2_BED_FLAT,10000000.0,year_assumed,66.0,4,4,4
+rentals,LAGOS,Freedom Way,2_BED_FLAT,13000000.0,year_assumed,19.0,4,4,4
+rentals,LAGOS,Gbagada,2_BED_FLAT,4387500.0,year_assumed,13.5,4,4,4
+rentals,LAGOS,Ibeju-Lekki,2_BED_FLAT,2000000.0,year_assumed,14.8,4,4,4
+rentals,LAGOS,Igbo Efon,2_BED_FLAT,6500000.0,year_assumed,5.5,4,4,4
+rentals,LAGOS,Ikate,2_BED_FLAT,10000000.0,year_assumed,106.0,4,4,4
+rentals,LAGOS,Ikeja,2_BED_FLAT,3875000.0,year_assumed,18.2,4,4,4
+rentals,LAGOS,Ikeja GRA,2_BED_FLAT,26000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ikorodu,2_BED_FLAT,1500000.0,year_assumed,25.5,4,4,4
+rentals,LAGOS,Ikota,2_BED_FLAT,4250000.0,year_assumed,22.0,4,4,4
+rentals,LAGOS,Ikotun,2_BED_FLAT,1700000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Ikoyi,2_BED_FLAT,29900000.0,year_assumed,67.0,4,4,4
+rentals,LAGOS,Ilaje,2_BED_FLAT,3200000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Ilasan,2_BED_FLAT,9000000.0,year_assumed,44.5,4,4,4
+rentals,LAGOS,Ipaja,2_BED_FLAT,3000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Isheri North,2_BED_FLAT,2750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Isolo,2_BED_FLAT,2812500.0,year_assumed,12.8,4,4,4
+rentals,LAGOS,Lekki,2_BED_FLAT,7500000.0,year_assumed,109.0,4,4,4
+rentals,LAGOS,Lekki Conservation,2_BED_FLAT,10000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Lekki Phase 1,2_BED_FLAT,15000000.0,year_assumed,261.8,4,4,4
+rentals,LAGOS,Lekki Phase 2,2_BED_FLAT,3000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Magodo,2_BED_FLAT,5000000.0,year_assumed,14.0,4,4,4
+rentals,LAGOS,Maryland,2_BED_FLAT,7750000.0,year_assumed,5.5,4,4,4
+rentals,LAGOS,Mobil Road,2_BED_FLAT,4500000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Monastery Road,2_BED_FLAT,3500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Nicon Town,2_BED_FLAT,14000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ogba,2_BED_FLAT,3250000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Ogombo,2_BED_FLAT,3250000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Ogudu,2_BED_FLAT,4000000.0,year_assumed,7.5,4,4,4
+rentals,LAGOS,Ojo,2_BED_FLAT,2500000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Okun Ajah,2_BED_FLAT,1500000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Ologolo,2_BED_FLAT,7000000.0,year_assumed,48.0,4,4,4
+rentals,LAGOS,Omole Phase 2,2_BED_FLAT,7000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Orchid,2_BED_FLAT,3500000.0,year_assumed,38.2,4,4,4
+rentals,LAGOS,Osapa,2_BED_FLAT,6500000.0,year_assumed,11.0,4,4,4
+rentals,LAGOS,Osapa London,2_BED_FLAT,6000000.0,year_assumed,14.0,4,4,4
+rentals,LAGOS,Sangotedo,2_BED_FLAT,3237500.0,year_assumed,48.0,4,4,4
+rentals,LAGOS,Seaside Estate,2_BED_FLAT,2500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Shomolu,2_BED_FLAT,2562500.0,year_assumed,7.8,4,4,4
+rentals,LAGOS,Surulere,2_BED_FLAT,4000000.0,year_assumed,20.5,4,4,4
+rentals,LAGOS,Thomas Estate,2_BED_FLAT,5000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Unity Estate,2_BED_FLAT,2000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Victoria Garden City,2_BED_FLAT,5000000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Victoria Island,2_BED_FLAT,20000000.0,year_assumed,96.8,4,4,4
+rentals,LAGOS,Yaba,2_BED_FLAT,4125000.0,year_assumed,28.5,4,4,4
+rentals,LAGOS,Abijo,3_BED_FLAT,3625000.0,year_assumed,5.2,4,4,4
+rentals,LAGOS,Abraham Adesanya,3_BED_FLAT,7500000.0,year_assumed,16.0,4,4,4
+rentals,LAGOS,Agege,3_BED_FLAT,2875000.0,year_assumed,5.5,4,4,4
+rentals,LAGOS,Ago Palace,3_BED_FLAT,3875000.0,year_assumed,6.5,4,4,4
+rentals,LAGOS,Agungi,3_BED_FLAT,7000000.0,year_assumed,10.0,4,4,4
+rentals,LAGOS,Ajah,3_BED_FLAT,5312500.0,year_assumed,17.8,4,4,4
+rentals,LAGOS,Alapere,3_BED_FLAT,5000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Allen Avenue,3_BED_FLAT,15000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Badore,3_BED_FLAT,3500000.0,year_assumed,11.2,4,4,4
+rentals,LAGOS,Banana Island,3_BED_FLAT,40000000.0,year_assumed,72.5,4,4,4
+rentals,LAGOS,Berger,3_BED_FLAT,4750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Elegushi,3_BED_FLAT,14000000.0,year_assumed,29.0,4,4,4
+rentals,LAGOS,Gbagada,3_BED_FLAT,6000000.0,year_assumed,30.5,4,4,4
+rentals,LAGOS,Ibeju-Lekki,3_BED_FLAT,2375000.0,year_assumed,10.5,4,4,4
+rentals,LAGOS,Ikate,3_BED_FLAT,15000000.0,year_assumed,36.8,4,4,4
+rentals,LAGOS,Ikeja,3_BED_FLAT,8500000.0,year_assumed,12.0,4,4,4
+rentals,LAGOS,Ikeja GRA,3_BED_FLAT,29250000.0,year_assumed,22.5,4,4,4
+rentals,LAGOS,Ikorodu,3_BED_FLAT,3000000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Ikota,3_BED_FLAT,6000000.0,year_assumed,14.8,4,4,4
+rentals,LAGOS,Ikotun,3_BED_FLAT,2150000.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Ikoyi,3_BED_FLAT,36250000.0,year_assumed,241.5,4,4,4
+rentals,LAGOS,Ilasan,3_BED_FLAT,8500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Isheri North,3_BED_FLAT,4750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Isolo,3_BED_FLAT,4875000.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Lekki,3_BED_FLAT,9250000.0,year_assumed,80.2,4,4,4
+rentals,LAGOS,Lekki Conservation,3_BED_FLAT,7500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Lekki Phase 1,3_BED_FLAT,20000000.0,year_assumed,239.2,4,4,4
+rentals,LAGOS,Magodo,3_BED_FLAT,8000000.0,year_assumed,5.8,4,4,4
+rentals,LAGOS,Maryland,3_BED_FLAT,10250000.0,year_assumed,11.2,4,4,4
+rentals,LAGOS,Mobil Road,3_BED_FLAT,3500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Monastery Road,3_BED_FLAT,4500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ogba,3_BED_FLAT,6750000.0,year_assumed,7.5,4,4,4
+rentals,LAGOS,Ogudu,3_BED_FLAT,3500000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Ojo,3_BED_FLAT,4000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ologolo,3_BED_FLAT,10000000.0,year_assumed,20.0,4,4,4
+rentals,LAGOS,Oral Estate,3_BED_FLAT,7625000.0,year_assumed,3.2,4,4,4
+rentals,LAGOS,Orchid,3_BED_FLAT,6750000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Osapa,3_BED_FLAT,10250000.0,year_assumed,15.8,4,4,4
+rentals,LAGOS,Osapa London,3_BED_FLAT,8500000.0,year_assumed,16.0,4,4,4
+rentals,LAGOS,Sangotedo,3_BED_FLAT,4000000.0,year_assumed,22.5,4,4,4
+rentals,LAGOS,Shomolu,3_BED_FLAT,1600000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Surulere,3_BED_FLAT,7500000.0,year_assumed,20.0,4,4,4
+rentals,LAGOS,Victoria Island,3_BED_FLAT,30000000.0,year_assumed,164.5,4,4,4
+rentals,LAGOS,Yaba,3_BED_FLAT,6000000.0,year_assumed,15.5,4,4,4
+rentals,LAGOS,Abraham Adesanya,4_PLUS_BED_FLAT,7750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Badore,4_PLUS_BED_FLAT,2500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Banana Island,4_PLUS_BED_FLAT,50000000.0,year_assumed,41.0,4,4,4
+rentals,LAGOS,Igbo Efon,4_PLUS_BED_FLAT,10000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ikate,4_PLUS_BED_FLAT,14250000.0,year_assumed,8.5,4,4,4
+rentals,LAGOS,Ikeja,4_PLUS_BED_FLAT,25000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Ikeja GRA,4_PLUS_BED_FLAT,40000000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Ikota,4_PLUS_BED_FLAT,10000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Ikoyi,4_PLUS_BED_FLAT,55625000.0,year_assumed,51.8,4,4,4
+rentals,LAGOS,Lekki,4_PLUS_BED_FLAT,15750000.0,year_assumed,18.5,4,4,4
+rentals,LAGOS,Lekki Phase 1,4_PLUS_BED_FLAT,25000000.0,year_assumed,29.5,4,4,4
+rentals,LAGOS,Maryland,4_PLUS_BED_FLAT,30000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ologolo,4_PLUS_BED_FLAT,12000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Seaside Estate,4_PLUS_BED_FLAT,2000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Surulere,4_PLUS_BED_FLAT,1500000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Victoria Island,4_PLUS_BED_FLAT,50000000.0,year_assumed,41.2,4,4,4
+rentals,LAGOS,Yaba,4_PLUS_BED_FLAT,3062500.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Abraham Adesanya,BUNGALOW,4312500.0,year_assumed,4.2,4,4,4
+rentals,LAGOS,Ogba,BUNGALOW,200000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ikeja,COMMERCIAL_INDUSTRIAL,47500.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Oregun,COMMERCIAL_INDUSTRIAL,65000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Oshodi,COMMERCIAL_INDUSTRIAL,1187500.0,year_assumed,3.8,4,4,4
+rentals,LAGOS,Surulere,COMMERCIAL_INDUSTRIAL,52500.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Abraham Adesanya,COMMERCIAL_OFFICE_RETAIL,1675000.0,year_assumed,3.8,4,4,4
+rentals,LAGOS,Gbagada,COMMERCIAL_OFFICE_RETAIL,1400000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ikeja,COMMERCIAL_OFFICE_RETAIL,3625000.0,year_assumed,17.5,4,4,4
+rentals,LAGOS,Ikeja GRA,COMMERCIAL_OFFICE_RETAIL,60300000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ikota,COMMERCIAL_OFFICE_RETAIL,1600000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ikoyi,COMMERCIAL_OFFICE_RETAIL,21250000.0,year_assumed,14.2,4,4,4
+rentals,LAGOS,Lekki,COMMERCIAL_OFFICE_RETAIL,10500000.0,year_assumed,7.5,4,4,4
+rentals,LAGOS,Lekki Phase 1,COMMERCIAL_OFFICE_RETAIL,10000000.0,year_assumed,63.5,4,4,4
+rentals,LAGOS,Maryland,COMMERCIAL_OFFICE_RETAIL,13000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ogba,COMMERCIAL_OFFICE_RETAIL,2000000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Oregun,COMMERCIAL_OFFICE_RETAIL,37500000.0,year_assumed,4.5,4,4,4
+rentals,LAGOS,Sangotedo,COMMERCIAL_OFFICE_RETAIL,3600000.0,year_assumed,6.0,4,4,4
+rentals,LAGOS,Surulere,COMMERCIAL_OFFICE_RETAIL,3000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Victoria Island,COMMERCIAL_OFFICE_RETAIL,4025000.0,year_assumed,52.5,4,4,4
+rentals,LAGOS,Yaba,COMMERCIAL_OFFICE_RETAIL,7250000.0,year_assumed,14.0,4,4,4
+rentals,LAGOS,Abraham Adesanya,DETACHED_HOUSE,8250000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ado Road,DETACHED_HOUSE,9500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Agungi,DETACHED_HOUSE,13000000.0,year_assumed,8.5,4,4,4
+rentals,LAGOS,Ajah,DETACHED_HOUSE,8500000.0,year_assumed,11.0,4,4,4
+rentals,LAGOS,Badore,DETACHED_HOUSE,5000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Banana Island,DETACHED_HOUSE,115500000.0,year_assumed,45.8,4,4,4
+rentals,LAGOS,Elegushi,DETACHED_HOUSE,23500000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Gbagada,DETACHED_HOUSE,17875000.0,year_assumed,5.5,4,4,4
+rentals,LAGOS,Ibeju-Lekki,DETACHED_HOUSE,8000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ikate,DETACHED_HOUSE,27500000.0,year_assumed,20.0,4,4,4
+rentals,LAGOS,Ikeja,DETACHED_HOUSE,30000000.0,year_assumed,12.8,4,4,4
+rentals,LAGOS,Ikeja GRA,DETACHED_HOUSE,40000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Ikota,DETACHED_HOUSE,15000000.0,year_assumed,29.0,4,4,4
+rentals,LAGOS,Ikoyi,DETACHED_HOUSE,70000000.0,year_assumed,60.5,4,4,4
+rentals,LAGOS,Ilupeju,DETACHED_HOUSE,1200000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Lekki,DETACHED_HOUSE,16000000.0,year_assumed,79.8,4,4,4
+rentals,LAGOS,Lekki Phase 1,DETACHED_HOUSE,40000000.0,year_assumed,91.5,4,4,4
+rentals,LAGOS,Lekki Phase 2,DETACHED_HOUSE,13500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Maryland,DETACHED_HOUSE,15000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Okun Ajah,DETACHED_HOUSE,3000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Ologolo,DETACHED_HOUSE,20000000.0,year_assumed,8.8,4,4,4
+rentals,LAGOS,Olokonla,DETACHED_HOUSE,10000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Omole Phase 1,DETACHED_HOUSE,23125000.0,year_assumed,5.8,4,4,4
+rentals,LAGOS,Oral Estate,DETACHED_HOUSE,13500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Orchid,DETACHED_HOUSE,15000000.0,year_assumed,22.8,4,4,4
+rentals,LAGOS,Osapa,DETACHED_HOUSE,18000000.0,year_assumed,15.0,4,4,4
+rentals,LAGOS,Osapa London,DETACHED_HOUSE,25000000.0,year_assumed,14.5,4,4,4
+rentals,LAGOS,Sangotedo,DETACHED_HOUSE,8000000.0,year_assumed,13.5,4,4,4
+rentals,LAGOS,Surulere,DETACHED_HOUSE,10000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Thomas Estate,DETACHED_HOUSE,12250000.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Victoria Island,DETACHED_HOUSE,70000000.0,year_assumed,40.5,4,4,4
+rentals,LAGOS,Ikoyi,LAND_COMMERCIAL,216250000.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Lekki Phase 1,LAND_COMMERCIAL,78000000.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Victoria Island,LAND_COMMERCIAL,100000000.0,year_assumed,10.0,4,4,4
+rentals,LAGOS,Allen Avenue,LAND_RESIDENTIAL,4000000000.0,year_assumed,3.0,3,3,4
+rentals,LAGOS,Banana Island,LAND_RESIDENTIAL,50000000.0,year_assumed,3.8,4,4,4
+rentals,LAGOS,Ikeja,LAND_RESIDENTIAL,1000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ikoyi,LAND_RESIDENTIAL,80000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ilupeju,LAND_RESIDENTIAL,35980000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Lekki Phase 1,LAND_RESIDENTIAL,91281250.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Victoria Island,LAND_RESIDENTIAL,6565625.0,year_assumed,9.2,4,4,4
+rentals,LAGOS,Ikota,OTHER,2900000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Lekki Phase 1,OTHER,10375000.0,year_assumed,7.5,4,4,4
+rentals,LAGOS,Orchid,OTHER,2000000.0,year_assumed,7.0,4,4,4
+rentals,LAGOS,Victoria Island,OTHER,77500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Abraham Adesanya,SEMI_DETACHED_HOUSE,8000000.0,year_assumed,10.0,4,4,4
+rentals,LAGOS,Agungi,SEMI_DETACHED_HOUSE,10500000.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Ajah,SEMI_DETACHED_HOUSE,9375000.0,year_assumed,15.2,4,4,4
+rentals,LAGOS,Allen Avenue,SEMI_DETACHED_HOUSE,18000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Banana Island,SEMI_DETACHED_HOUSE,79999999.75,year_assumed,14.0,4,4,4
+rentals,LAGOS,Elegushi,SEMI_DETACHED_HOUSE,21125000.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Ikate,SEMI_DETACHED_HOUSE,23000000.0,year_assumed,18.5,4,4,4
+rentals,LAGOS,Ikeja,SEMI_DETACHED_HOUSE,15000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ikeja GRA,SEMI_DETACHED_HOUSE,31875000.0,year_assumed,3.8,4,4,4
+rentals,LAGOS,Ikota,SEMI_DETACHED_HOUSE,11000000.0,year_assumed,31.0,4,4,4
+rentals,LAGOS,Ikoyi,SEMI_DETACHED_HOUSE,58750000.0,year_assumed,29.2,4,4,4
+rentals,LAGOS,Lekki,SEMI_DETACHED_HOUSE,13000000.0,year_assumed,71.2,4,4,4
+rentals,LAGOS,Lekki Conservation,SEMI_DETACHED_HOUSE,9000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Lekki Phase 1,SEMI_DETACHED_HOUSE,32500000.0,year_assumed,57.5,4,4,4
+rentals,LAGOS,Lekki Phase 2,SEMI_DETACHED_HOUSE,8875000.0,year_assumed,5.2,4,4,4
+rentals,LAGOS,Magodo,SEMI_DETACHED_HOUSE,14125000.0,year_assumed,8.8,4,4,4
+rentals,LAGOS,Ogudu,SEMI_DETACHED_HOUSE,18000000.0,year_assumed,3.5,4,4,4
+rentals,LAGOS,Ologolo,SEMI_DETACHED_HOUSE,12000000.0,year_assumed,10.0,4,4,4
+rentals,LAGOS,Omole Phase 2,SEMI_DETACHED_HOUSE,12250000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Oral Estate,SEMI_DETACHED_HOUSE,11000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Orchid,SEMI_DETACHED_HOUSE,11437500.0,year_assumed,35.2,4,4,4
+rentals,LAGOS,Osapa,SEMI_DETACHED_HOUSE,15000000.0,year_assumed,11.0,4,4,4
+rentals,LAGOS,Osapa London,SEMI_DETACHED_HOUSE,10000000.0,year_assumed,8.5,4,4,4
+rentals,LAGOS,Sangotedo,SEMI_DETACHED_HOUSE,8000000.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Victoria Garden City,SEMI_DETACHED_HOUSE,12000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Victoria Island,SEMI_DETACHED_HOUSE,40000000.0,year_assumed,15.5,4,4,4
+rentals,LAGOS,Abraham Adesanya,TERRACED_HOUSE,7500000.0,year_assumed,17.0,4,4,4
+rentals,LAGOS,Agungi,TERRACED_HOUSE,9000000.0,year_assumed,5.0,4,4,4
+rentals,LAGOS,Ajah,TERRACED_HOUSE,7375000.0,year_assumed,15.8,4,4,4
+rentals,LAGOS,Amuwo Odofin,TERRACED_HOUSE,12000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Badore,TERRACED_HOUSE,6500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Banana Island,TERRACED_HOUSE,60000000.0,year_assumed,52.2,4,4,4
+rentals,LAGOS,Elegushi,TERRACED_HOUSE,15000000.0,year_assumed,24.0,4,4,4
+rentals,LAGOS,Gbagada,TERRACED_HOUSE,14000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ibeju-Lekki,TERRACED_HOUSE,37000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Igbo Efon,TERRACED_HOUSE,10000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ikate,TERRACED_HOUSE,15375000.0,year_assumed,29.5,4,4,4
+rentals,LAGOS,Ikeja,TERRACED_HOUSE,25000000.0,year_assumed,6.5,4,4,4
+rentals,LAGOS,Ikeja GRA,TERRACED_HOUSE,30000000.0,year_assumed,13.8,4,4,4
+rentals,LAGOS,Ikota,TERRACED_HOUSE,8000000.0,year_assumed,47.0,4,4,4
+rentals,LAGOS,Ikoyi,TERRACED_HOUSE,50000000.0,year_assumed,62.8,4,4,4
+rentals,LAGOS,Ilasan,TERRACED_HOUSE,10000000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Lekki,TERRACED_HOUSE,10000000.0,year_assumed,64.8,4,4,4
+rentals,LAGOS,Lekki Phase 1,TERRACED_HOUSE,25000000.0,year_assumed,92.0,4,4,4
+rentals,LAGOS,Lekki Phase 2,TERRACED_HOUSE,11000000.0,year_assumed,8.0,4,4,4
+rentals,LAGOS,Magodo,TERRACED_HOUSE,14625000.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Maryland,TERRACED_HOUSE,25000000.0,year_assumed,4.8,4,4,4
+rentals,LAGOS,Mobil Road,TERRACED_HOUSE,8000000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Ogba,TERRACED_HOUSE,12500000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Ogudu,TERRACED_HOUSE,18875000.0,year_assumed,3.8,4,4,4
+rentals,LAGOS,Ologolo,TERRACED_HOUSE,12000000.0,year_assumed,22.5,4,4,4
+rentals,LAGOS,Omole Phase 1,TERRACED_HOUSE,15000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Oral Estate,TERRACED_HOUSE,9750000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Orchid,TERRACED_HOUSE,9000000.0,year_assumed,50.2,4,4,4
+rentals,LAGOS,Osapa,TERRACED_HOUSE,11875000.0,year_assumed,5.2,4,4,4
+rentals,LAGOS,Osapa London,TERRACED_HOUSE,12500000.0,year_assumed,4.0,4,4,4
+rentals,LAGOS,Sangotedo,TERRACED_HOUSE,6000000.0,year_assumed,26.2,4,4,4
+rentals,LAGOS,Thomas Estate,TERRACED_HOUSE,8000000.0,year_assumed,3.0,4,4,4
+rentals,LAGOS,Victoria Garden City,TERRACED_HOUSE,9000000.0,year_assumed,9.0,4,4,4
+rentals,LAGOS,Victoria Island,TERRACED_HOUSE,32500000.0,year_assumed,50.8,4,4,4
+rentals,OGUN,Obafemi Owode,1_BED_FLAT,250000.0,year_assumed,3.0,4,4,4
+rentals,OGUN,Obafemi Owode,3_BED_FLAT,1800000.0,year_assumed,3.0,4,4,4
+rentals,PH,Port Harcourt,2_BED_FLAT,5500000.0,year_assumed,3.0,4,4,4
+rentals,PH,Port Harcourt,DETACHED_HOUSE,25000000.0,year_assumed,3.0,4,4,4

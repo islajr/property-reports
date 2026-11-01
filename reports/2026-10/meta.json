@@ -11,5 +11,13 @@
   "pdf_filename": "nigerian-residential-real-estate-market-report-2026-10.pdf",
   "metrics_sha256": "95c23d6ba00acbbc08e8a035f743c2e156c0dd28d0e26a27ea0f32e989c768ee",
   "narrative_sha256": "4d954ac04eecca44a97449c834eb4d4e7cc1e1e33fe1cbcbbae909bbba3099b2",
-  "source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57"
+  "source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57",
+  "latest_source_observation": "2026-10-25T14:16:21.909710+00:00",
+  "source_freshness_checked_at": "2026-11-01T20:55:13.334089+00:00",
+  "revisions": [
+    {
+      "date": "2026-11-01",
+      "reason": "Restore missing aggregate comparison download, disclose source freshness, and adjust PDF pagination. Published figures and commentary unchanged."
+    }
+  ]
 }
