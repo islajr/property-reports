@@ -1,0 +1,54 @@
+{
+  "source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57",
+  "coverage_quality": {
+    "expected_week_starts": [
+      "2026-10-05",
+      "2026-10-12",
+      "2026-10-19",
+      "2026-10-26"
+    ],
+    "included_week_starts": [
+      "2026-10-05",
+      "2026-10-12",
+      "2026-10-19",
+      "2026-10-26"
+    ],
+    "missing_week_starts": [],
+    "excluded_week_starts": [],
+    "missing_price_rows": 4,
+    "invalid_price_rows": 0,
+    "snapshot_rows": 8598,
+    "historical_prices_reconstructed": true
+  },
+  "included_week_starts": {
+    "sales": [
+      "2026-10-05",
+      "2026-10-12",
+      "2026-10-19",
+      "2026-10-26"
+    ],
+    "rentals": [
+      "2026-10-05",
+      "2026-10-12",
+      "2026-10-19",
+      "2026-10-26"
+    ]
+  },
+  "eligibility": "At least 3 average active listings per observed week and at least one usable group median.",
+  "print_selection": "Four largest classes by listing-weeks; up to ten eligible areas per class selected by average observed inventory, ordered by city and price.",
+  "definitions": {
+    "mean_group_median_ngn": "Unweighted mean of usable weekly area/class group medians, converted from kobo to NGN. Not a pooled listing-level median or valuation.",
+    "average_active_per_observed_week": "Summed active listing counts divided by weeks observed for this area/class; rounded to one decimal.",
+    "observed_weeks": "Distinct week starts with a source row for this area/class.",
+    "priced_weeks": "Distinct week starts with a usable positive finite median price.",
+    "report_weeks": "Included week starts for the whole market, after the metrics coverage filter.",
+    "listing_weeks": "Sum of weekly active counts; properties may recur in several weeks.",
+    "rental_period": "Annual asking rents are assumed from the source, not independently verified."
+  },
+  "limitations": [
+    "Reconstructed historical prices reuse current listing records.",
+    "Broad classes do not control for size, bedrooms, condition or tenure.",
+    "Portal coverage is not representative of national stock or completed transactions."
+  ],
+  "spreadsheet_text": "Potential formula text is prefixed with an apostrophe in CSV downloads."
+}

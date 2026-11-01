@@ -1,0 +1,15 @@
+{
+  "month": "2026-10",
+  "period": "1mo",
+  "type": "all",
+  "issue_number": 6,
+  "published_date": "November 1, 2026",
+  "published_date_iso": "2026-11-01",
+  "num_cities": 10,
+  "unique_neighbourhoods": 310,
+  "peak_active_listings": 16619,
+  "pdf_filename": "nigerian-residential-real-estate-market-report-2026-10.pdf",
+  "metrics_sha256": "95c23d6ba00acbbc08e8a035f743c2e156c0dd28d0e26a27ea0f32e989c768ee",
+  "narrative_sha256": "4d954ac04eecca44a97449c834eb4d4e7cc1e1e33fe1cbcbbae909bbba3099b2",
+  "source_csv_sha256": "a039fd32f465779831ce0ad7ae3bf911f4f12a64cfc562543b65d1b05edfce57"
+}
