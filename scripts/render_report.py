@@ -33,6 +33,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from report_identity import report_key, validate_metrics_identity, require_closed_month
 from editorial import build_publication, money
 from research_content import build_research, comparison_download, research_provenance
+from source_provenance import format_timestamp
 from narrative_validation import metrics_digest, validate_narrative
 
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -115,6 +116,7 @@ def render_html(template_vars: dict) -> str:
         autoescape=True,
     )
     env.filters["money"] = money
+    env.filters["source_time"] = format_timestamp
     env.filters['location'] = lambda value: str(value).upper() if len(str(value)) <= 3 else str(value).title()
     env.filters['share'] = lambda value: '<0.1%' if 0 < value < .1 else f'{value:.1f}%'
     template = env.get_template("report.html.j2")
@@ -627,6 +629,8 @@ def main() -> None:
         "overall": overall,
         "preview": args.preview,
         "draft_as_of": args.as_of.isoformat() if args.as_of else None,
+        "source_freshness": metrics.get("_source", {}).get("latest_source_observation"),
+        "source_exported_at": metrics.get("_source", {}).get("source_exported_at"),
         "draft_source_last_seen": args.source_last_seen.isoformat() if args.source_last_seen else None,
         "publication": build_publication(metrics),
         "research": build_research(metrics, args.research_csv or DATA_DIR / "neighbourhood_snapshots.csv"),
@@ -692,6 +696,8 @@ def main() -> None:
         "metrics_sha256": metrics_digest(metrics),
         "narrative_sha256": metrics_digest(narrative),
         "source_csv_sha256": metrics.get("_source", {}).get("csv_sha256"),
+        "source_exported_at": template_vars["source_exported_at"],
+        "latest_source_observation": template_vars["source_freshness"],
     }
     # Compile every requested format before replacing an existing publication.
     with tempfile.TemporaryDirectory(prefix="property-report-") as tmp:

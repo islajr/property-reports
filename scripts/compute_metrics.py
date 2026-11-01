@@ -19,6 +19,7 @@ Output:
 from __future__ import annotations
 
 import argparse
+from source_provenance import read_source_metadata
 import hashlib
 import math
 import json
@@ -557,6 +558,7 @@ def main() -> None:
     )}
     metrics["quality"] = period_quality(df[df.price_type.isin(selected_types)], selected, first_date, last_date)
     metrics["_source"] = {
+        **read_source_metadata(csv_path),
         "report_key": key,
         "csv_sha256": hashlib.sha256(csv_path.read_bytes()).hexdigest(),
     }
